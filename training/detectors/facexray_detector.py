@@ -1,0 +1,216 @@
+import os
+import datetime
+import logging
+import numpy as np
+from sklearn import metrics
+from typing import Union
+from collections import defaultdict
+
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+from torch.nn import DataParallel
+from torch.utils.tensorboard import SummaryWriter
+
+from utils.plot_utils import plot_FaceMask
+from utils.gradcam import GradCam
+from metrics.base_metrics_class import calculate_metrics_for_train
+
+from .base_detector import AbstractDetector
+from detectors import DETECTOR
+from networks import BACKBONE
+from loss import LOSSFUNC
+from networks.cls_hrnet import get_cls_net
+import segmentation_models_pytorch as smp
+from efficientnet_pytorch import EfficientNet
+import yaml
+
+logger = logging.getLogger(__name__)
+
+@DETECTOR.register_module(module_name='facexray')
+class FaceXrayDetector(AbstractDetector):
+    def __init__(self, config):
+        super().__init__()
+        self.config = config
+        # build model
+        self.backbone = self.build_backbone(config)
+        self.post_process = nn.Sequential(
+            nn.Conv2d(in_channels=720, out_channels=256, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=256, out_channels=128, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=128, out_channels=1, kernel_size=1, stride=1, padding=0),
+            nn.Upsample(size=(256, 256), mode='bilinear', align_corners=True),
+        )
+        self.fc = nn.Sequential(
+            nn.Linear(128*128, 1024),
+            nn.BatchNorm1d(1024),
+            nn.ReLU(),
+            nn.Linear(1024, 128),
+            nn.BatchNorm1d(128),
+            nn.ReLU(),
+            nn.Linear(128, 2),
+        )
+
+        self.loss_func = self.build_loss(config)
+        self.prob, self.label = [], []
+        self.correct, self.total = 0, 0
+    
+    def build_backbone(self, config):
+        cfg_path = '/home/zhiyuanyan/disfin/deepfake_benchmark/training/config/backbone/cls_hrnet_w48.yaml'
+        # parse options and load config
+        with open(cfg_path, 'r') as f:
+            cfg_config = yaml.safe_load(f)
+        convnet = get_cls_net(cfg_config)
+        # convnet = EfficientNet.from_pretrained('efficientnet-b4')
+        saved = torch.load('./pretrained/hrnetv2_w48_imagenet_pretrained.pth', map_location='cpu')
+        convnet.load_state_dict(saved, False)
+        print('Load HRnet')
+        return convnet
+
+    # def build_backbone(self, config):
+    #     from timm.models import create_model
+    #     net = create_model(
+    #         'convnext_base', 
+    #         pretrained=True, 
+    #         num_classes=2, 
+    #         drop_path_rate=0.0,
+    #         # layer_scale_init_value=1e-6,
+    #         head_init_scale=1.0,
+    #     )
+    #     print('Load convnext-base')
+    #     return net
+
+    # def build_backbone(self, config):
+    #     # prepare the backbone
+    #     backbone_class = BACKBONE[config['backbone_name']]
+    #     model_config = config['backbone_config']
+    #     backbone = backbone_class(model_config)
+    #     # # if donot load the pretrained weights, fail to get good results
+    #     # state_dict = torch.load(config['pretrained'])
+    #     # state_dict = {'resnet.'+k:v for k, v in state_dict.items() if 'fc' not in k}
+    #     # backbone.load_state_dict(state_dict, False)
+    #     # logger.info('Load pretrained model successfully!')
+    #     return backbone
+
+    # def build_backbone(self, config):
+    #     backbone_class = BACKBONE[config['backbone_name']]
+    #     model_config = config['backbone_config']
+    #     backbone = backbone_class(model_config)
+    #     return backbone
+    
+    # def build_backbone(self, config):
+    #     # prepare the backbone
+    #     backbone_class = BACKBONE[config['backbone_name']]
+    #     model_config = config['backbone_config']
+    #     backbone = backbone_class(model_config)
+    #     # if donot load the pretrained weights, fail to get good results
+    #     state_dict = torch.load(config['pretrained'])
+    #     for name, weights in state_dict.items():
+    #         if 'pointwise' in name:
+    #             state_dict[name] = weights.unsqueeze(-1).unsqueeze(-1)
+    #     state_dict = {k:v for k, v in state_dict.items() if 'fc' not in k}
+    #     backbone.load_state_dict(state_dict, False)
+    #     logger.info('Load pretrained model successfully!')
+    #     return backbone
+    
+    def build_loss(self, config):
+        cls_loss_class = LOSSFUNC[config['loss_func']['cls_loss']]
+        mask_loss_class = LOSSFUNC[config['loss_func']['mask_loss']]
+        cls_loss_func = cls_loss_class()
+        mask_loss_func = mask_loss_class()
+        loss_func = {'cls': cls_loss_func, 'mask': mask_loss_func}
+        return loss_func
+
+    def features(self, data_dict: dict) -> torch.tensor:
+        return self.backbone.features(data_dict['image'])
+        # return self.backbone.forward_features(data_dict['image'])
+
+    def classifier(self, features: list) -> torch.tensor:
+        # mask
+        mask = self.post_process(features)
+        # feat
+        feat = F.adaptive_avg_pool2d(mask, 128).view(mask.size(0), -1)
+        # cls
+        score = self.fc(feat)
+        return feat, score, mask
+
+    def get_losses(self, data_dict: dict, pred_dict: dict) -> dict:
+        # label
+        label = data_dict['label']
+        mask_gt = data_dict['mask'] if data_dict['mask'] is not None else None
+        # pred
+        pred_cls = pred_dict['cls']
+        pred_mask = pred_dict['mask_pred'] if data_dict['mask'] is not None else None
+        # loss
+        loss_cls = self.loss_func['cls'](pred_cls, label)
+        if data_dict['mask'] is not None:
+            # Move tensors to the same device
+            mask_gt = mask_gt.to(pred_mask.device)
+            loss_mask = F.mse_loss(pred_mask.squeeze().float(), mask_gt.squeeze().float())
+            # follow the original paper, 
+            # FIXME: we set λ = 1000 to force the network focusing more on learning the face X-ray prediction
+            loss = loss_cls + 1000. * loss_mask
+            loss_dict = {'overall': loss, 'mask': loss_mask, 'cls': loss_cls}
+        else:  # mask_gt is none (during the testing or inference)
+            loss = loss_cls
+            loss_dict = {'overall': loss, 'cls': loss_cls}
+        return loss_dict
+    
+    def get_train_metrics(self, data_dict: dict, pred_dict: dict) -> dict:
+        label = data_dict['label']
+        pred = pred_dict['cls']
+        # compute metrics for batch data
+        auc, eer, acc, ap = calculate_metrics_for_train(label.detach(), pred.detach())
+        metric_batch_dict = {'acc': acc, 'auc': auc, 'eer': eer, 'ap': ap}
+        return metric_batch_dict
+    
+    def get_test_metrics(self):
+        y_pred = np.concatenate(self.prob)
+        y_true = np.concatenate(self.label)
+        # auc
+        fpr, tpr, thresholds = metrics.roc_curve(y_true, y_pred, pos_label=1)
+        auc = metrics.auc(fpr, tpr)
+        # eer
+        fnr = 1 - tpr
+        eer = fpr[np.nanargmin(np.absolute((fnr - fpr)))]
+        # ap
+        ap = metrics.average_precision_score(y_true,y_pred)
+        # acc
+        acc = self.correct / self.total
+        # reset the prob and label
+        self.prob, self.label = [], []
+        return {'acc':acc, 'auc':auc, 'eer':eer, 'ap':ap, 'pred':y_pred, 'label':y_true}
+
+    def forward(self, data_dict: dict, inference=False) -> dict:
+        features = self.features(data_dict)
+        features, pred, mask_pred = self.classifier(features)
+        # get the probability of the pred
+        prob = torch.softmax(pred, dim=1)[:, 1]
+        # build the prediction dict for each output
+        pred_dict = {'cls': pred, 'prob': prob, 'feat': features, 'mask_pred': mask_pred}
+        if inference:
+            self.prob.append(
+                pred_dict['prob']
+                .detach()
+                .squeeze()
+                .cpu()
+                .numpy()
+            )
+            self.label.append(
+                data_dict['label']
+                .detach()
+                .squeeze()
+                .cpu()
+                .numpy()
+            )
+            # deal with acc
+            _, prediction_class = torch.max(pred, 1)
+            correct = (prediction_class == data_dict['label']).sum().item()
+            self.correct += correct
+            self.total += data_dict['label'].size(0)
+        return pred_dict
+
