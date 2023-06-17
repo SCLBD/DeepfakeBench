@@ -1,0 +1,38 @@
+preprocess:
+  dataset_name: # the name of dataset
+    choices: ['FaceForensics++','Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0','UADFV']
+    default: 'FaceForensics++'
+  dataset_root_path: # the root path to the dataset
+    type: str
+    default: '/mntnfs/sec_data2/yuanxinhang/data' #'/mntcephfs/lab_data/yuanxinhang' #
+  comp: # the compression level of videos, only in the dataset of FaceForensics++.
+    choices: ['raw', 'c23', 'c40']
+    default: 'c23'
+  mode: # based on the numbers of frame or skip the specific stride of frames.
+    choices: ['fixed_num_frames', 'fixed_stride']
+    default: 'fixed_num_frames'
+  stride: # when 'mode' is 'fixed_stride', 'stride' is the number of frames to skip between each frame extracted.
+    type: int
+    default: 10
+  num_frames: # when 'mode' is 'fixed_num_frames', 'num_frames' is the number of frames to extract from each video.
+    type: int
+    default: 32
+
+rearrange:
+  dataset_name: # the name of dataset
+    choices: ['FaceForensics++', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2','DFDCP', 'DFDC', 'DeeperForensics-1.0','UADFV','FaceShifter']
+    default: 'FaceForensics++'
+  dataset_root_path: # the root path to the dataset
+    type: str
+    default: '/mntnfs/sec_data2/yuanxinhang/data' #'/mntcephfs/lab_data/yuanxinhang' #
+  output_file_path: # the json path to the dataset
+    type: str
+    default: '/home/zhiyuanyan/disfin/deepfake_benchmark/preprocessing/dataset_json/c40'
+  comp: # the compression level of videos, only in the dataset of FaceForensics++.
+    choices: ['raw', 'c23', 'c40']
+    default: 'c23'
+  perturbation: # Extensive real-world perturbations are applied to DeeperForensics-1.0 dataset
+    choices: ['end_to_end','end_to_end_level_1','end_to_end_level_2','end_to_end_level_3','end_to_end_level_4',
+              'end_to_end_level_5','end_to_end_mix_2_distortions','end_to_end_mix_3_distortions',
+              'end_to_end_mix_4_distortions','end_to_end_random_level','reenact_postprocess']
+    default: 'end_to_end'
