@@ -21,13 +21,13 @@ preprocess:
 rearrange:
   dataset_name: # the name of dataset
     choices: ['FaceForensics++', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2','DFDCP', 'DFDC', 'DeeperForensics-1.0','UADFV','FaceShifter']
-    default: 'FaceForensics++'
+    default: 'DeepFakeDetection'
   dataset_root_path: # the root path to the dataset
     type: str
     default: '/mntnfs/sec_data2/yuanxinhang/data' #'/mntcephfs/lab_data/yuanxinhang' #
   output_file_path: # the json path to the dataset
     type: str
-    default: '/home/zhiyuanyan/disfin/deepfake_benchmark/preprocessing/dataset_json/c40'
+    default: '/home/zhiyuanyan/disfin/deepfake_benchmark/preprocessing/dataset_json'
   comp: # the compression level of videos, only in the dataset of FaceForensics++.
     choices: ['raw', 'c23', 'c40']
     default: 'c23'
