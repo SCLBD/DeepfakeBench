@@ -1,14 +1,11 @@
 # DeepfakeBench: A Comprehensive Benchmark of Deepfake Detection
 
-![Pytorch 1.11.0](https://img.shields.io/badge/PyTorch-1.11-brightgreen) [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-brightgreen.svg)](https://creativecommons.org/licenses/by-nc/4.0/) ![Release .10](https://img.shields.io/badge/Release-1.0-brightgreen)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-brightgreen.svg)](https://creativecommons.org/licenses/by-nc/4.0/) ![Release .10](https://img.shields.io/badge/Release-1.0-brightgreen)
 
-<img src="figures/archi.png" style="max-width: 70%;">
+<div style="text-align:center;">
+  <img src="figures/archi.png" style="max-width:60%;">
+</div>
 
-<p align="center">
-<br>
-  <a href="http://backdoorbench.com" target="_blank"> Website </a >  •  <a href="https://openreview.net/pdf?id=31_U7n18gM7"> Paper </a > •  <a href="http://backdoorbench.com/leader_cifar10"> Leaderboard </a > <br>
-<br>
-</p >
 
 Welcome to *DeepfakeBench*, the comprehensive benchmark for deepfake detection! With a focus on a modular architecture, our comprehensive platform offers a wide range of benefits, including extensibility, maintainability, fairness, and analytical capability. Whether you're an expert in the field or new to the world of deepfakes, DeepfakeBench is designed to captivate and empower you in the realm of deepfake detection.
 
