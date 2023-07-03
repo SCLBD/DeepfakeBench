@@ -2,7 +2,7 @@
 
 ![Pytorch 1.11.0](https://img.shields.io/badge/PyTorch-1.11-brightgreen) [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-brightgreen.svg)](https://creativecommons.org/licenses/by-nc/4.0/) ![Release .10](https://img.shields.io/badge/Release-1.0-brightgreen)
 
-![Image](figures/archi.png)
+<img src="figures/archi.png" style="max-width: 70%;">
 
 <p align="center">
 <br>
