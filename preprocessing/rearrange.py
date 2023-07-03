@@ -253,6 +253,7 @@ def generate_dataset_file(dataset_name, dataset_root_path, output_file_path, com
                                         }}
                         json.dump(data, f)
                         print(f"Finish writing {label}.json")
+    
     ## Celeb-DF-v1 dataset
     ## Note: videos in Celeb-DF-v1/2 are not in the same format as in FaceForensics++ dataset
     elif dataset_name == 'Celeb-DF-v1':
@@ -413,7 +414,6 @@ def generate_dataset_file(dataset_name, dataset_root_path, output_file_path, com
 
     ## DeeperForensics-1.0 dataset
     elif dataset_name == 'DeeperForensics-1.0':
-        # 从txt中读取数据，一行作为一个列表中的元素，不含'\n'
         with open(os.path.join(dataset_root_path, dataset_name, 'lists/splits/train.txt'), 'r') as f:
             train_txt = f.readlines()
             train_txt = [line.strip().split('.')[0] for line in train_txt]
@@ -515,4 +515,3 @@ if __name__ == '__main__':
     perturbation = config['rearrange']['perturbation']['default']
     # Call the generate_dataset_file function
     generate_dataset_file(dataset_name, dataset_root_path, output_file_path, comp, perturbation)
-

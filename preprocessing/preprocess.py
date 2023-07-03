@@ -46,14 +46,11 @@ Original dataset structure before the preprocessing:
     -method_B
     -original_videos
 
--DFDC
-    -test
-    -train
 -DeeperForensics-1.0
     -manipulated_videos
     -source_videos
-        
-We then additionally obtain "frames" and "landmarks" directories in same directory as the "videos" folder.
+
+We then additionally obtain "frames", "landmarks", and "mask" directories in same directory as the "videos" folder.
 """
 
 
