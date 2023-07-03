@@ -1,0 +1,1 @@
+This folder saves the processing log file for each dataset.
