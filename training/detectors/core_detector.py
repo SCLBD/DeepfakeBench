@@ -1,3 +1,33 @@
+'''
+# author: Zhiyuan Yan
+# email: zhiyuanyan@link.cuhk.edu.cn
+# date: 2023-0706
+# description: Class for the CoreDetector
+
+Functions in the Class are summarized as:
+1. __init__: Initialization
+2. build_backbone: Backbone-building
+3. build_loss: Loss-function-building
+4. features: Feature-extraction
+5. classifier: Classification
+6. get_losses: Loss-computation
+7. get_train_metrics: Training-metrics-computation
+8. get_test_metrics: Testing-metrics-computation
+9. forward: Forward-propagation
+
+Reference:
+@inproceedings{ni2022core,
+  title={Core: Consistent representation learning for face forgery detection},
+  author={Ni, Yunsheng and Meng, Depu and Yu, Changqian and Quan, Chengbin and Ren, Dongchun and Zhao, Youjian},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={12--21},
+  year={2022}
+}
+
+GitHub Reference:
+https://github.com/nii-yamagishilab/Capsule-Forensics-v2
+'''
+
 import os
 import datetime
 import logging
@@ -51,24 +81,6 @@ class CoreDetector(AbstractDetector):
         backbone.load_state_dict(state_dict, False)
         logger.info('Load pretrained model successfully!')
         return backbone
-
-    # def build_backbone(self, config):
-    #     backbone_class = BACKBONE[config['backbone_name']]
-    #     model_config = config['backbone_config']
-    #     backbone = backbone_class(model_config)
-    #     return backbone
-
-    # def build_backbone(self, config):
-    #     # prepare the backbone
-    #     backbone_class = BACKBONE[config['backbone_name']]
-    #     model_config = config['backbone_config']
-    #     backbone = backbone_class(model_config)
-    #     # if donot load the pretrained weights, fail to get good results
-    #     state_dict = torch.load(config['pretrained'])
-    #     state_dict = {'resnet.'+k:v for k, v in state_dict.items() if 'fc' not in k}
-    #     backbone.load_state_dict(state_dict, False)
-    #     logger.info('Load pretrained model successfully!')
-    #     return backbone
     
     def build_loss(self, config):
         # prepare the loss function

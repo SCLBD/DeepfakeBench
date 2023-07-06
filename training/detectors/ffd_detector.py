@@ -1,3 +1,33 @@
+'''
+# author: Zhiyuan Yan
+# email: zhiyuanyan@link.cuhk.edu.cn
+# date: 2023-0706
+# description: Class for the FFDDetector
+
+Functions in the Class are summarized as:
+1. __init__: Initialization
+2. build_backbone: Backbone-building
+3. build_loss: Loss-function-building
+4. features: Feature-extraction
+5. classifier: Classification
+6. get_losses: Loss-computation
+7. get_train_metrics: Training-metrics-computation
+8. get_test_metrics: Testing-metrics-computation
+9. forward: Forward-propagation
+
+Reference:
+@inproceedings{dang2020detection,
+  title={On the detection of digital face manipulation},
+  author={Dang, Hao and Liu, Feng and Stehouwer, Joel and Liu, Xiaoming and Jain, Anil K},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern recognition},
+  pages={5781--5790},
+  year={2020}
+}
+
+GitHub Reference:
+https://github.com/JStehouwer/FFD_CVPR2020
+'''
+
 import os
 import datetime
 import numpy as np
@@ -221,7 +251,7 @@ class PCATemplateMap(nn.Module):
 def get_templates():
     templates_list = []
     for i in range(10):
-        img = imread('/home/zhiyuanyan/disfin/deepfake_benchmark/training/MCT/template{:d}.png'.format(i))
+        img = imread('.lib/MCT/template{:d}.png'.format(i))
         templates_list.append(transforms.functional.to_tensor(img)[0:1,0:19,0:19])
     if torch.cuda.is_available():
         templates = torch.stack(templates_list).cuda()

@@ -1,3 +1,8 @@
+# author: Zhiyuan Yan
+# email: zhiyuanyan@link.cuhk.edu.cn
+# date: 2023-0706
+# description: Abstract Class for the Deepfake Detector
+
 import abc
 import torch
 import torch.nn as nn

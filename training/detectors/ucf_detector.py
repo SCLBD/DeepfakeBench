@@ -1,3 +1,29 @@
+'''
+# author: Zhiyuan Yan
+# email: zhiyuanyan@link.cuhk.edu.cn
+# date: 2023-0706
+# description: Class for the UCFDetector
+
+Functions in the Class are summarized as:
+1. __init__: Initialization
+2. build_backbone: Backbone-building
+3. build_loss: Loss-function-building
+4. features: Feature-extraction
+5. classifier: Classification
+6. get_losses: Loss-computation
+7. get_train_metrics: Training-metrics-computation
+8. get_test_metrics: Testing-metrics-computation
+9. forward: Forward-propagation
+
+Reference:
+@article{yan2023ucf,
+  title={UCF: Uncovering Common Features for Generalizable Deepfake Detection},
+  author={Yan, Zhiyuan and Zhang, Yong and Fan, Yanbo and Wu, Baoyuan},
+  journal={arXiv preprint arXiv:2304.13949},
+  year={2023}
+}
+'''
+
 import os
 import datetime
 import logging
@@ -86,36 +112,6 @@ class UCFDetector(AbstractDetector):
         backbone.load_state_dict(state_dict, False)
         logger.info('Load pretrained model successfully!')
         return backbone
-
-    # def build_backbone(self, config):
-    #     from timm.models import create_model
-    #     net = create_model(
-    #         'convnext_base', 
-    #         pretrained=True, 
-    #         num_classes=2, 
-    #         drop_path_rate=0.0,
-    #         # layer_scale_init_value=1e-6,
-    #         head_init_scale=1.0,
-    #     )
-    #     return net
-
-    # def build_backbone(self, config):
-    #     backbone_class = BACKBONE[config['backbone_name']]
-    #     model_config = config['backbone_config']
-    #     backbone = backbone_class(model_config)
-    #     return backbone
-
-    # def build_backbone(self, config):
-    #     # prepare the backbone
-    #     backbone_class = BACKBONE[config['backbone_name']]
-    #     model_config = config['backbone_config']
-    #     backbone = backbone_class(model_config)
-    #     # # if donot load the pretrained weights, fail to get good results
-    #     # state_dict = torch.load(config['pretrained'])
-    #     # state_dict = {'resnet.'+k:v for k, v in state_dict.items() if 'fc' not in k}
-    #     # backbone.load_state_dict(state_dict, False)
-    #     # logger.info('Load pretrained model successfully!')
-    #     return backbone
     
     def build_loss(self, config):
         cls_loss_class = LOSSFUNC[config['loss_func']['cls_loss']]
@@ -139,8 +135,6 @@ class UCFDetector(AbstractDetector):
         # encoder
         f_all = self.encoder_f.features(cat_data)
         c_all = self.encoder_c.features(cat_data)
-        # f_all = self.encoder_f.forward_features(cat_data)
-        # c_all = self.encoder_c.forward_features(cat_data)
         feat_dict = {'forgery': f_all, 'content': c_all}
         return feat_dict
 
@@ -279,9 +273,6 @@ class UCFDetector(AbstractDetector):
             # inference only consider share loss
             out_sha, sha_feat = self.head_sha(f_share)
             out_spe, spe_feat = self.head_spe(f_spe)
-            # call the visualization function
-            # self.visualize_features(spe_feat, sha_feat)
-
             prob_sha = torch.softmax(out_sha, dim=1)[:, 1]
             self.prob.append(
                 prob_sha

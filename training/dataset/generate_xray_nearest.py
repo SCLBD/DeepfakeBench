@@ -1,3 +1,12 @@
+'''
+# author: Zhiyuan Yan
+# email: zhiyuanyan@link.cuhk.edu.cn
+# date: 2023-03-30
+
+The code is specifically designed for generating nearest sample pairs for Face X-ray. 
+Alternatively, you can utilize the pre-generated pkl files available in our GitHub repository. Please refer to the "Releases" section on our repository for accessing these files.
+'''
+
 import os
 import json
 import pickle
@@ -32,8 +41,8 @@ def load_landmark(file_path):
 
 def get_landmark_dict(dataset_folder):
     # Check if the dictionary has already been created
-    if os.path.exists('landmark_dict_ff+dfd+celeb+dfdcp.pkl'):
-        with open('landmark_dict_ff+dfd+celeb+dfdcp.pkl', 'rb') as f:
+    if os.path.exists('landmark_dict_ff.pkl'):
+        with open('landmark_dict_ff.pkl', 'rb') as f:
             return pickle.load(f)
     # Open the metadata file for the current folder
     metadata_path = os.path.join(dataset_folder, "FaceForensics++.json")
@@ -95,8 +104,8 @@ def get_nearest_faces(landmark_info, num_neighbors):
     random.seed(1024)  # Fix the random seed for reproducibility
 
     # Check if the dictionary has already been created
-    if os.path.exists('nearest_face_info_7w.pkl'):
-        with open('nearest_face_info_7w.pkl', 'rb') as f:
+    if os.path.exists('nearest_face_info_new.pkl'):
+        with open('nearest_face_info_new.pkl', 'rb') as f:
             return pickle.load(f)
 
     landmarks_array = np.array([lmk.flatten() for lmk in landmark_info.values()])
@@ -113,7 +122,7 @@ def get_nearest_faces(landmark_info, num_neighbors):
         nearest_faces[landmark_ids[idx]] = [landmark_ids[i] for i in indices[1:]]
 
     # Save the dictionary to a pickle file
-    with open('nearest_face_info_7w.pkl', 'wb') as f:
+    with open('nearest_face_info_new.pkl', 'wb') as f:
         pickle.dump(nearest_faces, f)
 
     return nearest_faces

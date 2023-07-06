@@ -1,9 +1,18 @@
+'''
+# author: Zhiyuan Yan
+# email: zhiyuanyan@link.cuhk.edu.cn
+# date: 2023-0706
+
 # ------------------------------------------------------------------------------
 # Copyright (c) Microsoft
 # Licensed under the MIT License.
 # Written by Bin Xiao (Bin.Xiao@microsoft.com)
 # Modified by Ke Sun (sunk@mail.ustc.edu.cn)
 # ------------------------------------------------------------------------------
+
+The code is mainly modified from the below link:
+https://github.com/HRNet/HRNet-Image-Classification/tree/master
+'''
 
 from __future__ import absolute_import
 from __future__ import division
@@ -554,29 +563,6 @@ class HighResolutionNet(nn.Module):
                                  [2:]).view(y.size(0), -1)
 
         y = self.fc(y)
-
-    def init_weights(self, pretrained: Union[bool, str] = False):
-        if isinstance(pretrained, str) and os.path.isfile(pretrained):
-            pretrained_dict = torch.load(pretrained)
-            logger.info('=> loading pretrained model {}'.format(pretrained))
-            model_dict = self.state_dict()
-            pretrained_dict = {k: v for k, v in pretrained_dict.items()
-                               if k in model_dict.keys()}
-            for k, _ in pretrained_dict.items():
-                logger.info(
-                    '=> loading {} pretrained model {}'.format(k, pretrained))
-            model_dict.update(pretrained_dict)
-            self.load_state_dict(model_dict)
-        else:
-            logger.info('=> init weights from normal distribution')
-            for m in self.modules():
-                if isinstance(m, nn.Conv2d):
-                    nn.init.kaiming_normal_(
-                        m.weight, mode='fan_out', nonlinearity='relu')
-                elif isinstance(m, nn.BatchNorm2d):
-                    nn.init.constant_(m.weight, 1)
-                    nn.init.constant_(m.bias, 0)
-
 
 def get_cls_net(config, **kwargs):
     model = HighResolutionNet(config, **kwargs)

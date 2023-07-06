@@ -1,6 +1,8 @@
-"""
-eval pretained model.
-"""
+# author: Zhiyuan Yan
+# email: zhiyuanyan@link.cuhk.edu.cn
+# date: 2023-03-30
+# description: training code.
+
 import os
 import numpy as np
 from os.path import join

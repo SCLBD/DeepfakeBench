@@ -25,7 +25,8 @@ class AbstractBackbone(abc.ABC):
         """
         """
         
-    @abc.abstractmethod
     def init_weights(self, pretrained_path: Union[bool, str]):
         """
+        This method can be optionally implemented by subclasses.
         """
+        pass

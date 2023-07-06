@@ -1,3 +1,33 @@
+'''
+# author: Zhiyuan Yan
+# email: zhiyuanyan@link.cuhk.edu.cn
+# date: 2023-0706
+# description: Class for the ResnetDetector
+
+Functions in the Class are summarized as:
+1. __init__: Initialization
+2. build_backbone: Backbone-building
+3. build_loss: Loss-function-building
+4. features: Feature-extraction
+5. classifier: Classification
+6. get_losses: Loss-computation
+7. get_train_metrics: Training-metrics-computation
+8. get_test_metrics: Testing-metrics-computation
+9. forward: Forward-propagation
+
+Reference:
+@inproceedings{wang2020cnn,
+  title={CNN-generated images are surprisingly easy to spot... for now},
+  author={Wang, Sheng-Yu and Wang, Oliver and Zhang, Richard and Owens, Andrew and Efros, Alexei A},
+  booktitle={Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
+  pages={8695--8704},
+  year={2020}
+}
+
+Notes:
+We chose to use ResNet-34 as the backbone instead of ResNet-50 because the number of parameters in ResNet-34 is relatively similar to that of Xception. This similarity allows us to make a more meaningful and fair comparison between different architectures.
+'''
+
 import os
 import datetime
 import logging
@@ -39,6 +69,7 @@ class ResnetDetector(AbstractDetector):
         backbone_class = BACKBONE[config['backbone_name']]
         model_config = config['backbone_config']
         backbone = backbone_class(model_config)
+        #FIXME: current load pretrained weights only from the backbone, not here
         # # if donot load the pretrained weights, fail to get good results
         # state_dict = torch.load(config['pretrained'])
         # state_dict = {'resnet.'+k:v for k, v in state_dict.items() if 'fc' not in k}

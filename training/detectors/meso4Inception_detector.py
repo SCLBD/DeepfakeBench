@@ -1,3 +1,34 @@
+'''
+# author: Zhiyuan Yan
+# email: zhiyuanyan@link.cuhk.edu.cn
+# date: 2023-0706
+# description: Class for the Meso4InceptionDetector
+
+Functions in the Class are summarized as:
+1. __init__: Initialization
+2. build_backbone: Backbone-building
+3. build_loss: Loss-function-building
+4. features: Feature-extraction
+5. classifier: Classification
+6. get_losses: Loss-computation
+7. get_train_metrics: Training-metrics-computation
+8. get_test_metrics: Testing-metrics-computation
+9. forward: Forward-propagation
+
+Reference:
+@inproceedings{afchar2018mesonet,
+  title={Mesonet: a compact facial video forgery detection network},
+  author={Afchar, Darius and Nozick, Vincent and Yamagishi, Junichi and Echizen, Isao},
+  booktitle={2018 IEEE international workshop on information forensics and security (WIFS)},
+  pages={1--7},
+  year={2018},
+  organization={IEEE}
+}
+
+GitHub Reference:
+https://github.com/HongguLiu/MesoNet-Pytorch
+'''
+
 import os
 import datetime
 import logging

@@ -1,7 +1,12 @@
-"""
+'''
+# author: Zhiyuan Yan
+# email: zhiyuanyan@link.cuhk.edu.cn
+# date: 2023-0706
 
-Author: Andreas Rössler
-"""
+The code is mainly modified from GitHub link below:
+https://github.com/ondyari/FaceForensics/blob/master/classification/network/xception.py
+'''
+
 import os
 import argparse
 import logging
@@ -264,56 +269,3 @@ class Xception(nn.Module):
         x = self.features(input)
         out = self.classifier(x)
         return out, x
-    
-    def init_weights(self, pretrained: Union[bool, str] = False):
-        if isinstance(pretrained, str) and os.path.isfile(pretrained):
-            state_dict = torch.load(pretrained)
-            logger.info('=> loading pretrained model {}'.format(pretrained))
-            # load pre-trained Xception
-            for name, weights in state_dict.items():
-                if 'pointwise' in name:
-                    state_dict[name] = weights.unsqueeze(-1).unsqueeze(-1)
-            state_dict = {k:v for k, v in state_dict.items() if 'fc' not in k}
-            self.load_state_dict(state_dict, False)
-        else:
-            logger.info('=> init weights from normal distribution')
-            for m in self.modules():
-                if isinstance(m, nn.Conv2d):
-                    n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
-                    m.weight.data.normal_(0, math.sqrt(2. / n))
-                elif isinstance(m, nn.BatchNorm2d):
-                    m.weight.data.fill_(1)
-                    m.bias.data.zero_()
-
-
-class RawXception(nn.Module):
-    """
-    Untrained Xception Model
-    """
-
-    def __init__(self, num_out_classes=2, inc=3, dropout=0.0):
-        super(RawXception, self).__init__()
-
-        self.model = Xception(pretrained=None, inc=inc)
-        # Replace fc
-        num_ftrs = self.model.last_linear.in_features
-        if not dropout:
-            self.model.last_linear = nn.Linear(num_ftrs, num_out_classes)
-        else:
-            print('Using dropout', dropout)
-            self.model.last_linear = nn.Sequential(
-                nn.Dropout(p=dropout),
-                nn.Linear(num_ftrs, num_out_classes)
-            )
-
-    def forward(self, x):
-        x = self.model(x)
-        return x
-
-    def features(self, x):
-        x = self.model.features(x)
-        return x
-
-    def classifier(self, x):
-        x = self.model.classifier(x)
-        return x

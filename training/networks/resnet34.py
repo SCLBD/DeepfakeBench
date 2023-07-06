@@ -1,3 +1,11 @@
+'''
+# author: Zhiyuan Yan
+# email: zhiyuanyan@link.cuhk.edu.cn
+# date: 2023-0706
+
+The code is for ResNet34 backbone.
+'''
+
 import os
 import logging
 from typing import Union
@@ -22,7 +30,7 @@ class ResNet34(nn.Module):
         self.mode = resnet_config["mode"]
 
         # Define layers of the backbone
-        resnet = torchvision.models.resnet34(pretrained=True)
+        resnet = torchvision.models.resnet34(pretrained=True)  # FIXME: download the pretrained weights from online
         # resnet.conv1 = nn.Conv2d(inc, 64, kernel_size=7, stride=2, padding=3, bias=False)
         self.resnet = torch.nn.Sequential(*list(resnet.children())[:-2])
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
@@ -50,32 +58,3 @@ class ResNet34(nn.Module):
         x = self.features(inp)
         out = self.classifier(x)
         return out
-
-    def init_weights(self, pretrained: Union[bool, str] = False):
-        if isinstance(pretrained, str) and os.path.isfile(pretrained):
-            pretrained_dict = torch.load(pretrained)
-            logger.info('=> loading pretrained model {}'.format(pretrained))
-
-            # Load pretrained weights
-            state_dict = self.state_dict()
-            for name, param in pretrained_dict.items():
-                if 'fc' in name:
-                    continue
-                if isinstance(param, nn.Parameter):
-                    # backwards compatibility for serialized parameters
-                    param = param.data
-                state_dict[name].copy_(param)
-        else:
-            logger.info('=> init weights from normal distribution')
-            for m in self.modules():
-                if isinstance(m, nn.Conv2d):
-                    nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
-                    if m.bias is not None:
-                        nn.init.constant_(m.bias, 0)
-                elif isinstance(m, nn.BatchNorm2d):
-                    nn.init.constant_(m.weight, 1)
-                    nn.init.constant_(m.bias, 0)
-                elif isinstance(m, nn.Linear):
-                    nn.init.normal_(m.weight, 0, 0.01)
-                    nn.init.constant_(m.bias, 0)
-

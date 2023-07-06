@@ -1,3 +1,11 @@
+'''
+# author: Zhiyuan Yan
+# email: zhiyuanyan@link.cuhk.edu.cn
+# date: 2023-0706
+
+The code is for EfficientNetB4 backbone.
+'''
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -20,7 +28,7 @@ class EfficientNetB4(nn.Module):
         self.mode = efficientnetb4_config["mode"]
 
         # Load the EfficientNet-B4 model without pre-trained weights
-        self.efficientnet = EfficientNet.from_pretrained('efficientnet-b4')
+        self.efficientnet = EfficientNet.from_pretrained('efficientnet-b4')  # FIXME: load the pretrained weights from online
         # self.efficientnet = EfficientNet.from_name('efficientnet-b4')
 
         # Modify the first convolutional layer to accept input tensors with 'inc' channels
@@ -69,28 +77,3 @@ class EfficientNetB4(nn.Module):
         x = x.view(x.size(0), -1)
         x = self.classifier(x)
         return x
-
-    def init_weights(self, pretrained: Union[bool, str] = False):
-        if isinstance(pretrained, str):
-            self.efficientnet.load_state_dict(torch.load(pretrained), strict=False)
-        elif pretrained:
-            self.efficientnet.load_state_dict(torch.hub.load_state_dict_from_url(
-                f'https://publicmodels.blob.core.windows.net/container/aa/efficientnet-b4-6ed6700e.pth'))
-            # If inc is not 3, initialize the first convolutional layer with normal distribution
-            if self.efficientnet._conv_stem.in_channels != 3:
-                nn.init.kaiming_normal_(self.efficientnet._conv_stem.weight, mode='fan_out', nonlinearity='relu')
-                if self.efficientnet._conv_stem.bias is not None:
-                    nn.init.zeros_(self.efficientnet._conv_stem.bias)
-        else:
-            for m in self.modules():
-                if isinstance(m, nn.Conv2d):
-                    nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
-                    if m.bias is not None:
-                        nn.init.zeros_(m.bias)
-                elif isinstance(m, (nn.BatchNorm2d, nn.GroupNorm)):
-                    nn.init.constant_(m.weight, 1)
-                    nn.init.constant_(m.bias, 0)
-                elif isinstance(m, nn.Linear):
-                    nn.init.normal_(m.weight, 0, 0.01)
-                    nn.init.zeros_(m.bias)
-

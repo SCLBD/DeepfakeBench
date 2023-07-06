@@ -1,3 +1,33 @@
+'''
+# author: Zhiyuan Yan
+# email: zhiyuanyan@link.cuhk.edu.cn
+# date: 2023-0706
+# description: Class for the UCFDetector
+
+Functions in the Class are summarized as:
+1. __init__: Initialization
+2. build_backbone: Backbone-building
+3. build_loss: Loss-function-building
+4. features: Feature-extraction
+5. classifier: Classification
+6. get_losses: Loss-computation
+7. get_train_metrics: Training-metrics-computation
+8. get_test_metrics: Testing-metrics-computation
+9. forward: Forward-propagation
+
+Reference:
+@inproceedings{li2020face,
+  title={Face x-ray for more general face forgery detection},
+  author={Li, Lingzhi and Bao, Jianmin and Zhang, Ting and Yang, Hao and Chen, Dong and Wen, Fang and Guo, Baining},
+  booktitle={Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
+  pages={5001--5010},
+  year={2020}
+}
+
+Notes:
+To implement Face X-ray, we utilize the pretrained hrnetv2_w48 as the backbone. Despite our efforts to experiment with alternative backbones, we were unable to attain comparable results with other detectors.
+'''
+
 import os
 import datetime
 import logging
@@ -65,57 +95,10 @@ class FaceXrayDetector(AbstractDetector):
         with open(cfg_path, 'r') as f:
             cfg_config = yaml.safe_load(f)
         convnet = get_cls_net(cfg_config)
-        # convnet = EfficientNet.from_pretrained('efficientnet-b4')
         saved = torch.load('./pretrained/hrnetv2_w48_imagenet_pretrained.pth', map_location='cpu')
         convnet.load_state_dict(saved, False)
         print('Load HRnet')
         return convnet
-
-    # def build_backbone(self, config):
-    #     from timm.models import create_model
-    #     net = create_model(
-    #         'convnext_base', 
-    #         pretrained=True, 
-    #         num_classes=2, 
-    #         drop_path_rate=0.0,
-    #         # layer_scale_init_value=1e-6,
-    #         head_init_scale=1.0,
-    #     )
-    #     print('Load convnext-base')
-    #     return net
-
-    # def build_backbone(self, config):
-    #     # prepare the backbone
-    #     backbone_class = BACKBONE[config['backbone_name']]
-    #     model_config = config['backbone_config']
-    #     backbone = backbone_class(model_config)
-    #     # # if donot load the pretrained weights, fail to get good results
-    #     # state_dict = torch.load(config['pretrained'])
-    #     # state_dict = {'resnet.'+k:v for k, v in state_dict.items() if 'fc' not in k}
-    #     # backbone.load_state_dict(state_dict, False)
-    #     # logger.info('Load pretrained model successfully!')
-    #     return backbone
-
-    # def build_backbone(self, config):
-    #     backbone_class = BACKBONE[config['backbone_name']]
-    #     model_config = config['backbone_config']
-    #     backbone = backbone_class(model_config)
-    #     return backbone
-    
-    # def build_backbone(self, config):
-    #     # prepare the backbone
-    #     backbone_class = BACKBONE[config['backbone_name']]
-    #     model_config = config['backbone_config']
-    #     backbone = backbone_class(model_config)
-    #     # if donot load the pretrained weights, fail to get good results
-    #     state_dict = torch.load(config['pretrained'])
-    #     for name, weights in state_dict.items():
-    #         if 'pointwise' in name:
-    #             state_dict[name] = weights.unsqueeze(-1).unsqueeze(-1)
-    #     state_dict = {k:v for k, v in state_dict.items() if 'fc' not in k}
-    #     backbone.load_state_dict(state_dict, False)
-    #     logger.info('Load pretrained model successfully!')
-    #     return backbone
     
     def build_loss(self, config):
         cls_loss_class = LOSSFUNC[config['loss_func']['cls_loss']]

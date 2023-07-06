@@ -1,3 +1,34 @@
+'''
+# author: Zhiyuan Yan
+# email: zhiyuanyan@link.cuhk.edu.cn
+# date: 2023-0706
+# description: Class for the CapsuleNetDetector
+
+Functions in the Class are summarized as:
+1. __init__: Initialization
+2. build_backbone: Backbone-building
+3. build_loss: Loss-function-building
+4. features: Feature-extraction
+5. classifier: Classification
+6. get_losses: Loss-computation
+7. get_train_metrics: Training-metrics-computation
+8. get_test_metrics: Testing-metrics-computation
+9. forward: Forward-propagation
+
+Reference:
+@inproceedings{nguyen2019capsule,
+  title={Capsule-forensics: Using capsule networks to detect forged images and videos},
+  author={Nguyen, Huy H and Yamagishi, Junichi and Echizen, Isao},
+  booktitle={ICASSP 2019-2019 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  pages={2307--2311},
+  year={2019},
+  organization={IEEE}
+}
+
+GitHub Reference:
+https://github.com/niyunsheng/CORE
+'''
+
 import os
 import datetime
 import numpy as np

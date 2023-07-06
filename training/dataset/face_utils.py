@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Sep 25 16:24:56 2019
-
-@author: py
-"""
-
 import cv2
 import numpy as np
 from skimage import transform as trans

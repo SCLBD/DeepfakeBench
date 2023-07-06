@@ -1,14 +1,18 @@
-"""
+'''
+# author: Zhiyuan Yan
+# email: zhiyuanyan@link.cuhk.edu.cn
+# date: 2023-0706
 
-Author: Andreas Rössler
-"""
+The code is mainly modified from the below link:
+https://github.com/HongguLiu/MesoNet-Pytorch
+'''
+
 import os
 import argparse
 import logging
 
 import math
 import torch
-# import pretrainedmodels
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -21,11 +25,6 @@ logger = logging.getLogger(__name__)
 
 @BACKBONE.register_module(module_name="meso4")
 class Meso4(nn.Module):
-	"""
-	Pytorch Implemention of Meso4
-	Autor: Honggu Liu
-	Date: July 4, 2019
-	"""
 	def __init__(self, meso4_config):
 		super(Meso4, self).__init__()
 		self.num_classes = meso4_config["num_classes"]
@@ -87,11 +86,6 @@ class Meso4(nn.Module):
  
 @BACKBONE.register_module(module_name="meso4Inception")
 class MesoInception4(nn.Module):
-	"""
-	Pytorch Implemention of MesoInception4
-	Author: Honggu Liu
-	Date: July 7, 2019
-	"""
 	def __init__(self, mesoInception4_config):
 		super(MesoInception4, self).__init__()
 		self.num_classes = mesoInception4_config["num_classes"]

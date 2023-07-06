@@ -19,5 +19,3 @@ from .liang_detector import LiangDetector
 from .rfm_detector import RfmDetector
 from .fwa_detector import FWADetector
 from .ffd_detector import FFDDetector
-from .combined_detector import CombDetector
-from .caddm_detector import CaddmDetector # TODO: remove this
