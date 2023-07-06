@@ -173,6 +173,12 @@ python rearrange.py
 After running the above line, you will obtain the json files for each dataset in the [`./preprocessing/dataset_json`](./preprocessing/dataset_json/) folder. The rearranged structure organizes the data in a hierarchical manner, grouping videos based on their labels and data splits (*i.e.,* train, test, validation). Each video is represented as a dictionary entry containing relevant metadata, including file paths, labels, compression levels (if applicable), *etc*. 
 
 
+### Pretrained Weights
+
+<a href="#top">[Back to top]</a>
+
+To run the training code, you should first download the pretrained weights for the corresponding backbones. You can download them from [Link](https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.0/pretrained.zip). After downloading, you need to put all the weights files into the folder [`./training/pretrained/`](./training/pretrained/).
+
 
 
 ### Training
