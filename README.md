@@ -6,6 +6,11 @@
   <img src="figures/archi.png" style="max-width:60%;">
 </div>
 
+<p align="center">
+<br>
+  <a href="https://arxiv.org/abs/2307.01426" target="_blank"> Paper </a >  •  <a href="https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.0/Supplementary_DeepfakeBench.pdf"> Supplementary </a > <br>
+<br>
+</p >
 
 Welcome to *DeepfakeBench*, the comprehensive benchmark for deepfake detection! With a focus on a modular architecture, our comprehensive platform offers a wide range of benefits, including extensibility, maintainability, fairness, and analytical capability. Whether you're an expert in the field or new to the world of deepfakes, DeepfakeBench is designed to captivate and empower you in the realm of deepfake detection.
 
