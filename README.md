@@ -56,12 +56,11 @@ The implementations of more backdoor methods, as well as their evaluations are o
 You can run the following script to configurate necessary environment
 
 ```
-git clone git@github.com:SCLBD/BackdoorBench.git
-cd BackdoorBench
-conda create -n backdoorbench python=3.8
-conda activate backdoorbench
-sh ./sh/install.sh
-sh ./sh/init_folders.sh
+git clone git@github.com:SCLBD/DeepfakeBench.git
+cd DeepfakeBench
+conda create -n DeepfakeBench python=3.9
+conda activate DeepfakeBench
+sh install.sh
 ```
 
 ## Quick Start
@@ -71,7 +70,87 @@ sh ./sh/init_folders.sh
 <a href="#top">[Back to top]</a>
 
 All datasets used in DeepfakeBench can be downloaded from their own websites or repositories.
-For the convenience, we also provide the data we use in our research. All the downloaded datasets have been organized and arranged in the same folder. **Users can easily access and download the preprocessed data**, including original videos and corresponding mask videos, directly from we provided data, including: [Celeb-DF-v1 (code: brkh)](https://pan.baidu.com/s/1uPmg5Nd-vKpcbylHSdNtUg?pwd=brkh), [Celeb-DF-v2 (code: pbod)](https://pan.baidu.com/s/19M7vnspE5aypR2iaWDn-_A?pwd=pbod), FaceForensics++ (coming...), FaceShifter (coming...), DeepfakeDetection (coming...), Deepfake Detection Challenge (Preview) (coming...), Deepfake Detection Challenge (coming...), DeepForensics-1.0 (coming...), UADFV (coming...).
+For the convenience, we also provide the data we use in our research. All the downloaded datasets have been organized and arranged in the same folder. **Users can easily access and download the preprocessed data**, including original videos and corresponding mask videos, directly from we provided data, including:
+
+| Dataset Name                 | Download Link (Baidu Netdisk)                                                  | Extract Code          | Notes |
+| ---------------------------- | --------------------------------------------------------------- | ------------- | ----- |
+| Celeb-DF-v1                  | [Download](https://pan.baidu.com/s/1uPmg5Nd-vKpcbylHSdNtUg?pwd=brkh) | brkh | - |
+| Celeb-DF-v2                  | [Download](https://pan.baidu.com/s/19M7vnspE5aypR2iaWDn-_A?pwd=pbod) | pbod | - |
+| FaceForensics++, DeepfakeDetection, FaceShifter              | [Download](https://pan.baidu.com/s/1VU7R6cFXRVphy0uSjXpCKg?pwd=rhn5)                    | rhn5             | c23 version only |
+| UADFV                        | [Download](https://pan.baidu.com/s/1xdUHRQV3TTsMVL-qLgypAA?pwd=s50u)                  | s50u             | - |
+| Deepfake Detection Challenge (Preview) | [Download](https://pan.baidu.com/s/1TthqUUACnNzGlKD3MUnhow?pwd=11ra)       | 11ra             | - |
+| Deepfake Detection Challenge | Coming Soon                                                     | -             | - |
+| DeepForensics-1.0           | Coming Soon                                                     | -             | - |
+| FaceForensics++ (c40)           | Coming Soon                                                     | -             | - |
+
+
+Other detailed information about the datasets used in DeepfakeBench is summarized below:
+
+
+| Dataset | Real Videos | Fake Videos | Total Videos | Rights Cleared | Total Subjects | Synthesis Methods | Perturbations | Original Repository |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| FaceForensics++ | 1000 | 4000 | 5000 | NO | N/A | 4 | 2 | [Hyper-link](https://github.com/ondyari/FaceForensics/tree/master/dataset) |
+| FaceShifter | 1000 | 1000 | 2000 | NO | N/A | 1 | - | [Hyper-link](https://github.com/ondyari/FaceForensics/tree/master/dataset) |
+| DeepfakeDetection | 363 | 3000 | 3363 | YES | 28 | 5 | - | [Hyper-link](https://github.com/ondyari/FaceForensics/tree/master/dataset) |
+| Deepfake Detection Challenge (Preview) | 1131 | 4119 | 5250 | YES | 66 | 2 | 3 | [Hyper-link](https://ai.facebook.com/datasets/dfdc/) |
+| Deepfake Detection Challenge | 23654 | 104500 | 128154 | YES | 960 | 8 | 19 | [Hyper-link](https://www.kaggle.com/c/deepfake-detection-challenge/data) |
+| CelebDF-v1 | 408 | 795 | 1203 | NO | N/A | 1 | - | [Hyper-link](https://github.com/yuezunli/celeb-deepfakeforensics/tree/master/Celeb-DF-v1) |
+| CelebDF-v2 | 590 | 5639 | 6229 | NO | 59 | 1 | - | [Hyper-link](https://github.com/yuezunli/celeb-deepfakeforensics) |
+| DeepForensics-1.0 | 50000 | 10000 | 60000 | YES | 100 | 1 | 7 | [Hyper-link](https://github.com/EndlessSora/DeeperForensics-1.0/tree/master/dataset) |
+| UADFV | 49 | 49 | 98 | NO | 49 | 1 | - | [Hyper-link](https://docs.google.com/forms/d/e/1FAIpQLScKPoOv15TIZ9Mn0nGScIVgKRM9tFWOmjh9eHKx57Yp-XcnxA/viewform) |
+
+
+Upon downloading your datasets, please ensure to store them in the [`./datasets`](./datasets/) folder, arranging them in accordance with the directory structure outlined below:
+
+```
+datasets
+├── FaceForensics++
+│   ├── original_sequences
+│   │   ├── youtube
+│   │   │   ├── c23
+│   │   │   │   ├── videos
+│   │   │   │   │   └── *.mp4
+│   ├── manipulated_sequences
+│   │   ├── Deepfakes
+│   │   │   ├── c23
+│   │   │   │   └── videos
+│   │   ├── Face2Face
+│   │   │   ├── c23
+│   │   │   │   └── videos
+│   │   ├── FaceSwap
+│   │   │   ├── c23
+│   │   │   │   └── videos
+│   │   ├── NeuralTextures
+│   │   │   ├── c23
+│   │   │   │   └── videos
+│   │   ├── FaceShifter
+│   │   │   ├── c23
+│   │   │   │   └── videos
+│   │   └── DeepFakeDetection
+│   │       ├── c23
+│   │       │   └── videos
+│
+├── Celeb-DF-v1/v2
+│   ├── Celeb-synthesis
+│   │   └── videos
+│   ├── Celeb-real
+│   │   └── videos
+│   └── YouTube-real
+│       └── videos
+│
+├── DFDCP
+│   ├── method_A
+│   ├── method_B
+│   └── original_videos
+│
+├── DeeperForensics-1.0
+│   ├── manipulated_videos
+│   └── source_videos
+│
+└── ...
+```
+
+If you choose to store your datasets in a different folder, for instance, `./deepfake/data`, it's important to reflect this change in the dataset path in the [config.yaml](./preprocessing/config.yaml) for preprocessing purposes.
 
 
 ### Preprocessing
@@ -82,16 +161,16 @@ For the preprocessing module, we mainly provide two scripts: preprocessing and a
 - **The preprocessing script** in DeepfakeBench follows a sequential workflow for face detection, alignment, and cropping. The processed data, including face images, landmarks, and masks, are saved in separate folders for further analysis.
 - **The rearrangement script** simplifies the handling of different datasets by providing a unified and convenient way to load them. The function eliminates the need to write separate input/output (I/O) code for each dataset, reducing duplication of effort and easing data management.
 
-First, you should go to the `./preprocessing/` folder, and set the parameters in `config.yaml`. Specifically, change the `default: DATASET_YOU_SPECIFY` to be the dataset you want to preprocess, *e.g.,* FaceForensics++. Also, you need to specify `dataset_root_path` where the dataset is arranged. After you done with the yaml file, run the following line:
+First, you should go to the [`./preprocessing/`](./preprocessing/) folder, and set the parameters in [config.yaml](./preprocessing/config.yaml). Specifically, change the `default: DATASET_YOU_SPECIFY` to be the dataset you want to preprocess, *e.g.,* FaceForensics++. Also, you need to specify `dataset_root_path` where the dataset is arranged. After you done with the yaml file, run the following line:
 ```shell
 python preprocess.py
 ```
 
-Second, after the preprocessing above, you will obtain the processed data for each dataset you specify. Similarly, you need to set the parameters in `config.yaml` for each dataset. After that, run the following line:
+Second, after the preprocessing above, you will obtain the processed data for each dataset you specify. Similarly, you need to set the parameters in [config.yaml](./preprocessing/config.yaml) for each dataset. After that, run the following line:
 ```
 python rearrange.py
 ```
-After running the above line, you will obtain the json files for each dataset in the `dataset_json` folder. The rearranged structure organizes the data in a hierarchical manner, grouping videos based on their labels and data splits (*i.e.,* train, test, validation). Each video is represented as a dictionary entry containing relevant metadata, including file paths, labels, compression levels (if applicable), *etc*. 
+After running the above line, you will obtain the json files for each dataset in the [`./preprocessing/dataset_json`](./preprocessing/dataset_json/) folder. The rearranged structure organizes the data in a hierarchical manner, grouping videos based on their labels and data splits (*i.e.,* train, test, validation). Each video is represented as a dictionary entry containing relevant metadata, including file paths, labels, compression levels (if applicable), *etc*. 
 
 
 
@@ -100,7 +179,7 @@ After running the above line, you will obtain the json files for each dataset in
 
 <a href="#top">[Back to top]</a>
 
-You should first go to the `./training/config/detector/` folder and then Choose the detector to be trained. For instance, you can adjust the parameters in `xception.yaml` to specify the parameters, *e.g.,* training and testing datasets, epoch, frame_num, *etc*.
+You should first go to the [`./training/config/detector/`](./training/config/detector/) folder and then Choose the detector to be trained. For instance, you can adjust the parameters in [`xception.yaml`](./training/config/detector/xception.yaml) to specify the parameters, *e.g.,* training and testing datasets, epoch, frame_num, *etc*.
 
 After setting the parameters, you can run with the following to train Xception detector:
 
@@ -127,7 +206,7 @@ python train.py \
 --no-save_feat
 ```
 
-To train other detectors using the code mentioned above, you can specify the config file accordingly. However, for the Face X-ray detector, an additional step is required before training. To save training time, a pickle file is generated to store the Top-N nearest images for each given image. To generate this file, you should run the `./training/dataset/generate_xray_nearest.py` file. Once the pickle file is created, you can train the Face X-ray detector using the same way above.
+To train other detectors using the code mentioned above, you can specify the config file accordingly. However, for the Face X-ray detector, an additional step is required before training. To save training time, a pickle file is generated to store the Top-N nearest images for each given image. To generate this file, you should run the [`generate_xray_nearest.py`](./training/dataset/generate_xray_nearest.py) file. Once the pickle file is created, you can train the Face X-ray detector using the same way above.
 
 
 ## Supported Detectors
@@ -184,7 +263,7 @@ As an example, we provide partial results of within-domain and cross-domain eval
 In the above table, "Avg." donates the average AUC for within-domain and cross-domain evaluation, and the overall results. "Top3" represents the count of each method ranks within the top-3 across all testing datasets. The best-performing method for each column is highlighted.
 
 
-Also, we provide all experimental results in [Link (code: qjpd)](https://pan.baidu.com/s/1Mgo5rW08B3ee_8ZBC3EXJA?pwd=qjpd). You can use these results for further analysis using the code in `./analysis` folder. You can run these codes to **reproduce the results** in our original paper.
+Also, we provide all experimental results in [Link (code: qjpd)](https://pan.baidu.com/s/1Mgo5rW08B3ee_8ZBC3EXJA?pwd=qjpd). You can use these results for further analysis using the code in [`./analysis`](`./analysis`) folder. You can run these codes to **reproduce the results** in our original paper.
 
 
 
