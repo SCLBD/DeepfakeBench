@@ -2,15 +2,15 @@
 
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-brightgreen.svg)](https://creativecommons.org/licenses/by-nc/4.0/) ![Release .10](https://img.shields.io/badge/Release-1.0-brightgreen)
 
-<div style="text-align:center;">
-  <img src="figures/archi.png" style="max-width:60%;">
-</div>
-
 <p align="center">
 <br>
   <a href="https://arxiv.org/abs/2307.01426" target="_blank"> Paper </a >  •  <a href="https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.0/Supplementary_DeepfakeBench.pdf"> Supplementary </a > <br>
 <br>
 </p >
+
+<div style="text-align:center;">
+  <img src="figures/archi.png" style="max-width:60%;">
+</div>
 
 Welcome to *DeepfakeBench*, the comprehensive benchmark for deepfake detection! With a focus on a modular architecture, our comprehensive platform offers a wide range of benefits, including extensibility, maintainability, fairness, and analytical capability. Whether you're an expert in the field or new to the world of deepfakes, DeepfakeBench is designed to captivate and empower you in the realm of deepfake detection.
 
