@@ -8,14 +8,9 @@ from .meso4_detector import Meso4Detector
 from .meso4Inception_detector import Meso4InceptionDetector
 from .spsl_detector import SpslDetector
 from .core_detector import CoreDetector
-from .vit_detector import ViTDetector
-from .spsl_detector import SpslDetector
-from .core_detector import CoreDetector
 from .capsule_net_detector import CapsuleNetDetector
 from .srm_detector import SRMDetector
 from .ucf_detector import UCFDetector
 from .recce_detector import RecceDetector
-from .liang_detector import LiangDetector
-from .rfm_detector import RfmDetector
 from .fwa_detector import FWADetector
 from .ffd_detector import FFDDetector
