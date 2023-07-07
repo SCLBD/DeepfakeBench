@@ -12,7 +12,7 @@
   <img src="figures/archi.png" style="max-width:60%;">
 </div>
 
-Welcome to *DeepfakeBench*, the comprehensive benchmark for deepfake detection! With a focus on a modular architecture, our comprehensive platform offers a wide range of benefits, including extensibility, maintainability, fairness, and analytical capability. Whether you're an expert in the field or new to the world of deepfakes, DeepfakeBench is designed to captivate and empower you in the realm of deepfake detection.
+Welcome to *DeepfakeBench*, the comprehensive benchmark for deepfake detection! With a focus on modular architecture, our comprehensive platform offers a wide range of benefits, including extensibility, maintainability, fairness, and analytical capability. Whether you're an expert in the field or new to the world of deepfake, DeepfakeBench is designed to captivate and empower you in the realm of deepfake detection.
 
 
 <font size=5><center><b> Table of Contents </b> </center></font>
@@ -308,6 +308,13 @@ Also, we provide all experimental results in [Link (code: qjpd)](https://pan.bai
 If interested, you can read our recent works about deepfake detection, and more works about trustworthy AI can be found [here](https://sites.google.com/site/baoyuanwu2015/home).
 
 ```
+@article{yan2023deepfakebench,
+  title={DeepfakeBench: A Comprehensive Benchmark of Deepfake Detection},
+  author={Yan, Zhiyuan and Zhang, Yong and Yuan, Xinhang and Lyu, Siwei and Wu, Baoyuan},
+  journal={arXiv preprint arXiv:2307.01426},
+  year={2023}
+}
+
 @article{yan2023ucf,
   title={UCF: Uncovering Common Features for Generalizable Deepfake Detection},
   author={Yan, Zhiyuan and Zhang, Yong and Fan, Yanbo and Wu, Baoyuan},
@@ -324,6 +331,6 @@ If interested, you can read our recent works about deepfake detection, and more 
 
 This repository is licensed by [The Chinese University of Hong Kong, Shenzhen](https://www.cuhk.edu.cn/en) under Creative Commons Attribution-NonCommercial 4.0 International Public License (identified as [CC BY-NC-4.0 in SPDX](https://spdx.org/licenses/)). More details about the license could be found in [LICENSE](./LICENSE).
 
-This project is built by the Secure Computing Lab of Big Data (SCLBD) at The School of Data Science (SDS) of The Chinese University of Hong Kong, Shenzhen, directed by Professor [Baoyuan Wu](https://sites.google.com/site/baoyuanwu2015/home). SCLBD focuses on research of trustworthy AI, including backdoor learning, adversarial examples, federated learning, fairness, etc.
+This project is built by the Secure Computing Lab of Big Data (SCLBD) at The School of Data Science (SDS) of The Chinese University of Hong Kong, Shenzhen, directed by Professor [Baoyuan Wu](https://sites.google.com/site/baoyuanwu2015/home). SCLBD focuses on the research of trustworthy AI, including backdoor learning, adversarial examples, federated learning, fairness, etc.
 
-If any suggestion or comment, please contact us at <wubaoyuan@cuhk.edu.cn>.
+If any suggestions or comments, please contact us at <wubaoyuan@cuhk.edu.cn>.
