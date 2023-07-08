@@ -1,6 +1,6 @@
 # DeepfakeBench: A Comprehensive Benchmark of Deepfake Detection
 
-[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-brightgreen.svg)](https://creativecommons.org/licenses/by-nc/4.0/) ![Release .10](https://img.shields.io/badge/Release-1.0-brightgreen)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-brightgreen.svg)](https://creativecommons.org/licenses/by-nc/4.0/) ![Release .10](https://img.shields.io/badge/Release-1.0-brightgreen) ![PyTorch](https://img.shields.io/badge/PyTorch-1.11-brightgreen) ![Python](https://img.shields.io/badge/Python-3.7.2-brightgreen)
 
 <p align="center">
 <br>
@@ -12,10 +12,19 @@
   <img src="figures/archi.png" style="max-width:60%;">
 </div>
 
-Welcome to *DeepfakeBench*, the comprehensive benchmark for deepfake detection! With a focus on modular architecture, our comprehensive platform offers a wide range of benefits, including extensibility, maintainability, fairness, and analytical capability. Whether you're an expert in the field or new to the world of deepfake, DeepfakeBench is designed to captivate and empower you in the realm of deepfake detection.
+Welcome to *DeepfakeBench*, your one-stop solution for deepfake detection! Here are some key features of our platform:
 
+> ✅ **Unified Platform**: *DeepfakeBench* presents the first comprehensive benchmark for deepfake detection, resolving the issue of lack of standardization and uniformity in this field.
+> 
+> ✅ **Data Management**: *DeepfakeBench* provides a unified data management system that ensures consistent input across all detection models.
+> 
+> ✅ **Integrated Framework**: *DeepfakeBench* offers an integrated framework for the implementation of state-of-the-art detection methods.
+> 
+> ✅ **Standardized Evaluations**: *DeepfakeBench* introduces standardized evaluation metrics and protocols to enhance the transparency and reproducibility of performance evaluations.
+> 
+> ✅ **Extensive Analysis and Insights**: *DeepfakeBench* facilitates an extensive analysis from various perspectives, providing new insights to inspire the development of new technologies.
 
-<font size=5><center><b> Table of Contents </b> </center></font>
+<font size=5><center><b> 📋 Table of Contents </b> </center></font>
 
 - [DeepfakeBench: A Comprehensive Benchmark of Deepfake Detection](#deepfakebench-a-comprehensive-benchmark-of-deepfake-detection)
   - [Features](#features)
@@ -32,7 +41,7 @@ Welcome to *DeepfakeBench*, the comprehensive benchmark for deepfake detection! 
 ---
 
 
-## Features
+## 📚 Features
 <a href="#top">[Back to top]</a>
 
 DeepfakeBench has the following features:
@@ -48,11 +57,9 @@ DeepfakeBench will be continuously updated to track the lastest advances of back
 The implementations of more backdoor methods, as well as their evaluations are on the way. **You are welcome to contribute your detection methods to DeepfakeBench.**
 
 
+## ⏳ Quick Start
 
-## Installation
-
-<a href="#top">[Back to top]</a>
-
+### 1. Installation
 You can run the following script to configurate necessary environment
 
 ```
@@ -63,9 +70,7 @@ conda activate DeepfakeBench
 sh install.sh
 ```
 
-## Quick Start
-
-### Download Data
+### 2. Download Data
 
 <a href="#top">[Back to top]</a>
 
@@ -153,7 +158,7 @@ datasets
 If you choose to store your datasets in a different folder, for instance, `./deepfake/data`, it's important to reflect this change in the dataset path in the [config.yaml](./preprocessing/config.yaml) for preprocessing purposes.
 
 
-### Preprocessing
+### 3. Preprocessing
 
 <a href="#top">[Back to top]</a>
 
@@ -173,7 +178,7 @@ python rearrange.py
 After running the above line, you will obtain the json files for each dataset in the [`./preprocessing/dataset_json`](./preprocessing/dataset_json/) folder. The rearranged structure organizes the data in a hierarchical manner, grouping videos based on their labels and data splits (*i.e.,* train, test, validation). Each video is represented as a dictionary entry containing relevant metadata, including file paths, labels, compression levels (if applicable), *etc*. 
 
 
-### Pretrained Weights
+### 4. Pretrained Weights
 
 <a href="#top">[Back to top]</a>
 
@@ -181,7 +186,7 @@ To run the training code, you should first download the pretrained weights for t
 
 
 
-### Training
+### 5. Training
 
 <a href="#top">[Back to top]</a>
 
@@ -215,7 +220,7 @@ python train.py \
 To train other detectors using the code mentioned above, you can specify the config file accordingly. However, for the Face X-ray detector, an additional step is required before training. To save training time, a pickle file is generated to store the Top-N nearest images for each given image. To generate this file, you should run the [`generate_xray_nearest.py`](./training/dataset/generate_xray_nearest.py) file. Once the pickle file is created, you can train the Face X-ray detector using the same way above.
 
 
-## Supported Detectors
+## 📦 Supported Detectors
 
 <a href="#top">[Back to top]</a>
 
@@ -240,7 +245,7 @@ To train other detectors using the code mentioned above, you can specify the con
 
 
 
-## Results
+## 🏆 Results
 
 <a href="#top">[Back to top]</a>
 
@@ -301,7 +306,7 @@ Also, we provide all experimental results in [Link (code: qjpd)](https://pan.bai
 
 
 
-## Citation
+## 📝 Citation
 
 <a href="#top">[Back to top]</a>
 
@@ -324,7 +329,7 @@ If interested, you can read our recent works about deepfake detection, and more 
 ```
 
 
-## Copyright
+## 🛡️ License
 
 <a href="#top">[Back to top]</a>
 
