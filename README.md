@@ -53,8 +53,8 @@ DeepfakeBench has the following features:
 
 ⭐️ **Datasets** (9 datasets): [FaceForensics++](https://github.com/ondyari/FaceForensics), [FaceShifter](https://github.com/ondyari/FaceForensics/tree/master/dataset), [DeepfakeDetection](https://github.com/ondyari/FaceForensics/tree/master/dataset), [Deepfake Detection Challenge (Preview)](https://ai.facebook.com/datasets/dfdc/), [Deepfake Detection Challenge](https://www.kaggle.com/c/deepfake-detection-challenge/data), [Celeb-DF-v1](https://github.com/yuezunli/celeb-deepfakeforensics/tree/master/Celeb-DF-v1), [Celeb-DF-v2](https://github.com/yuezunli/celeb-deepfakeforensics), [DeepForensics-1.0](https://github.com/EndlessSora/DeeperForensics-1.0/tree/master/dataset), [UADFV](https://docs.google.com/forms/d/e/1FAIpQLScKPoOv15TIZ9Mn0nGScIVgKRM9tFWOmjh9eHKx57Yp-XcnxA/viewform)
 
-DeepfakeBench will be continuously updated to track the lastest advances of backddor learning.
-The implementations of more backdoor methods, as well as their evaluations are on the way. **You are welcome to contribute your detection methods to DeepfakeBench.**
+DeepfakeBench will be continuously updated to track the lastest advances of deepfake detection.
+The implementations of more detection methods, as well as their evaluations are on the way. **You are welcome to contribute your detection methods to DeepfakeBench.**
 
 
 ## ⏳ Quick Start
