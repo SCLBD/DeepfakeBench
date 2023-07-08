@@ -58,7 +58,7 @@ You can run the following script to configurate necessary environment
 ```
 git clone git@github.com:SCLBD/DeepfakeBench.git
 cd DeepfakeBench
-conda create -n DeepfakeBench python=3.9
+conda create -n DeepfakeBench python=3.7.2
 conda activate DeepfakeBench
 sh install.sh
 ```

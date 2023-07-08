@@ -1,4 +1,4 @@
-The Chinese University of Hong Kong, Shenzhen is pleased to support the open source community by making BackdoorBench (the "Software") available. Please carefully read the terms and conditions of the Creative Commons Attribution-NonCommercial 4.0 International Public License (https://creativecommons.org/licenses/by-nc/4.0/legalcode, referred to hereinafter as "Public License") , under which the Software source code is licensed, except for the third-party components or materials listed as follows which are subject to different license. The integration of Software into your own project(s) shall require compliance with the Public License set forth herein. 
+The Chinese University of Hong Kong, Shenzhen is pleased to support the open source community by making DeepfakeBench (the "Software") available. Please carefully read the terms and conditions of the Creative Commons Attribution-NonCommercial 4.0 International Public License (https://creativecommons.org/licenses/by-nc/4.0/legalcode, referred to hereinafter as "Public License") , under which the Software source code is licensed, except for the third-party components or materials listed as follows which are subject to different license. The integration of Software into your own project(s) shall require compliance with the Public License set forth herein. 
 
 Copyright (c) 2023, CUHK(SZ)
 All rights reserved.
@@ -88,14 +88,12 @@ d. Nothing in this Public License constitutes or may be interpreted as a limitat
 Other dependencies and licenses:
 Open Source Software Licensed Under the Apache License, Version 2.0: 
 ----------------------------------------------------------------------------------------
-1. Keras 2.7.0
-Copyright 2015-present The Keras Authors.  All rights reserved.
-
-2. Tensorboard  2.7.0
+1. Tensorboard  2.10.1
 Copyright 2017 The TensorFlow Authors.  All rights reserved.
 
-3.Kornia  0.5.0
-Copyright 2021 Kornia. All Rights Reserved.
+2. efficientnet-pytorch  0.7.1
+
+3. timm  0.6.12
 
 Terms of the Apache License, Version 2.0:
 --------------------------------------------------------------------
@@ -201,22 +199,22 @@ Copyright (c) 2001-2004 Idiap Research Institute (Ronan Collobert, Samy Bengio, 
 From Caffe2:
 Copyright (c) 2016-present, Facebook Inc. All rights reserved.
 All contributions by Facebook: Copyright (c) 2016 Facebook Inc.
-All contributions by Google: Copyright (c) 2015 Google Inc.All rights reserved.
-All contributions by Yangqing Jia:Copyright (c) 2015 Yangqing Jia.All rights reserved.
+All contributions by Google: Copyright (c) 2015 Google Inc. All rights reserved.
+All contributions by Yangqing Jia:Copyright (c) 2015 Yangqing Jia. All rights reserved.
 All contributions by Kakao Brain:Copyright 2019-2020 Kakao Brain
-All contributions by Cruise LLC:Copyright (c) 2022 Cruise LLC.All rights reserved.
-All contributions from Caffe:Copyright(c) 2013, 2014, 2015, the respective contributors.All rights reserved.
-All other contributions:Copyright(c) 2015, 2016 the respective contributors.All rights reserved.
+All contributions by Cruise LLC:Copyright (c) 2022 Cruise LLC. All rights reserved.
+All contributions from Caffe:Copyright(c) 2013, 2014, 2015, the respective contributors. All rights reserved.
+All other contributions:Copyright(c) 2015, 2016 the respective contributors. All rights reserved.
 
-2.pandas  1.3.1
-Copyright (c) 2008-2011, AQR Capital Management, LLC, Lambda Foundry, Inc. and PyData Development Team.All rights reserved.
+2.pandas  1.4.2
+Copyright (c) 2008-2011, AQR Capital Management, LLC, Lambda Foundry, Inc. and PyData Development Team. All rights reserved.
 Copyright (c) 2011-2021, Open source contributors.
 
-3.scikit-learn  0.24.2
-Copyright (c) 2007-2020 The scikit-learn developers.All rights reserved.
+3.scikit-learn  1.0.2
+Copyright (c) 2007-2021 The scikit-learn developers. All rights reserved.
 
-4. scikit-image  0.18.1
-Copyright (C) 2019, the scikit-image team.All rights reserved.
+4. scikit-image  0.19.2
+Copyright (C) 2019, the scikit-image team. All rights reserved.
 
 Terms of the BSD 3-Clause License:
 --------------------------------------------------------------------
@@ -227,17 +225,27 @@ Redistribution and use in source and binary forms, with or without modification,
 
 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 
-3. Neither the names of Facebook, Deepmind Technologies, NYU, NEC Laboratories America and IDIAP Research Institute nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+3. Neither the name of skimage nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 
  
 Terms of the MIT License: 
 ----------------------------------------------------------------------------------------
-1. opencv-python  3.4.2
+1. opencv-python  4.6.0.66
 Copyright (c) Olli-Pekka Heinisuo
 
-2.tqdm  4.61.0
+2. tqdm  4.61.0
 `tqdm` is a product of collaborative work.
 Unless otherwise stated, all authors (see commit logs) retain copyright for their respective work, and release the work under the MIT licence(text below).
 
@@ -251,9 +259,12 @@ Exceptions or notable authors are listed belowin reverse chronological order:
 * files: tqdm/_tqdm.py setup.py README.rst MANIFEST.in .gitignore
   MIT 2013 (c) Noam Yorav-Raphael, original author.
 
-3.pyyaml  5.4.1
+3. pyyaml  6.0
 Copyright (c) 2017-2021 Ingy döt Net
 Copyright (c) 2006-2016 Kirill Simonov
+
+4. segmentation-models-pytorch  0.3.2
+Copyright (c) 2019, Pavel Iakubovskii
 
 Terms of the MIT License:
 --------------------------------------------------------------------
@@ -262,11 +273,22 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- 
+
+4. imgaug  0.4.0
+Copyright (c) 2015 aleju
+
+Terms of the MIT License:
+--------------------------------------------------------------------
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 open source HPND License: 
 ----------------------------------------------------------------------------------------
-1. Pillow  8.2.0
-Copyright 2010-2021 by Alex Clark and contributors
+1. Pillow  9.0.1
+Copyright 2010-2023 by Jeffrey A. Clark (Alex) and contributors
 
 Terms of the open source HPND License:
 --------------------------------------------------------------------
@@ -277,3 +299,93 @@ By obtaining, using, and/or copying this software and/or its associated document
 Permission to use, copy, modify, and distribute this software and its associated documentation for any purpose and without fee is hereby granted, provided that the above copyright notice appears in all copies, and that both that copyright notice and this permission notice appear in supporting documentation, and that the name of Secret Labs AB or the author not be used in advertising or publicity pertaining to distribution of the software without specific, written prior permission.
 
 SECRET LABS AB AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL SECRET LABS AB OR THE AUTHOR BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+Boost Software License:
+----------------------------------------------------------------------------------------
+1. dlib  19.24.0
+
+Terms of the Boost Software License:
+--------------------------------------------------------------------
+dlib is licensed under the Boost Software License:
+
+Permission is hereby granted, free of charge, to any person or organization obtaining a copy of the software and accompanying documentation covered by this license (the "Software") to use, reproduce, display, distribute, execute, and transmit the Software, and to prepare derivative works of the Software, and to permit third-parties to whom the Software is furnished to do so, all subject to the following:
+
+The copyright notices in the Software and this entire statement, including the above license grant, this restriction, and the following disclaimer, must be included in all copies of the Software, in whole or in part, and all derivative works of the Software unless such copies or derivative works are solely in the form of machine-executable object code generated by a source language processor.
+
+THE SOFTWARE IS PROVIDED "AS IS," WITHOUT WARRANTY OF ANY KIND, EXPRESS O IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR ANYONE DISTRIBUTING THE SOFTWARE BE LIABLE FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+BSD 2-Clause "Simplified" License:
+----------------------------------------------------------------------------------------
+1. imageio  2.9.0
+Copyright (c) 2014-2020, imageio developers. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+BSD 3-Clause "New" or "Revised" License:
+----------------------------------------------------------------------------------------
+1. scipy  1.7.3
+Copyright (c) 2001-2002 Enthought, Inc.  2003-2019, SciPy Developers.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+  1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+  2. Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following
+    disclaimer in the documentation and/or other materials provided
+    with the distribution.
+
+  3. Neither the name of the copyright holder nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+2. seaborn  0.11.2
+Copyright (c) 2012-2020, Michael L. Waskom. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+  1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+  2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+  3. Neither the name of the project nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+3. torchtoolbox
+Copyright (c) X.Yang 2019-present, All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+* Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
