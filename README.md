@@ -79,16 +79,16 @@ For the convenience, we also provide the data we use in our research. All the do
 
 | Dataset Name                 | Download Link (Baidu Netdisk)                                                  | Extract Code          | Notes |
 | ---------------------------- | --------------------------------------------------------------- | ------------- | ----- |
-| Celeb-DF-v1                  | [Download](https://pan.baidu.com/s/1uPmg5Nd-vKpcbylHSdNtUg?pwd=brkh) | brkh | - |
-| Celeb-DF-v2                  | [Download](https://pan.baidu.com/s/19M7vnspE5aypR2iaWDn-_A?pwd=pbod) | pbod | - |
-| FaceForensics++, DeepfakeDetection, FaceShifter              | [Download](https://pan.baidu.com/s/1VU7R6cFXRVphy0uSjXpCKg?pwd=rhn5)                    | rhn5             | c23 version only |
-| UADFV                        | [Download](https://pan.baidu.com/s/1xdUHRQV3TTsMVL-qLgypAA?pwd=s50u)                  | s50u             | - |
-| Deepfake Detection Challenge (Preview) | [Download](https://pan.baidu.com/s/1TthqUUACnNzGlKD3MUnhow?pwd=11ra)       | 11ra             | - |
+| Celeb-DF-v1                  | [Download](https://pan.baidu.com/s/1s5KMI3Sy2nRNpCBEb47q9w) | wf2u | - |
+| Celeb-DF-v2                  | [Download](https://pan.baidu.com/s/1Apca2Bgpwxvm9tNO6mUDpQ) | ra5t | - |
+| FaceForensics++, DeepfakeDetection, FaceShifter              | [Download](https://pan.baidu.com/s/1BbnPS2I7DDhMzvGyj3i95w)                    | mvgi             | c23 version only |
+| UADFV                        | [Download](https://pan.baidu.com/s/10-_ZW-TpOkdoY_fmESkIQA)                  | r0gc             | - |
+| Deepfake Detection Challenge (Preview) | [Download](https://pan.baidu.com/s/1b56Msxi5n7gwVoBwhZsXGA)       | i3pa             | - |
 | Deepfake Detection Challenge | Coming Soon                                                     | -             | - |
 | DeepForensics-1.0           | Coming Soon                                                     | -             | - |
 | FaceForensics++ (c40)           | Coming Soon                                                     | -             | - |
 
-
+**Please note**: We have encrypted and compressed the dataset, so you will need to enter the password: `123456`, to decompress each dataset file.
 Other detailed information about the datasets used in DeepfakeBench is summarized below:
 
 
