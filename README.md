@@ -166,9 +166,7 @@ For the preprocessing module, we mainly provide two scripts: preprocessing and a
 - **The preprocessing script** in DeepfakeBench follows a sequential workflow for face detection, alignment, and cropping. The processed data, including face images, landmarks, and masks, are saved in separate folders for further analysis.
 - **The rearrangement script** simplifies the handling of different datasets by providing a unified and convenient way to load them. The function eliminates the need to write separate input/output (I/O) code for each dataset, reducing duplication of effort and easing data management.
 
-First, you need to first download the [shape_predictor_81_face_landmarks.dat]() and put it into the [`./preprocessing/dlib_tools`](./preprocessing/dlib_tools) folder. We use Dlib for face detection. Then, you should go to the [`./preprocessing/`](./preprocessing/) folder, and set the parameters in [config.yaml](./preprocessing/config.yaml). Specifically, change the `default: DATASET_YOU_SPECIFY` to be the dataset you want to preprocess, *e.g.,* FaceForensics++. Also, you need to specify `dataset_root_path` where the dataset is arranged. 
-
-To start preprocessing your dataset using Dlib for face detection, follow these steps:
+To start preprocessing your dataset, please follow these steps:
 
 1. Download the [shape_predictor_81_face_landmarks.dat](https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.0/shape_predictor_81_face_landmarks.dat) file. Then, copy the downloaded shape_predictor_81_face_landmarks.dat file into the [`./preprocessing/dlib_tools`](./preprocessing/dlib_tools) folder. This file is necessary for Dlib's face detection functionality.
 
