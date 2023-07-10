@@ -368,7 +368,7 @@ def preprocess(dataset_path, mask_path, mode, num_frames, stride):
 
     # Define face detector and predictor models
     face_detector = dlib.get_frontal_face_detector()
-    predictor_path = '/home/yuanxinhang/SelfBlendedImages/src/preprocess/shape_predictor_81_face_landmarks.dat'
+    predictor_path = './dlib_tools/shape_predictor_81_face_landmarks.dat'
     ## Check if predictor path exists
     if not dataset_path.exists():
         logger.error(f"Predictor path does not exist: {predictor_path}")
