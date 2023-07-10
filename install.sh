@@ -10,6 +10,7 @@ pip install tqdm==4.61.0
 pip install scipy==1.7.3
 pip install seaborn==0.11.2
 pip install pyyaml==6.0
+pip install imutils==0.5.4
 pip install opencv-python==4.6.0.66
 pip install scikit-image==0.19.2
 pip install scikit-learn==1.0.2

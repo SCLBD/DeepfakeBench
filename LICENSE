@@ -249,6 +249,9 @@ Copyright (c) Olli-Pekka Heinisuo
 `tqdm` is a product of collaborative work.
 Unless otherwise stated, all authors (see commit logs) retain copyright for their respective work, and release the work under the MIT licence(text below).
 
+3. imutils  0.5.4
+Copyright (c) 2015-2016 Adrian Rosebrock, http://www.pyimagesearch.com
+
 Exceptions or notable authors are listed belowin reverse chronological order:
 
 * files: *
