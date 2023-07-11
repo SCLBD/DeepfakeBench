@@ -88,7 +88,7 @@ For the convenience, we also provide the data we use in our research. All the do
 | DeepForensics-1.0           | Coming Soon                                                     | -             | - |
 | FaceForensics++ (c40)           | Coming Soon                                                     | -             | - |
 
-**Please note**: We have encrypted and compressed the dataset, so you will need to enter the password: `123456`, to decompress each dataset file.
+**Please note**: We have encrypted and compressed the dataset, so you will need to enter the password: `123456`, to decompress each dataset file. Alternatively, you can directly run [`./unzip.sh`](./unzip.sh) file to decompress all files in the [`./datasets`](./datasets/) folder. 
 Other detailed information about the datasets used in DeepfakeBench is summarized below:
 
 
