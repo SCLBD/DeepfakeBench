@@ -41,8 +41,6 @@ import torch.optim as optim
 from torch.nn import DataParallel
 from torch.utils.tensorboard import SummaryWriter
 
-from utils.plot_utils import plot_FaceMask
-from utils.gradcam import GradCam
 from metrics.base_metrics_class import calculate_metrics_for_train
 
 from .base_detector import AbstractDetector

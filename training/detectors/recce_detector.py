@@ -39,8 +39,6 @@ from torch.nn import DataParallel
 from torch.utils.tensorboard import SummaryWriter
 import numpy as np
 import argparse
-from utils.plot_utils import plot_FaceMask
-from utils.gradcam import GradCam
 from metrics.base_metrics_class import calculate_metrics_for_train
 
 from networks.xception import SeparableConv2d, Block

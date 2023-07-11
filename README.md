@@ -88,7 +88,7 @@ For the convenience, we also provide the data we use in our research. All the do
 | DeepForensics-1.0           | Coming Soon                                                     | -             | - |
 | FaceForensics++ (c40)           | Coming Soon                                                     | -             | - |
 
-**Please note**: We have encrypted and compressed the dataset, so you will need to enter the password: `123456`, to decompress each dataset file. Alternatively, you can directly run [`./unzip.sh`](./unzip.sh) file to decompress all files in the [`./datasets`](./datasets/) folder. 
+**Please note**: We have encrypted and compressed the dataset, so you will need to enter the password: `123456`, to decompress each dataset file. Alternatively, you can directly run [`./unzip.sh`](./unzip.sh) file to decompress all compressed files (currently limited to `.zip` format) in the [`./datasets`](./datasets/) folder. 
 Other detailed information about the datasets used in DeepfakeBench is summarized below:
 
 
@@ -258,6 +258,7 @@ To train other detectors using the code mentioned above, you can specify the con
 ## 🏆 Results
 
 <a href="#top">[Back to top]</a>
+
 In our Benchmark, we apply [TensorBoard](https://github.com/tensorflow/tensorboard) to monitor the progress of training models. It provides a visual representation of the training process, allowing users to examine training results conveniently.
 
 To demonstrate the effectiveness of different detectors, we present partial results from both within-domain and cross-domain evaluations. The evaluation metric used is the Area Under the Curve (AUC). In this particular scenario, we train the detectors on the FF++ (c23) dataset and assess their performance on other datasets.
