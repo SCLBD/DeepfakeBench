@@ -178,11 +178,15 @@ Replace `./datasets` with the actual path to the folder where your dataset is ar
 Once you have completed these steps, you can proceed with running the following line to do the preprocessing:
 
 ```shell
+cd preprocessing
+
 python preprocess.py
 ```
 
 Second, after the preprocessing above, you will obtain the processed data for each dataset you specify. Similarly, you need to set the parameters in [config.yaml](./preprocessing/config.yaml) for each dataset. After that, run the following line:
 ```
+cd preprocessing
+
 python rearrange.py
 ```
 After running the above line, you will obtain the json files for each dataset in the [`./preprocessing/dataset_json`](./preprocessing/dataset_json/) folder. The rearranged structure organizes the data in a hierarchical manner, grouping videos based on their labels and data splits (*i.e.,* train, test, validation). Each video is represented as a dictionary entry containing relevant metadata, including file paths, labels, compression levels (if applicable), *etc*. 
@@ -205,23 +209,29 @@ You should first go to the [`./training/config/detector/`](./training/config/det
 After setting the parameters, you can run with the following to train Xception detector:
 
 ```
+cd training
+
 python train.py \
---detector_path ./training/config/detector/xception.yaml
+--detector_path ./config/detector/xception.yaml
 ```
 
 You can also adjust the training and testing parameters using the command line, for example:
 
 ```
+cd training
+
 python train.py \
---detector_path ./training/config/detector/xception.yaml  \
+--detector_path ./config/detector/xception.yaml  \
 --train_dataset FaceForensics++ --testing_dataset Celeb-DF-v1
 ```
 
 By default, the checkpoints and features will be saved during the training process. If you do not want to save them, run with the following:
 
 ```
+cd training
+
 python train.py \
---detector_path ./training/config/detector/xception.yaml \
+--detector_path ./config/detector/xception.yaml \
 --train_dataset FaceForensics++ --testing_dataset Celeb-DF-v1 \
 --no-save_ckpt \
 --no-save_feat
