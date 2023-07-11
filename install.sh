@@ -14,6 +14,7 @@ pip install imutils==0.5.4
 pip install opencv-python==4.6.0.66
 pip install scikit-image==0.19.2
 pip install scikit-learn==1.0.2
+pip install albumentations==1.1.0
 pip install torch==1.12.0+cu113 torchvision==0.13.0+cu113 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu113
 pip install efficientnet-pytorch==0.7.1
 pip install timm==0.6.12

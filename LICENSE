@@ -252,6 +252,9 @@ Unless otherwise stated, all authors (see commit logs) retain copyright for thei
 3. imutils  0.5.4
 Copyright (c) 2015-2016 Adrian Rosebrock, http://www.pyimagesearch.com
 
+4. albumentations  1.1.0
+Copyright (c) 2017 Buslaev Alexander, Alexander Parinov, Vladimir Iglovikov
+
 Exceptions or notable authors are listed belowin reverse chronological order:
 
 * files: *
