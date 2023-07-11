@@ -177,7 +177,7 @@ Replace `./datasets` with the actual path to the folder where your dataset is ar
 
 Once you have completed these steps, you can proceed with running the following line to do the preprocessing:
 
-```shell
+```
 cd preprocessing
 
 python preprocess.py
