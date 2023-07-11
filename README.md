@@ -258,8 +258,11 @@ To train other detectors using the code mentioned above, you can specify the con
 ## 🏆 Results
 
 <a href="#top">[Back to top]</a>
+In our Benchmark, we apply [TensorBoard](https://github.com/tensorflow/tensorboard) to monitor the progress of training models. It provides a visual representation of the training process, allowing users to examine training results conveniently.
 
-As an example, we provide partial results of within-domain and cross-domain evaluations for different detectors using the AUC metric. However, for the complete results, we encourage referring to our main paper and supplementary materials.
+To demonstrate the effectiveness of different detectors, we present partial results from both within-domain and cross-domain evaluations. The evaluation metric used is the Area Under the Curve (AUC). In this particular scenario, we train the detectors on the FF++ (c23) dataset and assess their performance on other datasets.
+
+For a comprehensive overview of the results, we strongly recommend referring to our [main paper](https://arxiv.org/abs/2307.01426) and [supplementary materials](https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.0/Supplementary_DeepfakeBench.pdf). These resources provide a detailed analysis of the training outcomes and offer a deeper understanding of the methodology and findings.
 
 
 | Type     | Detector   | Backbone  | FF++\_c23 | FF++\_c40 | FF-DF   | FF-F2F  | FF-FS   | FF-NT   | Avg.     | Top3 | CDFv1   | CDFv2   | DF-1.0  | DFD     | DFDC    | DFDCP   | Fsh     | UADFV   | Avg.    | Top3 |
