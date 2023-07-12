@@ -60,7 +60,7 @@ The implementations of more detection methods, as well as their evaluations, are
 ## ⏳ Quick Start
 
 ### 1. Installation
-You can run the following script to configure the necessary environment:
+(option 1) You can run the following script to configure the necessary environment:
 
 ```
 git clone git@github.com:SCLBD/DeepfakeBench.git
@@ -70,7 +70,7 @@ conda activate DeepfakeBench
 sh install.sh
 ```
 
-You can also utilize the supplied [`Dockerfile`](./Dockerfile) to set up the entire environment using Docker. This will allow you to execute all the codes in the benchmark without encountering any environment-related problems. Simply run the following commands to enter the Docker environment.
+(option 2) You can also utilize the supplied [`Dockerfile`](./Dockerfile) to set up the entire environment using Docker. This will allow you to execute all the codes in the benchmark without encountering any environment-related problems. Simply run the following commands to enter the Docker environment.
 
 ```
 docker build -t DeepfakeBench .
