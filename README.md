@@ -76,6 +76,7 @@ sh install.sh
 docker build -t DeepfakeBench .
 docker run --gpus all -itd -v /path/to/this/repository:/app/ --shm-size 64G DeepfakeBench
 ```
+Note we used Docker version `19.03.14` in our setup. We highly recommend using this version for consistency, but later versions of Docker may also compatible.
 
 ### 2. Download Data
 
