@@ -38,6 +38,8 @@ Welcome to *DeepfakeBench*, your one-stop solution for deepfake detection! Here 
   - [Citation](#citation)
   - [Copyright](#copyright)
 
+❗️ *Note we are currently iterating at a rapid pace! Kindly ensure your focus is on our most recent version.*
+
 ---
 
 
