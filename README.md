@@ -247,6 +247,8 @@ python train.py \
 
 To train other detectors using the code mentioned above, you can specify the config file accordingly. However, for the Face X-ray detector, an additional step is required before training. To save training time, a pickle file is generated to store the Top-N nearest images for each given image. To generate this file, you should run the [`generate_xray_nearest.py`](./training/dataset/generate_xray_nearest.py) file. Once the pickle file is created, you can train the Face X-ray detector using the same way above.
 
+**Please note**: In this benchmark, the validation set is not utilized. Instead, the model is evaluated during the training process every 300 iterations as a default setting. This idea is derived from the [Repo](https://github.com/liangchen527/SLADD), suggesting the selection of the model with the best performance on the test set for evaluation, rather than using a separate evaluation set.
+By following this methodology, the model's performance is monitored and assessed using the test set throughout the training process. This allows for continuous evaluation and enables the selection of the best-performing model based on its performance on the test set.
 
 ## 📦 Supported Detectors
 
