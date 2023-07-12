@@ -344,7 +344,7 @@ Also, we provide all experimental results in [Link (code: qjpd)](https://pan.bai
 
 <a href="#top">[Back to top]</a>
 
-If interested, you can read our recent works about deepfake detection, and more works about trustworthy AI can be found [here](https://sites.google.com/site/baoyuanwu2015/home).
+If you find our benchmark useful to your research, please cite it as follows:
 
 ```
 @article{yan2023deepfakebench,
@@ -353,7 +353,10 @@ If interested, you can read our recent works about deepfake detection, and more 
   journal={arXiv preprint arXiv:2307.01426},
   year={2023}
 }
+```
 
+If interested, you can read our recent works about deepfake detection, and more works about trustworthy AI can be found [here](https://sites.google.com/site/baoyuanwu2015/home).
+```
 @article{yan2023ucf,
   title={UCF: Uncovering Common Features for Generalizable Deepfake Detection},
   author={Yan, Zhiyuan and Zhang, Yong and Fan, Yanbo and Wu, Baoyuan},
