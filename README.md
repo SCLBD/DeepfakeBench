@@ -53,8 +53,8 @@ DeepfakeBench has the following features:
 
 ⭐️ **Datasets** (9 datasets): [FaceForensics++](https://github.com/ondyari/FaceForensics), [FaceShifter](https://github.com/ondyari/FaceForensics/tree/master/dataset), [DeepfakeDetection](https://github.com/ondyari/FaceForensics/tree/master/dataset), [Deepfake Detection Challenge (Preview)](https://ai.facebook.com/datasets/dfdc/), [Deepfake Detection Challenge](https://www.kaggle.com/c/deepfake-detection-challenge/data), [Celeb-DF-v1](https://github.com/yuezunli/celeb-deepfakeforensics/tree/master/Celeb-DF-v1), [Celeb-DF-v2](https://github.com/yuezunli/celeb-deepfakeforensics), [DeepForensics-1.0](https://github.com/EndlessSora/DeeperForensics-1.0/tree/master/dataset), [UADFV](https://docs.google.com/forms/d/e/1FAIpQLScKPoOv15TIZ9Mn0nGScIVgKRM9tFWOmjh9eHKx57Yp-XcnxA/viewform)
 
-DeepfakeBench will be continuously updated to track the lastest advances of deepfake detection.
-The implementations of more detection methods, as well as their evaluations are on the way. **You are welcome to contribute your detection methods to DeepfakeBench.**
+DeepfakeBench will be continuously updated to track the latest advances in deepfake detection.
+The implementations of more detection methods, as well as their evaluations, are on the way. **You are welcome to contribute your detection methods to DeepfakeBench.**
 
 
 ## ⏳ Quick Start
@@ -73,8 +73,8 @@ sh install.sh
 You can also utilize the supplied [`Dockerfile`](./Dockerfile) to set up the entire environment using Docker. This will allow you to execute all the codes in the benchmark without encountering any environment-related problems. Simply run the following commands to enter the Docker environment.
 
 ```
-docker build -t imagename .
-docker run --gpus all -itd -v yourVolum:yourVolum --shm-size 16G IMAGE ID
+docker build -t DeepfakeBench .
+docker run --gpus all -itd -v /path/to/this/repository:/app/ --shm-size 64G DeepfakeBench
 ```
 
 ### 2. Download Data
@@ -82,7 +82,7 @@ docker run --gpus all -itd -v yourVolum:yourVolum --shm-size 16G IMAGE ID
 <a href="#top">[Back to top]</a>
 
 All datasets used in DeepfakeBench can be downloaded from their own websites or repositories.
-For the convenience, we also provide the data we use in our research. All the downloaded datasets have been organized and arranged in the same folder. **Users can easily access and download the preprocessed data**, including original videos and corresponding mask videos, directly from we provided data, including:
+For convenience, we also provide the data we use in our research. All the downloaded datasets have been organized and arranged in the same folder. **Users can easily access and download the preprocessed data**, including original videos and corresponding mask videos, directly from we provided data, including:
 
 | Dataset Name                 | Download Link (Baidu Netdisk)                                                  | Extract Code          | Notes |
 | ---------------------------- | --------------------------------------------------------------- | ------------- | ----- |
