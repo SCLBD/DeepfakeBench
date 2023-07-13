@@ -53,14 +53,14 @@ DeepfakeBench has the following features:
 
 ⭐️ **Datasets** (9 datasets): [FaceForensics++](https://github.com/ondyari/FaceForensics), [FaceShifter](https://github.com/ondyari/FaceForensics/tree/master/dataset), [DeepfakeDetection](https://github.com/ondyari/FaceForensics/tree/master/dataset), [Deepfake Detection Challenge (Preview)](https://ai.facebook.com/datasets/dfdc/), [Deepfake Detection Challenge](https://www.kaggle.com/c/deepfake-detection-challenge/data), [Celeb-DF-v1](https://github.com/yuezunli/celeb-deepfakeforensics/tree/master/Celeb-DF-v1), [Celeb-DF-v2](https://github.com/yuezunli/celeb-deepfakeforensics), [DeepForensics-1.0](https://github.com/EndlessSora/DeeperForensics-1.0/tree/master/dataset), [UADFV](https://docs.google.com/forms/d/e/1FAIpQLScKPoOv15TIZ9Mn0nGScIVgKRM9tFWOmjh9eHKx57Yp-XcnxA/viewform)
 
-DeepfakeBench will be continuously updated to track the lastest advances of deepfake detection.
-The implementations of more detection methods, as well as their evaluations are on the way. **You are welcome to contribute your detection methods to DeepfakeBench.**
+DeepfakeBench will be continuously updated to track the latest advances in deepfake detection.
+The implementations of more detection methods, as well as their evaluations, are on the way. **You are welcome to contribute your detection methods to DeepfakeBench.**
 
 
 ## ⏳ Quick Start
 
 ### 1. Installation
-You can run the following script to configurate necessary environment
+(option 1) You can run the following script to configure the necessary environment:
 
 ```
 git clone git@github.com:SCLBD/DeepfakeBench.git
@@ -70,12 +70,20 @@ conda activate DeepfakeBench
 sh install.sh
 ```
 
+(option 2) You can also utilize the supplied [`Dockerfile`](./Dockerfile) to set up the entire environment using Docker. This will allow you to execute all the codes in the benchmark without encountering any environment-related problems. Simply run the following commands to enter the Docker environment.
+
+```
+docker build -t DeepfakeBench .
+docker run --gpus all -itd -v /path/to/this/repository:/app/ --shm-size 64G DeepfakeBench
+```
+Note we used Docker version `19.03.14` in our setup. We highly recommend using this version for consistency, but later versions of Docker may also compatible.
+
 ### 2. Download Data
 
 <a href="#top">[Back to top]</a>
 
 All datasets used in DeepfakeBench can be downloaded from their own websites or repositories.
-For the convenience, we also provide the data we use in our research. All the downloaded datasets have been organized and arranged in the same folder. **Users can easily access and download the preprocessed data**, including original videos and corresponding mask videos, directly from we provided data, including:
+For convenience, we also provide the data we use in our research. All the downloaded datasets have been organized and arranged in the same folder. **Users can easily access and download the preprocessed data**, including original videos and corresponding mask videos, directly from we provided data, including:
 
 | Dataset Name                 | Download Link (Baidu Netdisk)                                                  | Extract Code          | Notes |
 | ---------------------------- | --------------------------------------------------------------- | ------------- | ----- |
@@ -177,12 +185,16 @@ Replace `./datasets` with the actual path to the folder where your dataset is ar
 
 Once you have completed these steps, you can proceed with running the following line to do the preprocessing:
 
-```shell
+```
+cd preprocessing
+
 python preprocess.py
 ```
 
 Second, after the preprocessing above, you will obtain the processed data for each dataset you specify. Similarly, you need to set the parameters in [config.yaml](./preprocessing/config.yaml) for each dataset. After that, run the following line:
 ```
+cd preprocessing
+
 python rearrange.py
 ```
 After running the above line, you will obtain the json files for each dataset in the [`./preprocessing/dataset_json`](./preprocessing/dataset_json/) folder. The rearranged structure organizes the data in a hierarchical manner, grouping videos based on their labels and data splits (*i.e.,* train, test, validation). Each video is represented as a dictionary entry containing relevant metadata, including file paths, labels, compression levels (if applicable), *etc*. 
@@ -205,30 +217,35 @@ You should first go to the [`./training/config/detector/`](./training/config/det
 After setting the parameters, you can run with the following to train Xception detector:
 
 ```
+cd training
+
 python train.py \
---detector_path ./training/config/detector/xception.yaml
+--detector_path ./config/detector/xception.yaml
 ```
 
 You can also adjust the training and testing parameters using the command line, for example:
 
 ```
+cd training
+
 python train.py \
---detector_path ./training/config/detector/xception.yaml  \
+--detector_path ./config/detector/xception.yaml  \
 --train_dataset FaceForensics++ --testing_dataset Celeb-DF-v1
 ```
 
 By default, the checkpoints and features will be saved during the training process. If you do not want to save them, run with the following:
 
 ```
+cd training
+
 python train.py \
---detector_path ./training/config/detector/xception.yaml \
+--detector_path ./config/detector/xception.yaml \
 --train_dataset FaceForensics++ --testing_dataset Celeb-DF-v1 \
 --no-save_ckpt \
 --no-save_feat
 ```
 
 To train other detectors using the code mentioned above, you can specify the config file accordingly. However, for the Face X-ray detector, an additional step is required before training. To save training time, a pickle file is generated to store the Top-N nearest images for each given image. To generate this file, you should run the [`generate_xray_nearest.py`](./training/dataset/generate_xray_nearest.py) file. Once the pickle file is created, you can train the Face X-ray detector using the same way above.
-
 
 ## 📦 Supported Detectors
 
@@ -324,7 +341,7 @@ Also, we provide all experimental results in [Link (code: qjpd)](https://pan.bai
 
 <a href="#top">[Back to top]</a>
 
-If interested, you can read our recent works about deepfake detection, and more works about trustworthy AI can be found [here](https://sites.google.com/site/baoyuanwu2015/home).
+If you find our benchmark useful to your research, please cite it as follows:
 
 ```
 @article{yan2023deepfakebench,
@@ -333,7 +350,10 @@ If interested, you can read our recent works about deepfake detection, and more 
   journal={arXiv preprint arXiv:2307.01426},
   year={2023}
 }
+```
 
+If interested, you can read our recent works about deepfake detection, and more works about trustworthy AI can be found [here](https://sites.google.com/site/baoyuanwu2015/home).
+```
 @article{yan2023ucf,
   title={UCF: Uncovering Common Features for Generalizable Deepfake Detection},
   author={Yan, Zhiyuan and Zhang, Yong and Fan, Yanbo and Wu, Baoyuan},
