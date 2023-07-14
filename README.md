@@ -2,6 +2,12 @@
 
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-brightgreen.svg)](https://creativecommons.org/licenses/by-nc/4.0/) ![Release .10](https://img.shields.io/badge/Release-1.0-brightgreen) ![PyTorch](https://img.shields.io/badge/PyTorch-1.11-brightgreen) ![Python](https://img.shields.io/badge/Python-3.7.2-brightgreen)
 
+<div align="center">
+ 
+**"You focus on the algorithm. *DeepfakeBench* will do everything else."**  
+
+</div>
+
 <p align="center">
 <br>
   <a href="https://arxiv.org/abs/2307.01426" target="_blank"> Paper </a >  •  <a href="https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.0/Supplementary_DeepfakeBench.pdf"> Supplementary </a > <br>
