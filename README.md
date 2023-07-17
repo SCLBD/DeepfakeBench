@@ -96,7 +96,7 @@ For convenience, we also provide the data we use in our research. All the downlo
 | FaceForensics++, DeepfakeDetection, FaceShifter              | [Download](https://pan.baidu.com/s/1BbnPS2I7DDhMzvGyj3i95w)                    | mvgi             | c23 version only |
 | UADFV                        | [Download](https://pan.baidu.com/s/10-_ZW-TpOkdoY_fmESkIQA)                  | r0gc             | - |
 | Deepfake Detection Challenge (Preview) | [Download](https://pan.baidu.com/s/1b56Msxi5n7gwVoBwhZsXGA)       | i3pa             | - |
-| Deepfake Detection Challenge | Coming Soon                                                     | -             | - |
+| Deepfake Detection Challenge | [Download](https://pan.baidu.com/s/1sFrgIqJeiDqRkNAzhgsQjg?pwd=tk27)                                                     | tk27             | - |
 | DeepForensics-1.0           | Coming Soon                                                     | -             | - |
 | FaceForensics++ (c40)           | Coming Soon                                                     | -             | - |
 
