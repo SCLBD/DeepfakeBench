@@ -238,6 +238,15 @@ def video_manipulate(
     Returns:
         None
     """
+
+    # Define face detector and predictor models
+    face_detector = dlib.get_frontal_face_detector()
+    predictor_path = './dlib_tools/shape_predictor_81_face_landmarks.dat'
+    ## Check if predictor path exists
+    if not os.path.exists(predictor_path):
+        logger.error(f"Predictor path does not exist: {predictor_path}")
+        sys.exit()
+    face_predictor = dlib.shape_predictor(predictor_path)
     
     def facecrop(
         org_path: Path,
@@ -364,16 +373,7 @@ def preprocess(dataset_path, mask_path, mode, num_frames, stride):
         if len(masks_path_list) == 0:
             logger.error(f"No masks found in {mask_path}")
             sys.exit()
-        logger.info(f"{len(masks_path_list)} masks found in {mask_path}")
-
-    # Define face detector and predictor models
-    face_detector = dlib.get_frontal_face_detector()
-    predictor_path = './dlib_tools/shape_predictor_81_face_landmarks.dat'
-    ## Check if predictor path exists
-    if not dataset_path.exists():
-        logger.error(f"Predictor path does not exist: {predictor_path}")
-        sys.exit()
-    face_predictor = dlib.shape_predictor(predictor_path)
+        logger.info(f"{len(masks_path_list)} masks found in {mask_path}")    
     
     # Start timer
     start_time = time.monotonic()
