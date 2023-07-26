@@ -217,8 +217,6 @@ def video_manipulate(
     mode: str,
     num_frames: int, 
     stride: int, 
-    face_predictor: dlib.shape_predictor,
-    face_detector: dlib.fhog_object_detector
     ) -> None:
     """
     Processes a single video file by detecting and cropping the largest face in each frame and saving the results.
@@ -230,8 +228,6 @@ def video_manipulate(
         mode (str): Either 'fixed_num_frames' or 'fixed_stride'.
         num_frames (int): Number of frames to extract from the video.
         stride (int): Number of frames to skip between each frame extracted.
-        face_predictor (dlib.shape_predictor): A dlib face predictor object.
-        face_detector (dlib.fhog_object_detector): A dlib face detector object.
         margin (float): Amount to increase the size of the face bounding box by.
         visualization (bool): Whether to save visualization images.
 
@@ -403,8 +399,6 @@ def preprocess(dataset_path, mask_path, mode, num_frames, stride):
                 mode,
                 num_frames,
                 stride,
-                face_predictor,
-                face_detector,
                 )
             )
         # Wait for all futures to complete and log any errors
