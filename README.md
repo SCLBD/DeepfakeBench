@@ -92,7 +92,7 @@ For convenience, we also provide the data we use in our research. All the downlo
 | Dataset Name                 | Download Link (Baidu Netdisk)                                                  | Extract Code          | Notes |
 | ---------------------------- | --------------------------------------------------------------- | ------------- | ----- |
 | Celeb-DF-v1                  | [Download](https://pan.baidu.com/s/1s5KMI3Sy2nRNpCBEb47q9w) | wf2u | - |
-| Celeb-DF-v2                  | Coming Soon | - | - |
+| Celeb-DF-v2                  | Coming Soon | [Download](https://pan.baidu.com/s/1Z8qyaOiQJPZBd24itEEPDA?pwd=4om9) | 4om9 |
 | FaceForensics++, DeepfakeDetection, FaceShifter              | [Download](https://pan.baidu.com/s/1BbnPS2I7DDhMzvGyj3i95w)                    | mvgi             | c23 version only |
 | UADFV                        | [Download](https://pan.baidu.com/s/10-_ZW-TpOkdoY_fmESkIQA)                  | r0gc             | - |
 | Deepfake Detection Challenge (Preview) | Coming Soon       | -             | - |
