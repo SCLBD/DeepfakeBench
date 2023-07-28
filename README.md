@@ -80,7 +80,7 @@ sh install.sh
 docker build -t DeepfakeBench .
 docker run --gpus all -itd -v /path/to/this/repository:/app/ --shm-size 64G DeepfakeBench
 ```
-Note we used Docker version `19.03.14` in our setup. We highly recommend using this version for consistency, but later versions of Docker may also compatible.
+Note we used Docker version `19.03.14` in our setup. We highly recommend using this version for consistency, but later versions of Docker may also be compatible.
 
 ### 2. Download Data
 
@@ -92,10 +92,10 @@ For convenience, we also provide the data we use in our research. All the downlo
 | Dataset Name                 | Download Link (Baidu Netdisk)                                                  | Extract Code          | Notes |
 | ---------------------------- | --------------------------------------------------------------- | ------------- | ----- |
 | Celeb-DF-v1                  | [Download](https://pan.baidu.com/s/1s5KMI3Sy2nRNpCBEb47q9w) | wf2u | - |
-| Celeb-DF-v2                  | [Download](https://pan.baidu.com/s/1Z8qyaOiQJPZBd24itEEPDA?pwd=4om9) | 4om9 | - |
+| Celeb-DF-v2                  | [Download](https://pan.baidu.com/s/1XBbRLrZ06uQDpD6bZGTHEQ?pwd=hqu1) | hqu1 | - |
 | FaceForensics++, DeepfakeDetection, FaceShifter              | [Download](https://pan.baidu.com/s/1BbnPS2I7DDhMzvGyj3i95w)                    | mvgi             | c23 version only |
 | UADFV                        | [Download](https://pan.baidu.com/s/10-_ZW-TpOkdoY_fmESkIQA)                  | r0gc             | - |
-| Deepfake Detection Challenge (Preview) | Coming Soon       | -             | - |
+| Deepfake Detection Challenge (Preview) | [Download](https://pan.baidu.com/s/1HZEOXRYMTEkdYCOaYhbieg?pwd=027l)       | 027l             | - |
 | Deepfake Detection Challenge |       Coming Soon                                               | -             | - |
 | DeepForensics-1.0           | Coming Soon                                                     | -             | - |
 | FaceForensics++ (c40)           | Coming Soon                                                     | -             | - |
