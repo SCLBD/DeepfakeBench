@@ -96,11 +96,27 @@ For convenience, we also provide the data we use in our research. All the downlo
 | FaceForensics++, DeepfakeDetection, FaceShifter              | [Download](https://pan.baidu.com/s/1BbnPS2I7DDhMzvGyj3i95w)                    | mvgi             | c23 version only |
 | UADFV                        | [Download](https://pan.baidu.com/s/10-_ZW-TpOkdoY_fmESkIQA)                  | r0gc             | - |
 | Deepfake Detection Challenge (Preview) | [Download](https://pan.baidu.com/s/1HZEOXRYMTEkdYCOaYhbieg?pwd=027l)       | 027l             | - |
-| Deepfake Detection Challenge |       Coming Soon                                               | -             | - |
+| Deepfake Detection Challenge |       [Download](https://pan.baidu.com/s/1p5S_fiKk-ovzJ6Ix3Y1LOA?pwd=aktc)                        | aktc             | - |
 | DeepForensics-1.0           | Coming Soon                                                     | -             | - |
 | FaceForensics++ (c40)           | Coming Soon                                                     | -             | - |
 
 **Please note**: We have encrypted and compressed the dataset, so you will need to enter the password: `123456`, to decompress each dataset file. Alternatively, you can directly run [`./unzip.sh`](./unzip.sh) file to decompress all compressed files (currently limited to `.zip` format) in the [`./datasets`](./datasets/) folder. 
+
+It is important to note that the size of `Deepfake Detection Challenge (DFDC)` dataset can be really large. So, you should decompress this dataset manually. Specifically, you should first navigate to the `./datasets` folder where the DFDC dataset is located and decompress each `train_part.zip` file. You can do this by entering the password `123456` when prompted. Once all the `train_part.zip` files are decompressed, you will see folders named `dfdc_train_part_0`, `dfdc_train_part_1`, ..., `dfdc_train_part_49`. Enter the `meta_files` folder inside the `DFDC` folder. Copy the `metadata.json file` from the `meta_files` folder. Paste the `metadata.json` file into each corresponding `dfdc_train_part_X` folder. For example, copy `metadata.json` from `meta_files/dfdc_train_part_0/` folder and paste it into `dfdc_train_part_0`.
+Finally, the directory structure of DFDC should look like this:
+
+```
+DFDC
+├── dfdc_train_part_0
+│   ├── metadata.json
+│   ├── *.mp4
+├── dfdc_train_part_1
+│   ├── metadata.json
+│   ├── *.mp4
+├── ...
+├── dfdc_train_part_49
+```
+
 Other detailed information about the datasets used in DeepfakeBench is summarized below:
 
 
@@ -201,7 +217,7 @@ cd preprocessing
 
 python rearrange.py
 ```
-After running the above line, you will obtain the json files for each dataset in the [`./preprocessing/dataset_json`](./preprocessing/dataset_json/) folder. The rearranged structure organizes the data in a hierarchical manner, grouping videos based on their labels and data splits (*i.e.,* train, test, validation). Each video is represented as a dictionary entry containing relevant metadata, including file paths, labels, compression levels (if applicable), *etc*. 
+After running the above line, you will obtain the JSON files for each dataset in the [`./preprocessing/dataset_json`](./preprocessing/dataset_json/) folder. The rearranged structure organizes the data in a hierarchical manner, grouping videos based on their labels and data splits (*i.e.,* train, test, validation). Each video is represented as a dictionary entry containing relevant metadata, including file paths, labels, compression levels (if applicable), *etc*. 
 
 
 ### 4. Pretrained Weights
@@ -218,7 +234,7 @@ To run the training code, you should first download the pretrained weights for t
 
 You should first go to the [`./training/config/detector/`](./training/config/detector/) folder and then Choose the detector to be trained. For instance, you can adjust the parameters in [`xception.yaml`](./training/config/detector/xception.yaml) to specify the parameters, *e.g.,* training and testing datasets, epoch, frame_num, *etc*.
 
-After setting the parameters, you can run with the following to train Xception detector:
+After setting the parameters, you can run with the following to train the Xception detector:
 
 ```
 cd training
