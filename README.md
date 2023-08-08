@@ -80,7 +80,7 @@ sh install.sh
 docker build -t DeepfakeBench .
 docker run --gpus all -itd -v /path/to/this/repository:/app/ --shm-size 64G DeepfakeBench
 ```
-Note we used Docker version `19.03.14` in our setup. We highly recommend using this version for consistency, but later versions of Docker may also compatible.
+Note we used Docker version `19.03.14` in our setup. We highly recommend using this version for consistency, but later versions of Docker may also be compatible.
 
 ### 2. Download Data
 
@@ -92,15 +92,31 @@ For convenience, we also provide the data we use in our research. All the downlo
 | Dataset Name                 | Download Link (Baidu Netdisk)                                                  | Extract Code          | Notes |
 | ---------------------------- | --------------------------------------------------------------- | ------------- | ----- |
 | Celeb-DF-v1                  | [Download](https://pan.baidu.com/s/1s5KMI3Sy2nRNpCBEb47q9w) | wf2u | - |
-| Celeb-DF-v2                  | [Download](https://pan.baidu.com/s/1Apca2Bgpwxvm9tNO6mUDpQ) | ra5t | - |
+| Celeb-DF-v2                  | [Download](https://pan.baidu.com/s/1XBbRLrZ06uQDpD6bZGTHEQ?pwd=hqu1) | hqu1 | - |
 | FaceForensics++, DeepfakeDetection, FaceShifter              | [Download](https://pan.baidu.com/s/1BbnPS2I7DDhMzvGyj3i95w)                    | mvgi             | c23 version only |
 | UADFV                        | [Download](https://pan.baidu.com/s/10-_ZW-TpOkdoY_fmESkIQA)                  | r0gc             | - |
-| Deepfake Detection Challenge (Preview) | [Download](https://pan.baidu.com/s/1b56Msxi5n7gwVoBwhZsXGA)       | i3pa             | - |
-| Deepfake Detection Challenge | [Download](https://pan.baidu.com/s/1sFrgIqJeiDqRkNAzhgsQjg?pwd=tk27)                                                     | tk27             | - |
+| Deepfake Detection Challenge (Preview) | [Download](https://pan.baidu.com/s/1HZEOXRYMTEkdYCOaYhbieg?pwd=027l)       | 027l             | - |
+| Deepfake Detection Challenge |       [Download](https://pan.baidu.com/s/1p5S_fiKk-ovzJ6Ix3Y1LOA?pwd=aktc)                        | aktc             | - |
 | DeepForensics-1.0           | Coming Soon                                                     | -             | - |
 | FaceForensics++ (c40)           | Coming Soon                                                     | -             | - |
 
 **Please note**: We have encrypted and compressed the dataset, so you will need to enter the password: `123456`, to decompress each dataset file. Alternatively, you can directly run [`./unzip.sh`](./unzip.sh) file to decompress all compressed files (currently limited to `.zip` format) in the [`./datasets`](./datasets/) folder. 
+
+It is important to note that the size of `Deepfake Detection Challenge (DFDC)` dataset can be really large. So, you should decompress this dataset manually. Specifically, you should first navigate to the `./datasets` folder where the DFDC dataset is located and decompress each `train_part.zip` file. You can do this by entering the password `123456` when prompted. Once all the `train_part.zip` files are decompressed, you will see folders named `dfdc_train_part_0`, `dfdc_train_part_1`, ..., `dfdc_train_part_49`. Enter the `meta_files` folder inside the `DFDC` folder. Copy the `metadata.json file` from the `meta_files` folder. Paste the `metadata.json` file into each corresponding `dfdc_train_part_X` folder. For example, copy `metadata.json` from `meta_files/dfdc_train_part_0/` folder and paste it into `dfdc_train_part_0`.
+Finally, the directory structure of DFDC should look like this:
+
+```
+DFDC
+├── dfdc_train_part_0
+│   ├── metadata.json
+│   ├── *.mp4
+├── dfdc_train_part_1
+│   ├── metadata.json
+│   ├── *.mp4
+├── ...
+├── dfdc_train_part_49
+```
+
 Other detailed information about the datasets used in DeepfakeBench is summarized below:
 
 
@@ -201,7 +217,7 @@ cd preprocessing
 
 python rearrange.py
 ```
-After running the above line, you will obtain the json files for each dataset in the [`./preprocessing/dataset_json`](./preprocessing/dataset_json/) folder. The rearranged structure organizes the data in a hierarchical manner, grouping videos based on their labels and data splits (*i.e.,* train, test, validation). Each video is represented as a dictionary entry containing relevant metadata, including file paths, labels, compression levels (if applicable), *etc*. 
+After running the above line, you will obtain the JSON files for each dataset in the [`./preprocessing/dataset_json`](./preprocessing/dataset_json/) folder. The rearranged structure organizes the data in a hierarchical manner, grouping videos based on their labels and data splits (*i.e.,* train, test, validation). Each video is represented as a dictionary entry containing relevant metadata, including file paths, labels, compression levels (if applicable), *etc*. 
 
 
 ### 4. Pretrained Weights
@@ -218,7 +234,7 @@ To run the training code, you should first download the pretrained weights for t
 
 You should first go to the [`./training/config/detector/`](./training/config/detector/) folder and then Choose the detector to be trained. For instance, you can adjust the parameters in [`xception.yaml`](./training/config/detector/xception.yaml) to specify the parameters, *e.g.,* training and testing datasets, epoch, frame_num, *etc*.
 
-After setting the parameters, you can run with the following to train Xception detector:
+After setting the parameters, you can run with the following to train the Xception detector:
 
 ```
 cd training
@@ -268,7 +284,7 @@ To train other detectors using the code mentioned above, you can specify the con
 | FFD              | [ffd_detector.py](./training/detectors/ffd_detector.py)               | [On the Detection of Digital Face Manipulation](http://cvlab.cse.msu.edu/pdfs/dang_liu_stehouwer_liu_jain_cvpr2020.pdf) CVPR 2020                                                                                                                                                                                                                                           |
 | CORE             | [facexray_detector.py](./training/detectors/facexray_detector.py)             | [CORE: COnsistent REpresentation Learning for Face Forgery Detection](https://openaccess.thecvf.com/content/CVPR2022W/WMF/papers/Ni_CORE_COnsistent_REpresentation_Learning_for_Face_Forgery_Detection_CVPRW_2022_paper.pdf) CVPRW 2022                                                                                                                                                    |
 | RECCE         | [recce_detector.py](./training/detectors/recce_detector.py)     | [End-to-End Reconstruction-Classification Learning for Face Forgery Detection](https://openaccess.thecvf.com/content/CVPR2022/papers/Cao_End-to-End_Reconstruction-Classification_Learning_for_Face_Forgery_Detection_CVPR_2022_paper.pdf) CVPR 2022                                                                                                                                                                                               |
-| UCF            | [ucf_detector.py](./training/detectors/ucf_detector.py)           | [UCF: Uncovering Common Features for Generalizable Deepfake Detection](https://arxiv.org/pdf/2304.13949.pdf) ArXiv 2023                                                                                                                                                                                   |
+| UCF            | [ucf_detector.py](./training/detectors/ucf_detector.py)           | [UCF: Uncovering Common Features for Generalizable Deepfake Detection](https://arxiv.org/pdf/2304.13949.pdf) ICCV 2023                                                                                                                                                                                   |
 | F3Net  | [f3net_detector.py](./training/detectors/f3net_detector.py)     | [Thinking in Frequency: Face Forgery Detection by Mining Frequency-aware Clues](https://www.ecva.net/papers/eccv_2020/papers_ECCV/papers/123570086.pdf) ECCV 2020                                                                                                                                                                                                                                                                                 |
 | SPSL   | [spsl_detector.py](./training/detectors/spsl_detector.py)       | [Spatial-Phase Shallow Learning: Rethinking Face Forgery Detection in Frequency Domain](https://openaccess.thecvf.com/content/CVPR2021/papers/Liu_Spatial-Phase_Shallow_Learning_Rethinking_Face_Forgery_Detection_in_Frequency_Domain_CVPR_2021_paper.pdf) CVPR 2021                                                                                                                                                                                                                                                                   |
 | SRM    | [srm_detector.py](./training/detectors/srm_detector.py)         | [Generalizing Face Forgery Detection with High-frequency Features](https://openaccess.thecvf.com/content/CVPR2021/papers/Luo_Generalizing_Face_Forgery_Detection_With_High-Frequency_Features_CVPR_2021_paper.pdf) CVPR 2021                                                       |
