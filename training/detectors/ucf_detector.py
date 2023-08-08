@@ -71,7 +71,7 @@ class UCFDetector(AbstractDetector):
         self.pool = nn.AdaptiveAvgPool2d(1)
 
         # conditional gan
-        self.con_gan = Conditional_UNet(2)
+        self.con_gan = Conditional_UNet()
 
         # head
         specific_task_number = len(config['train_dataset']) + 1  # default: 5 in FF++
@@ -405,7 +405,7 @@ class Conditional_UNet(nn.Module):
                 m.weight.data.normal_(1., std)
                 m.bias.data.fill_(0)
 
-    def __init__(self, num_classes):
+    def __init__(self):
         super(Conditional_UNet, self).__init__()
 
         self.upsample = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)

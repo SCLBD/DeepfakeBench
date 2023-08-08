@@ -355,7 +355,7 @@ def video_manipulate(
         logger.error(f"Error processing video {movie_path}: {e}")
 
 
-def preprocess(dataset_path, mask_path, mode, num_frames, stride):
+def preprocess(dataset_path, mask_path, mode, num_frames, stride, logger):
     # Define paths to videos in dataset
     movies_path_list = sorted([Path(p) for p in glob.glob(os.path.join(dataset_path, '**/*.mp4'), recursive=True)])
     if len(movies_path_list) == 0:
@@ -508,9 +508,9 @@ if __name__ == '__main__':
             # only part of FaceForensics++ has mask
             if dataset_name == 'FaceForensics++' and sub_dataset_path.parent in mask_dataset_paths:
                 mask_dataset_path = os.path.join(sub_dataset_path.parent, "masks")
-                preprocess(sub_dataset_path, mask_dataset_path, mode, num_frames, stride)
+                preprocess(sub_dataset_path, mask_dataset_path, mode, num_frames, stride, logger)
             else:
-                preprocess(sub_dataset_path, None, mode, num_frames, stride)
+                preprocess(sub_dataset_path, None, mode, num_frames, stride, logger)
     else:
         logger.error(f"Sub Dataset path does not exist: {sub_dataset_paths}")
         sys.exit()
