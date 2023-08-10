@@ -395,16 +395,16 @@ class FWABlendDataset(FFBlendDataset):
         if im is None or mask is None:
             return imid_fg, None
 
-        images = [
-            imid_fg, 
-            np.where(mask.astype(np.uint8)>0, 255, 0), 
-            im,
-        ]
-        titles = ["Image", "Mask", "Blended Image"]
+        # images = [
+        #     imid_fg, 
+        #     np.where(mask.astype(np.uint8)>0, 255, 0), 
+        #     im,
+        # ]
+        # titles = ["Image", "Mask", "Blended Image"]
 
-        # Save the combined image
-        os.makedirs('fwa_examples_2', exist_ok=True)
-        self.save_combined_image(images, titles, index, f'fwa_examples_2/combined_image_{index}.png')
+        # # Save the combined image
+        # os.makedirs('fwa_examples_2', exist_ok=True)
+        # self.save_combined_image(images, titles, index, f'fwa_examples_2/combined_image_{index}.png')
         return imid_fg, im
 
 

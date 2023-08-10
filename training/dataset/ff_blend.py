@@ -291,15 +291,15 @@ class FFBlendDataset(data.Dataset):
             blended_image = self.blend_images(color_corrected_fg, bg_im, bg_mask)
         boundary = get_boundary(bg_mask)
 
-        # Prepare images and titles for the combined image
-        images = [fg_im, np.where(fg_mask>0, 255, 0), bg_im, bg_mask, color_corrected_fg, blended_image, np.where(boundary>0, 255, 0)]
-        titles = ["Fg Image", "Fg Mask", "Bg Image",
-                "Bg Mask", "Blended Region",
-                "Blended Image", "Boundary"]
+        # # Prepare images and titles for the combined image
+        # images = [fg_im, np.where(fg_mask>0, 255, 0), bg_im, bg_mask, color_corrected_fg, blended_image, np.where(boundary>0, 255, 0)]
+        # titles = ["Fg Image", "Fg Mask", "Bg Image",
+        #         "Bg Mask", "Blended Region",
+        #         "Blended Image", "Boundary"]
 
-        # Save the combined image
-        os.makedirs('facexray_examples_3', exist_ok=True)
-        self.save_combined_image(images, titles, index, f'facexray_examples_3/combined_image_{index}.png')
+        # # Save the combined image
+        # os.makedirs('facexray_examples_3', exist_ok=True)
+        # self.save_combined_image(images, titles, index, f'facexray_examples_3/combined_image_{index}.png')
         return blended_image, boundary, bg_im
 
 
