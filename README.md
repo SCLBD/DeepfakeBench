@@ -95,10 +95,12 @@ For convenience, we also provide the data we use in our research. All the downlo
 | Celeb-DF-v2                  | [Download](https://pan.baidu.com/s/1XBbRLrZ06uQDpD6bZGTHEQ?pwd=hqu1) | hqu1 | - |
 | FaceForensics++, DeepfakeDetection, FaceShifter              | [Download](https://pan.baidu.com/s/1BbnPS2I7DDhMzvGyj3i95w)                    | mvgi             | c23 version only |
 | UADFV                        | [Download](https://pan.baidu.com/s/10-_ZW-TpOkdoY_fmESkIQA)                  | r0gc             | - |
-| Deepfake Detection Challenge (Preview) | [Download](https://pan.baidu.com/s/1HZEOXRYMTEkdYCOaYhbieg?pwd=027l)       | 027l             | - |
+| Deepfake Detection Challenge (Preview) | [Download](https://pan.baidu.com/s/1ZrBhZAD2YZSqRoTZXjZ2Tg?pwd=j1pq)       | j1pq             | - |
 | Deepfake Detection Challenge |       [Download](https://pan.baidu.com/s/1p5S_fiKk-ovzJ6Ix3Y1LOA?pwd=aktc)                        | aktc             | - |
 | DeepForensics-1.0           | Coming Soon                                                     | -             | - |
 | FaceForensics++ (c40)           | Coming Soon                                                     | -             | - |
+
+🛡️ **Copyright of the above datasets belongs to their original providers.**
 
 **Please note**: We have encrypted and compressed the dataset, so you will need to enter the password: `123456`, to decompress each dataset file. Alternatively, you can directly run [`./unzip.sh`](./unzip.sh) file to decompress all compressed files (currently limited to `.zip` format) in the [`./datasets`](./datasets/) folder. 
 
