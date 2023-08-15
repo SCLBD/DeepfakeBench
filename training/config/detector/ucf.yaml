@@ -23,7 +23,7 @@ dataset_json_folder: '/home/zhiyuanyan/disfin/deepfake_benchmark/preprocessing/d
 dataset_type: pair
 
 compression: c23  # compression-level for videos
-train_batchSize: 32   # training batch size
+train_batchSize: 16   # training batch size
 test_batchSize: 32   # test batch size
 workers: 8   # number of data loading workers
 frame_num: {'train': 32, 'test': 32}   # number of frames to use per video in training and testing
