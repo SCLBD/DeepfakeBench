@@ -117,6 +117,7 @@ class ResnetDetector(AbstractDetector):
         acc = self.correct / self.total
         # reset the prob and label
         self.prob, self.label = [], []
+        self.correct, self.total = 0, 0
         return {'acc':acc, 'auc':auc, 'eer':eer, 'ap':ap, 'pred':y_pred, 'label':y_true}
 
     def forward(self, data_dict: dict, inference=False) -> dict:

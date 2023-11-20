@@ -49,7 +49,6 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
         self.mode = mode
         self.compression = config['compression']
         self.frame_num = config['frame_num'][mode]
-        self.genimg_path = '/mntcephfs/sec_dataset/GenImage/'
 
         # Dataset dictionary
         self.image_list = []
@@ -58,14 +57,20 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
         # Set the dataset dictionary based on the mode
         if mode == 'train':
             dataset_list = config['train_dataset']
+            # Training data should be collected together for training
+            image_list, label_list = [], []
+            for one_data in dataset_list:
+                tmp_image, tmp_label = self.collect_img_and_label_for_one_dataset(one_data)
+                image_list.extend(tmp_image)
+                label_list.extend(tmp_label)
         elif mode == 'test':
-            dataset_list = config['test_dataset']
+            one_data = config['test_dataset']
+            # Test dataset should be evaluated separately. So collect only one dataset each time
+            image_list, label_list = self.collect_img_and_label_for_one_dataset(one_data)
         else:
             raise NotImplementedError('Only train and test modes are supported.')
-        self.dataset_list = dataset_list
-        
-        # Collect image and label lists
-        image_list, label_list = self.collect_img_and_label(dataset_list)
+
+        assert len(image_list)!=0 and len(label_list)!=0, f"Collect nothing for {mode} mode!"
         self.image_list, self.label_list = image_list, label_list
                     
         # Create a dictionary containing the image and label lists
@@ -97,11 +102,11 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
         )
         return trans
        
-    def collect_img_and_label(self, dataset_list):
+    def collect_img_and_label_for_one_dataset(self, dataset_name: str):
         """Collects image and label lists.
 
         Args:
-            dataset_list (dict): A dictionary containing dataset information.
+            dataset_name (str): A list containing one dataset information. e.g., 'FF-F2F'
 
         Returns:
             list: A list of image paths.
@@ -114,88 +119,66 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
         # Initialize the label and frame path lists
         label_list = []
         frame_path_list = []
-        landmarks_list = []
-        masks_list = []
 
-        # If the dataset dictionary is not empty, collect the image, label, landmark, and mask lists
-        if dataset_list:
-            # Iterate over the datasets in the dictionary
-            for dataset_name in dataset_list:
-                # Try to get the dataset information from the JSON file
-                try:
-                    with open(os.path.join(self.config['dataset_json_folder'], dataset_name + '.json'), 'r') as f:
-                        dataset_info = json.load(f)
-                except:
-                    # If the JSON file does not exist, load the images from the genimage path
-                    # ALL: ADM  BigGAN  glide  Midjourney  stable_diffusion_v_1_4  stable_diffusion_v_1_5  VQDM  wukong
-                    dataset_path = os.path.join(self.genimg_path, dataset_name)
-                    if os.path.exists(dataset_path):
-                        if self.mode in ["val", "test"]:
-                            mode = "val"
-                        else:
-                            mode = "train"
+        # Try to get the dataset information from the JSON file
+        try:
+            with open(os.path.join(self.config['dataset_json_folder'], dataset_name + '.json'), 'r') as f:
+                dataset_info = json.load(f)
+        except Exception as e:
+            print(e)
+            raise ValueError(f'dataset {dataset_name} not exist!')
 
-                        mode_path = os.path.join(dataset_path, mode)
-                        if os.path.exists(mode_path):
-                            for subfolder in ['nature', 'ai']:
-                                subfolder_path = os.path.join(mode_path, subfolder)
-                                if os.path.exists(subfolder_path):
-                                    for img_name in os.listdir(subfolder_path):
-                                        frame_path_list.append(os.path.join(subfolder_path, img_name))
-                                        label = 0 if subfolder == 'nature' else 1
-                                        label_list.append(label)
-                    else:
-                        print(f'dataset {dataset_name} not exist! Lets skip it.')
-                        continue # skip if the dataset does not exist in the default image path
+        # If JSON file exists, do the following data collection
+        # FIXME: ugly, need to be modified here.
+        cp = None
+        if dataset_name == 'FaceForensics++_c40':
+            dataset_name = 'FaceForensics++'
+            cp = 'c40'
+        elif dataset_name == 'FF-DF_c40':
+            dataset_name = 'FF-DF'
+            cp = 'c40'
+        elif dataset_name == 'FF-F2F_c40':
+            dataset_name = 'FF-F2F'
+            cp = 'c40'
+        elif dataset_name == 'FF-FS_c40':
+            dataset_name = 'FF-FS'
+            cp = 'c40'
+        elif dataset_name == 'FF-NT_c40':
+            dataset_name = 'FF-NT'
+            cp = 'c40'
+        # Get the information for the current dataset
+        for label in dataset_info[dataset_name]:
+            sub_dataset_info = dataset_info[dataset_name][label][self.mode]
+            # Special case for FaceForensics++ and DeepFakeDetection, choose the compression type
+            if cp == None and dataset_name in ['FF-DF', 'FF-F2F', 'FF-FS', 'FF-NT', 'FaceForensics++','DeepFakeDetection','FaceShifter']:
+                sub_dataset_info = sub_dataset_info[self.compression]
+            elif cp == 'c40' and dataset_name in ['FF-DF', 'FF-F2F', 'FF-FS', 'FF-NT', 'FaceForensics++','DeepFakeDetection','FaceShifter']:
+                sub_dataset_info = sub_dataset_info['c40']
+            # Iterate over the videos in the dataset
+            for video_name, video_info in sub_dataset_info.items():
+                # Get the label and frame paths for the current video
+                if video_info['label'] not in self.config['label_dict']:
+                    raise ValueError(f'Label {video_info["label"]} is not found in the configuration file.')
+                label = self.config['label_dict'][video_info['label']]
+                frame_paths = video_info['frames']
 
-                # If JSON file exists, the following processes the data according to your original code
-                else:
-                    # FIXME: ugly, need to be modified here.
-                    cp = None
-                    if dataset_name == 'FaceForensics++_c40':
-                        dataset_name = 'FaceForensics++'
-                        cp = 'c40'
-                    elif dataset_name == 'FF-DF_c40':
-                        dataset_name = 'FF-DF'
-                        cp = 'c40'
-                    elif dataset_name == 'FF-F2F_c40':
-                        dataset_name = 'FF-F2F'
-                        cp = 'c40'
-                    elif dataset_name == 'FF-FS_c40':
-                        dataset_name = 'FF-FS'
-                        cp = 'c40'
-                    elif dataset_name == 'FF-NT_c40':
-                        dataset_name = 'FF-NT'
-                        cp = 'c40'
-                    # Get the information for the current dataset
-                    for label in dataset_info[dataset_name]:
-                        sub_dataset_info = dataset_info[dataset_name][label][self.mode]
-                        # Special case for FaceForensics++ and DeepFakeDetection, choose the compression type
-                        if cp == None and dataset_name in ['FF-DF', 'FF-F2F', 'FF-FS', 'FF-NT', 'FaceForensics++','DeepFakeDetection','FaceShifter']:
-                            sub_dataset_info = sub_dataset_info[self.compression]
-                        elif cp == 'c40' and dataset_name in ['FF-DF', 'FF-F2F', 'FF-FS', 'FF-NT', 'FaceForensics++','DeepFakeDetection','FaceShifter']:
-                            sub_dataset_info = sub_dataset_info['c40']
-                        # Iterate over the videos in the dataset
-                        for video_name, video_info in sub_dataset_info.items():
-                            # Get the label and frame paths for the current video
-                            if video_info['label'] not in self.config['label_dict']:
-                                raise ValueError(f'Label {video_info["label"]} is not found in the configuration file.')
-                            label = self.config['label_dict'][video_info['label']]
-                            frame_paths = video_info['frames']
-                            
-                            # Append the label and frame paths to the lists
-                            label_list.extend([label]*len(frame_paths))
-                            frame_path_list.extend(frame_paths)
-                    
-                # Shuffle the label and frame path lists in the same order
-                shuffled = list(zip(label_list, frame_path_list))
-                random.shuffle(shuffled)
-                label_list, frame_path_list = zip(*shuffled)
+                # Select self.frame_num frames evenly distributed throughout the video
+                total_frames = len(frame_paths)
+                if self.frame_num < total_frames:
+                    step = total_frames // self.frame_num
+                    selected_frames = [frame_paths[i] for i in range(0, total_frames, step)][:self.frame_num]
                 
-                return frame_path_list, label_list
+                # Append the label and frame paths to the lists according the number of frames
+                label_list.extend([label]*len(selected_frames))
+                frame_path_list.extend(selected_frames)
+            
+        # Shuffle the label and frame path lists in the same order
+        shuffled = list(zip(label_list, frame_path_list))
+        random.shuffle(shuffled)
+        label_list, frame_path_list = zip(*shuffled)
+        
+        return frame_path_list, label_list
 
-        else:
-            raise ValueError('No dataset is given.')
      
     def load_rgb(self, file_path):
         """
@@ -357,8 +340,8 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
         else:
             landmarks = None
 
-        # Do transforms
-        if self.config['use_data_augmentation']:
+        # Do Data Augmentation
+        if self.mode=='train' and self.config['use_data_augmentation']:
             image_trans, landmarks_trans, mask_trans = self.data_aug(image, landmarks, mask)
         else:
             image_trans, landmarks_trans, mask_trans = deepcopy(image), deepcopy(landmarks), deepcopy(mask)

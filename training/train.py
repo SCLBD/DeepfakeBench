@@ -35,7 +35,7 @@ from logger import create_logger
 
 parser = argparse.ArgumentParser(description='Process some paths.')
 parser.add_argument('--detector_path', type=str, 
-                    default='/home/zhiyuanyan/disfin/deepfake_benchmark/training/config/detector/ucf.yaml',
+                    default='/home/zhiyuanyan/DeepfakeBench/training/config/detector/meso4Inception.yaml',
                     help='path to detector YAML file')
 parser.add_argument("--train_dataset", nargs="+")
 parser.add_argument("--test_dataset", nargs="+")
@@ -86,7 +86,7 @@ def prepare_testing_data(config):
     def get_test_data_loader(config, test_name):
         # update the config dictionary with the specific testing dataset
         config = config.copy()  # create a copy of config to avoid altering the original one
-        config['test_dataset'] = [test_name]  # specify the current test dataset
+        config['test_dataset'] = test_name  # specify the current test dataset
         test_set = DeepfakeAbstractBaseDataset(
                 config=config,
                 mode='test', 
