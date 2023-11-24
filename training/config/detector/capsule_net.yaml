@@ -16,7 +16,7 @@ backbone_config:
 
 # dataset
 all_dataset: [FaceForensics++, FF-F2F, FF-DF, FF-FS, FF-NT, FaceShifter, DeepFakeDetection, Celeb-DF-v1, Celeb-DF-v2, DFDCP, DFDC, DeeperForensics-1.0, UADFV]
-train_dataset: [FaceForensics++, Celeb-DF-v2, DFDCP, DFD]
+train_dataset: [FaceForensics++, Celeb-DF-v2, DFDCP, DeepFakeDetection]
 test_dataset: [FaceForensics++, DeepFakeDetection, Celeb-DF-v2, DFDCP]
 dataset_json_folder: '/home/zhiyuanyan/disfin/deepfake_benchmark/preprocessing/dataset_json'
 
@@ -27,6 +27,7 @@ frame_num: {'train': 32, 'test': 32}   # number of frames to use per video in tr
 resolution: 256   # resolution of output image to network
 with_mask: false   # whether to include mask information in the input
 with_landmark: false   # whether to include facial landmark information in the input
+compression: c23 # compression-level for videos
 
 # label settings
 label_dict:

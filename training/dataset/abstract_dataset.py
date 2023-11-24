@@ -167,10 +167,12 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
                 if self.frame_num < total_frames:
                     step = total_frames // self.frame_num
                     selected_frames = [frame_paths[i] for i in range(0, total_frames, step)][:self.frame_num]
-                
-                # Append the label and frame paths to the lists according the number of frames
-                label_list.extend([label]*len(selected_frames))
-                frame_path_list.extend(selected_frames)
+                    # Append the label and frame paths to the lists according the number of frames
+                    label_list.extend([label]*len(selected_frames))
+                    frame_path_list.extend(selected_frames)
+                else:
+                    label_list.extend([label]*total_frames)
+                    frame_path_list.extend(frame_paths)
             
         # Shuffle the label and frame path lists in the same order
         shuffled = list(zip(label_list, frame_path_list))

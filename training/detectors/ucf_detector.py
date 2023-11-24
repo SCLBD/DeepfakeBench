@@ -229,6 +229,7 @@ class UCFDetector(AbstractDetector):
     def get_test_metrics(self):
         y_pred = np.concatenate(self.prob)
         y_true = np.concatenate(self.label)
+        y_true = np.where(y_true!=0, 1, 0)
         # auc
         fpr, tpr, thresholds = metrics.roc_curve(y_true, y_pred, pos_label=1)
         auc = metrics.auc(fpr, tpr)
@@ -243,23 +244,6 @@ class UCFDetector(AbstractDetector):
         self.prob, self.label = [], []
         self.correct, self.total = 0, 0
         return {'acc':acc, 'auc':auc, 'eer':eer, 'ap':ap, 'pred':y_pred, 'label':y_true}
-
-    def visualize_features(self, specific_features, common_features):
-        import matplotlib.pyplot as plt
-
-        # Assuming that features are 1D tensors
-        specific_features = specific_features.detach().numpy()[0]
-        common_features = common_features.detach().numpy()[0]
-
-        fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(10, 5))
-
-        axes[0].bar(range(len(specific_features)), specific_features)
-        axes[0].set_title('Specific Features')
-
-        axes[1].bar(range(len(common_features)), common_features)
-        axes[1].set_title('Common Features')
-
-        plt.savefig('features.png')
 
     def forward(self, data_dict: dict, inference=False) -> dict:
         # split the features into the content and forgery

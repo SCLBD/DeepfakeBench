@@ -62,7 +62,7 @@ def prepare_testing_data(config):
         # update the config dictionary with the specific testing dataset
         config = config.copy()  # create a copy of config to avoid altering the original one
         config['test_dataset'] = test_name  # specify the current test dataset
-        test_set = testDataset(
+        test_set = DeepfakeAbstractBaseDataset(
                 config=config,
                 mode='test', 
             )
@@ -89,14 +89,14 @@ def choose_metric(config):
     return metric_scoring
 
 
-def test_one_dataset(model, data_loader, tsne_dict):
+def test_one_dataset(model, data_loader):
     for i, data_dict in tqdm(enumerate(data_loader)):
         # get data
-        data, label, label_spe, mask, landmark = \
-        data_dict['image'], data_dict['label'], data_dict['label_spe'], data_dict['mask'], data_dict['landmark']
+        data, label, mask, landmark = \
+        data_dict['image'], data_dict['label'], data_dict['mask'], data_dict['landmark']
     
         # move data to GPU
-        data_dict['image'], data_dict['label'], data_dict['label_spe'] = data.to(device), label.to(device), label_spe.to(device)
+        data_dict['image'], data_dict['label'] = data.to(device), label.to(device)
         if mask is not None:
             data_dict['mask'] = mask.to(device)
         if landmark is not None:
@@ -105,18 +105,12 @@ def test_one_dataset(model, data_loader, tsne_dict):
         # model forward without considering gradient computation
         predictions = inference(model, data_dict)
 
-        # update predictions by adding label_spe for t-SNE
-        predictions['label_spe'] = label_spe.cpu().numpy()
-
         # deal with the feat, pooling if needed
         if len(predictions['feat'].shape) == 4:
             predictions['feat'] = F.adaptive_avg_pool2d(predictions['feat'], (1, 1)).reshape(predictions['feat'].shape[0], -1)
         predictions['feat'] = predictions['feat'].cpu().numpy()
     
-        # tsne
-        tsne_dict['feat'].append(predictions['feat'])
-        tsne_dict['label_spe'].append(predictions['label_spe'])
-    return predictions, tsne_dict
+    return predictions
     
 def test_epoch(model, test_data_loaders):
     # set model to eval mode
@@ -125,32 +119,22 @@ def test_epoch(model, test_data_loaders):
     # define test recorder
     metrics_all_datasets = {}
 
-    # tsne dict
-    tsne_dict = defaultdict(list)
-
     # testing for all test data
     keys = test_data_loaders.keys()
     for key in keys:
         # compute loss for each dataset
-        predictions, tsne_dict = test_one_dataset(model, test_data_loaders[key], tsne_dict)
+        predictions = test_one_dataset(model, test_data_loaders[key])
         
         # compute metric for each dataset
         metric_one_dataset = model.get_test_metrics()
         metrics_all_datasets[key] = metric_one_dataset
         
         # info for each dataset
-        metric_str = f"dataset: {key}        "
+        tqdm.write(f"dataset: {key}")
         for k, v in metric_one_dataset.items():
-            metric_str += f"testing-metric, {k}: {v}    "
-        print(metric_str)
-        tqdm.write(metric_str)
+            tqdm.write(f"{k}: {v}")
 
-    # print(f"before concat, feat shape is: {tsne_dict['feat'].shape}, label is: {tsne_dict['label_spe']}")
-    tsne_dict['feat'] = np.concatenate(tsne_dict['feat'], axis=0)
-    # print(f"after concat, feat shape is: {tsne_dict['feat'].shape}, label is: {tsne_dict['label_spe']}")
-    tsne_dict['label_spe'] = np.concatenate(tsne_dict['label_spe'], axis=0)
-    print('===> Test Done!')
-    return metrics_all_datasets, tsne_dict
+    return metrics_all_datasets
 
 @torch.no_grad()
 def inference(model, data_dict):
@@ -170,13 +154,6 @@ def main():
     if args.weights_path:
         config['weights_path'] = args.weights_path
         weights_path = args.weights_path
-
-    # print configuration
-    print("--------------- Configuration ---------------")
-    params_string = "Parameters: \n"
-    for key, value in config.items():
-        params_string += "{}: {}".format(key, value) + "\n"
-    print(params_string)
     
     # init seed
     init_seed(config)
@@ -203,18 +180,9 @@ def main():
     else:
         print('Fail to load the pre-trained weights')
     
-    # prepare the metric
-    metric_scoring = choose_metric(config)
-    
-    # start training
-    best_metric, tsne_dict = test_epoch(model, test_data_loaders)
-    print(f"===> End with testing {metric_scoring}: {best_metric}!")
-    print("Stop on best Testing metric {}".format(best_metric))
-
-    # # save tsne
-    # with open(os.path.join('/mntcephfs/lab_data/zhiyuanyan/benchmark_results/tsne', f"tsne_dict_{config['model_name']}_{epoch}.pkl"), 'wb') as f:
-    #     pickle.dump(tsne_dict, f)
-    # print('===> Save tsne done!')
+    # start testing
+    best_metric = test_epoch(model, test_data_loaders)
+    print('===> Test Done!')
 
 if __name__ == '__main__':
     main()
