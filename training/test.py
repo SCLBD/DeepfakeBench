@@ -23,7 +23,6 @@ import torch.utils.data
 import torch.optim as optim
 
 from dataset.abstract_dataset import DeepfakeAbstractBaseDataset
-from dataset.test_dataset import testDataset
 from dataset.ff_blend import FFBlendDataset
 from dataset.fwa_blend import FWABlendDataset
 from dataset.pair_dataset import pairDataset
