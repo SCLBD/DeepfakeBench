@@ -28,17 +28,17 @@ Welcome to *DeepfakeBench*, your one-stop solution for deepfake detection! Here 
 
 <font size=4><b> Table of Contents </b></font>
 
-- [Features](#Features)
-- [Quick Start](#quick-start)
-  - [Installation](#installation)
-  - [Download Data](#download-data)
-  - [Preprocessing](#preprocessing)
-  - [Training (optional)](#training)
-  - [Evaluation](#evaluation)
-- [Supported Detectors](#supported-detectors)
-- [Results](#results)
-- [Citation](#citation)
-- [Copyright](#copyright)
+- [Features](#-features)
+- [Quick Start](#-quick-start)
+  - [Installation](#1-installation)
+  - [Download Data](#2-download-data)
+  - [Preprocessing](#3-preprocessing)
+  - [Training (optional)](#4-training-optional)
+  - [Evaluation](#5-evaluation)
+- [Supported Detectors](#-supported-detectors)
+- [Results](#-results)
+- [Citation](#-citation)
+- [Copyright](#%EF%B8%8F-license)
 
 ---
 
