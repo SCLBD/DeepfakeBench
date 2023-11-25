@@ -25,20 +25,20 @@ Welcome to *DeepfakeBench*, your one-stop solution for deepfake detection! Here 
 > 
 > ✅ **Extensive Analysis and Insights**: *DeepfakeBench* facilitates an extensive analysis from various perspectives, providing new insights to inspire the development of new technologies.
 
-<font size=5><center><b> 📋 Table of Contents </b> </center></font>
 
-- [DeepfakeBench: A Comprehensive Benchmark of Deepfake Detection](#deepfakebench-a-comprehensive-benchmark-of-deepfake-detection)
-  - [Features](#Features)
-  - [Quick Start](#quick-start)
-    - [Installation](#installation)
-    - [Download Data](#download-data)
-    - [Preprocessing](#preprocessing)
-    - [Training (optional)](#training)
-    - [Evaluation](#evaluation)
-  - [Supported Detectors](#supported-detectors)
-  - [Results](#results)
-  - [Citation](#citation)
-  - [Copyright](#copyright)
+<font size=4><b> Table of Contents </b></font>
+
+- [Features](#Features)
+- [Quick Start](#quick-start)
+  - [Installation](#installation)
+  - [Download Data](#download-data)
+  - [Preprocessing](#preprocessing)
+  - [Training (optional)](#training)
+  - [Evaluation](#evaluation)
+- [Supported Detectors](#supported-detectors)
+- [Results](#results)
+- [Citation](#citation)
+- [Copyright](#copyright)
 
 ---
 
