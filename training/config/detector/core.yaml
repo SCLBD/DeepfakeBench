@@ -20,6 +20,7 @@ train_dataset: [FF-NT]
 test_dataset: [FaceForensics++, FF-F2F, FF-DF, FF-FS, FF-NT]
 dataset_json_folder: '/home/zhiyuanyan/disfin/deepfake_benchmark/preprocessing/dataset_json'
 
+compression: c23  # compression-level for videos
 train_batchSize: 32   # training batch size
 test_batchSize: 32   # test batch size
 workers: 8   # number of data loading workers

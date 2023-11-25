@@ -36,7 +36,8 @@ Welcome to *DeepfakeBench*, your one-stop solution for deepfake detection! Here 
   - [Quick Start](#quick-start)
     - [Download Data](#download-data)
     - [Preprocessing](#preprocessing)
-    - [Training](#training)
+    - [Training (optional)](#training)
+    - [Evaluation](#evaluation)
   - [Supported Detectors](#supported-detectors)
   - [Results](#results)
   - [Citation](#citation)
@@ -198,7 +199,7 @@ For the preprocessing module, we mainly provide two scripts: preprocessing and a
 
 To start preprocessing your dataset, please follow these steps:
 
-1. Download the [shape_predictor_81_face_landmarks.dat](https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.0/shape_predictor_81_face_landmarks.dat) file. Then, copy the downloaded shape_predictor_81_face_landmarks.dat file into the [`./preprocessing/dlib_tools`](./preprocessing/dlib_tools) folder. This file is necessary for Dlib's face detection functionality.
+1. Download the [shape_predictor_81_face_landmarks.dat](https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.0/shape_predictor_81_face_landmarks.dat) file. Then, copy the downloaded shape_predictor_81_face_landmarks.dat file into the `./preprocessing/dlib_tools folder`. This file is necessary for Dlib's face detection functionality.
 
 2. Open the [`./preprocessing/config.yaml`](./preprocessing/config.yaml) and locate the line `default: DATASET_YOU_SPECIFY`. Replace `DATASET_YOU_SPECIFY` with the name of the dataset you want to preprocess, such as `FaceForensics++`.
 
@@ -213,61 +214,64 @@ cd preprocessing
 python preprocess.py
 ```
 
-Second, after the preprocessing above, you will obtain the processed data for each dataset you specify. Similarly, you need to set the parameters in [config.yaml](./preprocessing/config.yaml) for each dataset. After that, run the following line:
+Second, after the preprocessing above, you will obtain the processed data for each dataset you specify. Similarly, you need to set the parameters in `./preprocessing/config.yaml` for each dataset. After that, run the following line:
 ```
 cd preprocessing
 
 python rearrange.py
 ```
-After running the above line, you will obtain the JSON files for each dataset in the [`./preprocessing/dataset_json`](./preprocessing/dataset_json/) folder. The rearranged structure organizes the data in a hierarchical manner, grouping videos based on their labels and data splits (*i.e.,* train, test, validation). Each video is represented as a dictionary entry containing relevant metadata, including file paths, labels, compression levels (if applicable), *etc*. 
+After running the above line, you will obtain the JSON files for each dataset in the `./preprocessing/dataset_json` folder. The rearranged structure organizes the data in a hierarchical manner, grouping videos based on their labels and data splits (*i.e.,* train, test, validation). Each video is represented as a dictionary entry containing relevant metadata, including file paths, labels, compression levels (if applicable), *etc*. 
 
 
-### 4. Pretrained Weights
-
-<a href="#top">[Back to top]</a>
-
-To run the training code, you should first download the pretrained weights for the corresponding backbones. You can download them from [Link](https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.0/pretrained.zip). After downloading, you need to put all the weights files into the folder [`./training/pretrained/`](./training/pretrained/).
-
-
-
-### 5. Training
+### 4. Training (optional)
 
 <a href="#top">[Back to top]</a>
 
-You should first go to the [`./training/config/detector/`](./training/config/detector/) folder and then Choose the detector to be trained. For instance, you can adjust the parameters in [`xception.yaml`](./training/config/detector/xception.yaml) to specify the parameters, *e.g.,* training and testing datasets, epoch, frame_num, *etc*.
+To run the training code, you should first download the pretrained weights for the corresponding **backbones** (These pre-trained weights are from ImageNet). You can download them from [Link](https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.0/pretrained.zip). After downloading, you need to put all the weights files into the folder `./training/pretrained`.
+
+Then, you should go to the `./training/config/detector/` folder and then Choose the detector to be trained. For instance, you can adjust the parameters in [`xception.yaml`](./training/config/detector/xception.yaml) to specify the parameters, *e.g.,* training and testing datasets, epoch, frame_num, *etc*.
 
 After setting the parameters, you can run with the following to train the Xception detector:
 
 ```
-cd training
-
-python train.py \
---detector_path ./config/detector/xception.yaml
+python training/train.py \
+--detector_path ./training/config/detector/xception.yaml
 ```
 
-You can also adjust the training and testing parameters using the command line, for example:
+You can also adjust the training and testing datasets using the command line, for example:
 
 ```
-cd training
-
-python train.py \
---detector_path ./config/detector/xception.yaml  \
---train_dataset FaceForensics++ --testing_dataset Celeb-DF-v1
+python training/train.py \
+--detector_path ./training/config/detector/xception.yaml  \
+--train_dataset "FaceForensics++" \
+--testing_dataset "Celeb-DF-v1" "Celeb-DF-v2"
 ```
 
 By default, the checkpoints and features will be saved during the training process. If you do not want to save them, run with the following:
 
 ```
-cd training
-
-python train.py \
---detector_path ./config/detector/xception.yaml \
---train_dataset FaceForensics++ --testing_dataset Celeb-DF-v1 \
+python training/train.py \
+--detector_path ./training/config/detector/xception.yaml \
+--train_dataset "FaceForensics++" \
+--testing_dataset "Celeb-DF-v1" "Celeb-DF-v2" \
 --no-save_ckpt \
 --no-save_feat
 ```
 
 To train other detectors using the code mentioned above, you can specify the config file accordingly. However, for the Face X-ray detector, an additional step is required before training. To save training time, a pickle file is generated to store the Top-N nearest images for each given image. To generate this file, you should run the [`generate_xray_nearest.py`](./training/dataset/generate_xray_nearest.py) file. Once the pickle file is created, you can train the Face X-ray detector using the same way above.
+
+
+### 5. Evaluation
+If you only want to evaluate the detectors to produce the results of the cross-dataset evaluation, you can use the the [`test.py`](./training/test.py) code for evaluation. Here is an example:
+
+```
+python3 training/test.py \
+--detector_path ./training/config/detector/xception.yaml \
+--test_dataset "Celeb-DF-v1" "Celeb-DF-v2" "DFDCP" \
+--weights_path ./training/weights/xception_best.pth
+```
+**Note that we have provided the pre-trained weights for each detector (you can download them from the [`link`](https://github.com/SCLBD/DeepfakeBench/releases/tag/v1.0.1)).** Make sure to put these weights in the `./training/weights` folder.
+
 
 ## 📦 Supported Detectors
 
@@ -300,9 +304,9 @@ To train other detectors using the code mentioned above, you can specify the con
 
 In our Benchmark, we apply [TensorBoard](https://github.com/tensorflow/tensorboard) to monitor the progress of training models. It provides a visual representation of the training process, allowing users to examine training results conveniently.
 
-To demonstrate the effectiveness of different detectors, we present partial results from both within-domain and cross-domain evaluations. The evaluation metric used is the Area Under the Curve (AUC). In this particular scenario, we train the detectors on the FF++ (c23) dataset and assess their performance on other datasets.
+To demonstrate the effectiveness of different detectors, we present partial results from both within-domain and cross-domain evaluations. The evaluation metric used is the frame-level Area Under the Curve (AUC). In this particular scenario, we train the detectors on the FF++ (c23) dataset and assess their performance on other datasets.
 
-For a comprehensive overview of the results, we strongly recommend referring to our [main paper](https://arxiv.org/abs/2307.01426) and [supplementary materials](https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.0/Supplementary_DeepfakeBench.pdf). These resources provide a detailed analysis of the training outcomes and offer a deeper understanding of the methodology and findings.
+For a comprehensive overview of the results, we strongly recommend referring to our [paper](https://arxiv.org/abs/2307.01426). These resources provide a detailed analysis of the training outcomes and offer a deeper understanding of the methodology and findings.
 
 
 | Type     | Detector   | Backbone  | FF++\_c23 | FF++\_c40 | FF-DF   | FF-F2F  | FF-FS   | FF-NT   | Avg.     | Top3 | CDFv1   | CDFv2   | DF-1.0  | DFD     | DFDC    | DFDCP   | Fsh     | UADFV   | Avg.    | Top3 |
@@ -327,7 +331,7 @@ For a comprehensive overview of the results, we strongly recommend referring to 
 In the above table, "Avg." donates the average AUC for within-domain and cross-domain evaluation, and the overall results. "Top3" represents the count of each method ranks within the top-3 across all testing datasets. The best-performing method for each column is highlighted.
 
 
-Also, we provide all experimental results in [Link (code: qjpd)](https://pan.baidu.com/s/1Mgo5rW08B3ee_8ZBC3EXJA?pwd=qjpd). You can use these results for further analysis using the code in [`./analysis`](`./analysis`) folder. You can run these codes to **reproduce the results** in our original paper.
+Also, we provide all experimental results in [Link (code: qjpd)](https://pan.baidu.com/s/1Mgo5rW08B3ee_8ZBC3EXJA?pwd=qjpd). You can use these results for further analysis using the code in [`./analysis`](`./analysis`) folder.
 
 
 
