@@ -273,7 +273,8 @@ class UCFDetector(AbstractDetector):
             )
             # deal with acc
             _, prediction_class = torch.max(out_sha, 1)
-            correct = (prediction_class == data_dict['label']).sum().item()
+            common_label = (data_dict['label'] >= 1)
+            correct = (prediction_class == common_label).sum().item()
             self.correct += correct
             self.total += data_dict['label'].size(0)
 
