@@ -57,13 +57,15 @@ class RandomDownScale(A.core.transforms_interface.ImageOnlyTransform):
 class FFBlendDataset(data.Dataset):
     def __init__(self, config=None):
         # Check if the dictionary has already been created
-        if os.path.exists('nearest_face_info_new.pkl'):
-            with open('nearest_face_info_new.pkl', 'rb') as f:
+        if os.path.exists('training/lib/nearest_face_info.pkl'):
+            with open('training/lib/nearest_face_info.pkl', 'rb') as f:
                 face_info = pickle.load(f)
+        else:
+            raise ValueError(f"Need to run the dataset/generate_xray_nearest.py before training the face xray.")
         self.face_info = face_info
         # Check if the dictionary has already been created
-        if os.path.exists('landmark_dict_ffall.pkl'):
-            with open('landmark_dict_ffall.pkl', 'rb') as f:
+        if os.path.exists('training/lib/landmark_dict_ffall.pkl'):
+            with open('training/lib/landmark_dict_ffall.pkl', 'rb') as f:
                 landmark_dict = pickle.load(f)
         self.landmark_dict = landmark_dict
         self.imid_list = self.get_training_imglist()
