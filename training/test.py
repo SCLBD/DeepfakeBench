@@ -89,7 +89,7 @@ def choose_metric(config):
 
 
 def test_one_dataset(model, data_loader):
-    for i, data_dict in tqdm(enumerate(data_loader)):
+    for i, data_dict in tqdm(enumerate(data_loader), total=len(data_loader)):
         # get data
         data, label, mask, landmark = \
         data_dict['image'], data_dict['label'], data_dict['mask'], data_dict['landmark']

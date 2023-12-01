@@ -157,7 +157,7 @@ class Trainer(object):
         train_recorder_loss = defaultdict(Recorder)
         train_recorder_metric = defaultdict(Recorder)
 
-        for iteration, data_dict in tqdm(enumerate(train_data_loader)):
+        for iteration, data_dict in tqdm(enumerate(train_data_loader), total=len(train_data_loader)):
             self.setTrain()
 
             # get data
@@ -211,22 +211,24 @@ class Trainer(object):
                 loss_str = f"Iter: {step_cnt}    "
                 for k, v in train_recorder_loss.items():
                     loss_str += f"training-loss, {k}: {v.average()}    "
+                    # tensorboard-1. loss
+                    writer = self.get_writer('train', ','.join(self.config['train_dataset']), k)
+                    writer.add_scalar(f'train_loss/{k}', v.average(), global_step=step_cnt)
                 self.logger.info(loss_str)
+
                 # info for metric
                 metric_str = f"Iter: {step_cnt}    "
                 for k, v in train_recorder_metric.items():
-                    metric_str += f"training-metric, {k}: {v.average()}    "
+                    v_avg = v.average()
+                    if v_avg is None:
+                        metric_str += f"training-metric, {k}: fail to compute because the metric within this batch is NaN    "
+                        continue  # tensorboard doesnt support the str when v_avg is None
+                    metric_str += f"training-metric, {k}: {v_avg}    "
+                    # tensorboard-2. metric
+                    writer = self.get_writer('train', ','.join(self.config['train_dataset']), k)
+                    writer.add_scalar(f'train_metric/{k}', v_avg, global_step=step_cnt)
                 self.logger.info(metric_str)
 
-                # tensorboard-1. loss
-                for k, v in train_recorder_loss.items():
-                    writer = self.get_writer('train', ','.join(self.config['train_dataset']), k)
-                    writer.add_scalar(f'train_loss/{k}', v.average(), global_step=step_cnt)
-                # tensorboard-2. metric
-                for k, v in train_recorder_metric.items():
-                    writer = self.get_writer('train', ','.join(self.config['train_dataset']), k)
-                    writer.add_scalar(f'train_metric/{k}', v.average(), global_step=step_cnt)
-                
                 # clear recorder. 
                 # Note we only consider the current 300 samples for computing batch-level loss/metric
                 for name, recorder in train_recorder_loss.items():  # clear loss recorder
@@ -285,7 +287,6 @@ class Trainer(object):
         # define test recorder
         losses_all_datasets = {}
         metrics_all_datasets = {}
-        best_metrics_per_dataset = defaultdict(dict)  # best metric for each dataset, for each metric
 
         # testing for all test data
         keys = test_data_loaders.keys()
@@ -332,12 +333,10 @@ class Trainer(object):
             for k, v in losses_one_dataset_recorder.items():
                 loss_str += f"testing-loss, {k}: {v.average()}    "
             self.logger.info(loss_str)
-            tqdm.write(loss_str)
             metric_str = f"dataset: {key}    step: {step}    "
             for k, v in metric_one_dataset.items():
                 metric_str += f"testing-metric, {k}: {v}    "
             self.logger.info(metric_str)
-            tqdm.write(metric_str)
 
             # tensorboard-1. loss
             for k, v in losses_one_dataset_recorder.items():
@@ -349,7 +348,7 @@ class Trainer(object):
                 writer.add_scalar(f'test_metrics/{k}', v, global_step=step)
 
         self.logger.info('===> Test Done!')
-        return best_metrics_per_dataset  # return all types of mean metrics for determining the best ckpt
+        return self.best_metrics_all_time  # return all types of mean metrics for determining the best ckpt
 
     @torch.no_grad()
     def inference(self, data_dict):

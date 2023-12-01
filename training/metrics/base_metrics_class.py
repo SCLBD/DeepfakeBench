@@ -32,21 +32,27 @@ def calculate_metrics_for_train(label, output):
     correct = (prediction == label).sum().item()
     accuracy = correct / prediction.size(0)
 
-    # AUC and EER
-    fpr, tpr, thresholds = metrics.roc_curve(label.squeeze().cpu().numpy(),
-                                             prob.squeeze().cpu().numpy(),
-                                             pos_label=1)
-    if np.isnan(fpr[0]) or np.isnan(tpr[0]):
-        auc, eer = -1, -1
-    else:
-        auc = metrics.auc(fpr, tpr)
-        fnr = 1 - tpr
-        eer = fpr[np.nanargmin(np.absolute((fnr - fpr)))]
-
     # Average Precision
     y_true = label.cpu().detach().numpy()
     y_pred = prob.cpu().detach().numpy()
     ap = metrics.average_precision_score(y_true, y_pred)
+
+    # AUC and EER
+    try:
+        fpr, tpr, thresholds = metrics.roc_curve(label.squeeze().cpu().numpy(),
+                                                 prob.squeeze().cpu().numpy(),
+                                                 pos_label=1)
+    except:
+        # for the case when we only have one sample
+        return None, None, accuracy, ap
+
+    if np.isnan(fpr[0]) or np.isnan(tpr[0]):
+        # for the case when all the samples within a batch is fake/real
+        auc, eer = None, None
+    else:
+        auc = metrics.auc(fpr, tpr)
+        fnr = 1 - tpr
+        eer = fpr[np.nanargmin(np.absolute((fnr - fpr)))]
 
     return auc, eer, accuracy, ap
 
@@ -187,9 +193,12 @@ class Recorder:
         self.sum = 0
         self.num = 0
     def update(self, item, num=1):
-        self.sum += item * num
-        self.num += num
+        if item is not None:
+            self.sum += item * num
+            self.num += num
     def average(self):
+        if self.num == 0:
+            return None
         return self.sum/self.num
     def clear(self):
         self.sum = 0
