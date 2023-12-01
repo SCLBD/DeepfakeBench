@@ -241,7 +241,7 @@ You can also adjust the training and testing datasets using the command line, fo
 python training/train.py \
 --detector_path ./training/config/detector/xception.yaml  \
 --train_dataset "FaceForensics++" \
---testing_dataset "Celeb-DF-v1" "Celeb-DF-v2"
+--test_dataset "Celeb-DF-v1" "Celeb-DF-v2"
 ```
 
 By default, the checkpoints and features will be saved during the training process. If you do not want to save them, run with the following:
@@ -250,7 +250,7 @@ By default, the checkpoints and features will be saved during the training proce
 python training/train.py \
 --detector_path ./training/config/detector/xception.yaml \
 --train_dataset "FaceForensics++" \
---testing_dataset "Celeb-DF-v1" "Celeb-DF-v2" \
+--test_dataset "Celeb-DF-v1" "Celeb-DF-v2" \
 --no-save_ckpt \
 --no-save_feat
 ```
