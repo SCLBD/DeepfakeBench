@@ -85,37 +85,21 @@ Note we used Docker version `19.03.14` in our setup. We highly recommend using t
 <a href="#top">[Back to top]</a>
 
 All datasets used in DeepfakeBench can be downloaded from their own websites or repositories.
-For convenience, we also provide the data we use in our research. All the downloaded datasets have been organized and arranged in the same folder. **Users can easily access and download the preprocessed data**, including original videos and corresponding mask videos, directly from we provided data, including:
+For convenience, we also provide the data we use in our research. All the downloaded datasets have been organized and arranged in the same folder. **Users can easily access and download the preprocessed data**, including original videos, mask videos, frames, and landmarks:
 
-| Dataset Name                 | Download Link (Baidu Netdisk)                                                  | Extract Code          | Notes |
-| ---------------------------- | --------------------------------------------------------------- | ------------- | ----- |
-| Celeb-DF-v1                  | [Download](https://pan.baidu.com/s/1s5KMI3Sy2nRNpCBEb47q9w) | wf2u | - |
-| Celeb-DF-v2                  | [Download](https://pan.baidu.com/s/1XBbRLrZ06uQDpD6bZGTHEQ?pwd=hqu1) | hqu1 | - |
-| FaceForensics++, DeepfakeDetection, FaceShifter              | [Download](https://pan.baidu.com/s/1BbnPS2I7DDhMzvGyj3i95w)                    | mvgi             | c23 version only |
-| UADFV                        | [Download](https://pan.baidu.com/s/10-_ZW-TpOkdoY_fmESkIQA)                  | r0gc             | - |
-| Deepfake Detection Challenge (Preview) | [Download](https://pan.baidu.com/s/1ZrBhZAD2YZSqRoTZXjZ2Tg?pwd=j1pq)       | j1pq             | - |
-| Deepfake Detection Challenge |       [Download](https://pan.baidu.com/s/1p5S_fiKk-ovzJ6Ix3Y1LOA?pwd=aktc)                        | aktc             | - |
-| DeepForensics-1.0           | Coming Soon                                                     | -             | - |
-| FaceForensics++ (c40)           | Coming Soon                                                     | -             | - |
+| Dataset Name                    | OneDrive Link                                                                                           | Notes                   |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------- |
+| Celeb-DF-v1                     | [Code: cdfv1](https://cuhko365-my.sharepoint.com/:u:/g/personal/222041040_link_cuhk_edu_cn/Ebtbcp8jZ3hCioAqUN6B8zkB8wXhNdaebk4GKba-zaa1bQ?e=XTiypw)   | -                       |
+| Celeb-DF-v2                     | [Code: cdfv2](https://cuhko365-my.sharepoint.com/:u:/g/personal/222041040_link_cuhk_edu_cn/EaWGnMVgNbJGkFvyUIarFCABTFyw0tWbkfwT6AFvvR86Mg?e=pQQqnd)   | -                       |
+| FaceForensics++, DeepfakeDetection, FaceShifter | [Code: ffpp](https://cuhko365-my.sharepoint.com/:f:/g/personal/222041040_link_cuhk_edu_cn/Emfob8yNKyJAgS1UMOohxJ0B0coJAUSP0MFJ3tDEmKeJ6g?e=YGGq7a)                                                                                                      | both c23 and c40 version       |
+| UADFV                           | [Code: uadfv](https://cuhko365-my.sharepoint.com/:u:/g/personal/222041040_link_cuhk_edu_cn/ERduMejcZRNDhqsCfZwhVuMBjLjtAMA7UyxDBs1qFhxs-w?e=gDYKqn)                                                                                            | -                       |
+| Deepfake Detection Challenge (Preview) | Coming Soon                                                                                       | -                       |
+| Deepfake Detection Challenge     | Coming Soon                                                                                       | Only Test Data                       |
+| DeepForensics-1.0               | Coming Soon                                                                                                    | Only Test Data                       |
+
 
 🛡️ **Copyright of the above datasets belongs to their original providers.**
 
-**Please note**: We have encrypted and compressed the dataset, so you will need to enter the password: `123456`, to decompress each dataset file. Alternatively, you can directly run [`./unzip.sh`](./unzip.sh) file to decompress all compressed files (currently limited to `.zip` format) in the [`./datasets`](./datasets/) folder. 
-
-It is important to note that the size of `Deepfake Detection Challenge (DFDC)` dataset can be really large. So, you should decompress this dataset manually. Specifically, you should first navigate to the `./datasets` folder where the DFDC dataset is located and decompress each `train_part.zip` file. You can do this by entering the password `123456` when prompted. Once all the `train_part.zip` files are decompressed, you will see folders named `dfdc_train_part_0`, `dfdc_train_part_1`, ..., `dfdc_train_part_49`. Enter the `meta_files` folder inside the `DFDC` folder. Copy the `metadata.json file` from the `meta_files` folder. Paste the `metadata.json` file into each corresponding `dfdc_train_part_X` folder. For example, copy `metadata.json` from `meta_files/dfdc_train_part_0/` folder and paste it into `dfdc_train_part_0`.
-Finally, the directory structure of DFDC should look like this:
-
-```
-DFDC
-├── dfdc_train_part_0
-│   ├── metadata.json
-│   ├── *.mp4
-├── dfdc_train_part_1
-│   ├── metadata.json
-│   ├── *.mp4
-├── ...
-├── dfdc_train_part_49
-```
 
 Other detailed information about the datasets used in DeepfakeBench is summarized below:
 
@@ -133,7 +117,7 @@ Other detailed information about the datasets used in DeepfakeBench is summarize
 | UADFV | 49 | 49 | 98 | NO | 49 | 1 | - | [Hyper-link](https://docs.google.com/forms/d/e/1FAIpQLScKPoOv15TIZ9Mn0nGScIVgKRM9tFWOmjh9eHKx57Yp-XcnxA/viewform) |
 
 
-Upon downloading your datasets, please ensure to store them in the [`./datasets`](./datasets/) folder, arranging them in accordance with the directory structure outlined below:
+Upon downloading the datasets, please ensure to store them in the [`./datasets`](./datasets/) folder, arranging them in accordance with the directory structure outlined below:
 
 ```
 datasets
@@ -143,52 +127,82 @@ datasets
 │   │   │   ├── c23
 │   │   │   │   ├── videos
 │   │   │   │   │   └── *.mp4
+│   │   │   │   └── frames (if you download my processed data)
+│   │   │   │   │   └── *.png
+|   |   |   |   └── masks (if you download my processed data)
+│   │   │   │   │   └── *.png
+│   │   │   │   └── landmarks (if you download my processed data)
+│   │   │   │   │   └── *.png
+│   │   │   └── c40
+│   │   │   │   ├── videos
+│   │   │   │   │   └── *.mp4
+│   │   │   │   └── frames (if you download my processed data)
+│   │   │   │   │   └── *.png
+|   |   |   |   └── masks (if you download my processed data)
+│   │   │   │   │   └── *.png
+│   │   │   │   └── landmarks (if you download my processed data)
+│   │   │   │       └── *.npy
+│   │   ├── actors
+│   │   │   ├── c23
+│   │   │   │   ├── videos
+│   │   │   │   │   └── *.mp4
+│   │   │   │   └── frames (if you download my processed data)
+│   │   │   │   │   └── *.png
+|   |   |   |   └── masks (if you download my processed data)
+│   │   │   │   │   └── *.png
+│   │   │   │   └── landmarks (if you download my processed data)
+│   │   │   │       └── *.npy
+│   │   │   └── c40
+│   │   │   │   ├── videos
+│   │   │   │   │   └── *.mp4
+│   │   │   │   └── frames (if you download my processed data)
+│   │   │   │   │   └── *.png
+|   |   |   |   └── masks (if you download my processed data)
+│   │   │   │   │   └── *.png
+│   │   │   │   └── landmarks (if you download my processed data)
+│   │   │   │       └── *.npy
 │   ├── manipulated_sequences
 │   │   ├── Deepfakes
 │   │   │   ├── c23
 │   │   │   │   └── videos
+│   │   │   │   │   └── *.mp4
+│   │   │   │   └── frames (if you download my processed data)
+│   │   │   │   │   └── *.png
+|   |   |   |   └── masks (if you download my processed data)
+│   │   │   │   │   └── *.png
+│   │   │   │   └── landmarks (if you download my processed data)
+│   │   │   │       └── *.npy
+│   │   │   └── c40
+│   │   │   │   ├── videos
+│   │   │   │   │   └── *.mp4
+│   │   │   │   └── frames (if you download my processed data)
+│   │   │   │   │   └── *.png
+|   |   |   |   └── masks (if you download my processed data)
+│   │   │   │   │   └── *.png
+│   │   │   │   └── landmarks (if you download my processed data)
+│   │   │   │       └── *.npy
 │   │   ├── Face2Face
-│   │   │   ├── c23
-│   │   │   │   └── videos
+│   │   │   ├── ...
 │   │   ├── FaceSwap
-│   │   │   ├── c23
-│   │   │   │   └── videos
+│   │   │   ├── ...
 │   │   ├── NeuralTextures
-│   │   │   ├── c23
-│   │   │   │   └── videos
+│   │   │   ├── ...
 │   │   ├── FaceShifter
-│   │   │   ├── c23
-│   │   │   │   └── videos
+│   │   │   ├── ...
 │   │   └── DeepFakeDetection
-│   │       ├── c23
-│   │       │   └── videos
-│
-├── Celeb-DF-v1/v2
-│   ├── Celeb-synthesis
-│   │   └── videos
-│   ├── Celeb-real
-│   │   └── videos
-│   └── YouTube-real
-│       └── videos
-│
-├── DFDCP
-│   ├── method_A
-│   ├── method_B
-│   └── original_videos
-│
-├── DeeperForensics-1.0
-│   ├── manipulated_videos
-│   └── source_videos
-│
-└── ...
+│   │       ├── ...
+
+Other datasets are similar to the above structure
 ```
 
 If you choose to store your datasets in a different folder, for instance, `./deepfake/data`, it's important to reflect this change in the dataset path in the [config.yaml](./preprocessing/config.yaml) for preprocessing purposes.
 
 
-### 3. Preprocessing
+### 3. Preprocessing (optional)
 
 <a href="#top">[Back to top]</a>
+
+**❗️Note**: If you want to directly utilize the data, including frames, landmarks, masks, and more, that I have provided above, you can skip the pre-processing step. However, you still need to run the rearrangement script to generate the JSON file for each dataset for the unified data loading in the training and testing process.
 
 For the preprocessing module, we mainly provide two scripts: preprocessing and arrangement. 
 - **The preprocessing script** in DeepfakeBench follows a sequential workflow for face detection, alignment, and cropping. The processed data, including face images, landmarks, and masks, are saved in separate folders for further analysis.
