@@ -32,7 +32,8 @@ Welcome to *DeepfakeBench*, your one-stop solution for deepfake detection! Here 
 - [Quick Start](#-quick-start)
   - [Installation](#1-installation)
   - [Download Data](#2-download-data)
-  - [Preprocessing](#3-preprocessing)
+  - [Preprocessing (optional)](#3-preprocessing-optional)
+  - [Rearrangement](#4-rearrangement)
   - [Training (optional)](#4-training-optional)
   - [Evaluation](#5-evaluation)
 - [Supported Detectors](#-supported-detectors)
@@ -198,15 +199,13 @@ Other datasets are similar to the above structure
 If you choose to store your datasets in a different folder, for instance, `./deepfake/data`, it's important to reflect this change in the dataset path in the [config.yaml](./preprocessing/config.yaml) for preprocessing purposes.
 
 
-### 3. Preprocessing
+### 3. Preprocessing (optional)
 
 <a href="#top">[Back to top]</a>
 
-**❗️Note**: If you want to directly utilize the data, including frames, landmarks, masks, and more, that I have provided above, you can skip the pre-processing step. However, you still need to run the rearrangement script to generate the JSON file for each dataset for the unified data loading in the training and testing process.
+**❗️Note**: If you want to directly utilize the data, including frames, landmarks, masks, and more, that I have provided above, you can skip the pre-processing step. **However, you still need to run the rearrangement script to generate the JSON file** for each dataset for the unified data loading in the training and testing process.
 
-For the preprocessing module, we mainly provide two scripts: preprocessing and arrangement. 
-- **The preprocessing script** in DeepfakeBench follows a sequential workflow for face detection, alignment, and cropping. The processed data, including face images, landmarks, and masks, are saved in separate folders for further analysis.
-- **The rearrangement script** simplifies the handling of different datasets by providing a unified and convenient way to load them. The function eliminates the need to write separate input/output (I/O) code for each dataset, reducing duplication of effort and easing data management.
+DeepfakeBench follows a sequential workflow for face detection, alignment, and cropping. The processed data, including face images, landmarks, and masks, are saved in separate folders for further analysis.
 
 To start preprocessing your dataset, please follow these steps:
 
@@ -225,7 +224,11 @@ cd preprocessing
 python preprocess.py
 ```
 
-Second, after the preprocessing above, you will obtain the processed data for each dataset you specify. Similarly, you need to set the parameters in `./preprocessing/config.yaml` for each dataset. After that, run the following line:
+
+### 4. Rearrangement
+To simplify the handling of different datasets, we propose a unified and convenient way to load them. The function eliminates the need to write separate input/output (I/O) code for each dataset, reducing duplication of effort and easing data management.
+
+After the preprocessing above, you will obtain the processed data (*i.e., frames, landmarks, and masks*) for each dataset you specify. Similarly, you need to set the parameters in `./preprocessing/config.yaml` for each dataset. After that, run the following line:
 ```
 cd preprocessing
 
@@ -234,7 +237,7 @@ python rearrange.py
 After running the above line, you will obtain the JSON files for each dataset in the `./preprocessing/dataset_json` folder. The rearranged structure organizes the data in a hierarchical manner, grouping videos based on their labels and data splits (*i.e.,* train, test, validation). Each video is represented as a dictionary entry containing relevant metadata, including file paths, labels, compression levels (if applicable), *etc*. 
 
 
-### 4. Training (optional)
+### 5. Training (optional)
 
 <a href="#top">[Back to top]</a>
 
@@ -272,7 +275,7 @@ python training/train.py \
 To train other detectors using the code mentioned above, you can specify the config file accordingly. However, for the Face X-ray detector, an additional step is required before training. To save training time, a pickle file is generated to store the Top-N nearest images for each given image. To generate this file, you should run the [`generate_xray_nearest.py`](./training/dataset/generate_xray_nearest.py) file. Once the pickle file is created, you can train the Face X-ray detector using the same way above. If you want to check/use the files I have already generated, please refer to the [`link`](https://github.com/SCLBD/DeepfakeBench/releases/tag/v1.0.2).
 
 
-### 5. Evaluation
+### 6. Evaluation
 If you only want to evaluate the detectors to produce the results of the cross-dataset evaluation, you can use the the [`test.py`](./training/test.py) code for evaluation. Here is an example:
 
 ```
