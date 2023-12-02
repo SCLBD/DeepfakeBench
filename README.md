@@ -198,7 +198,7 @@ Other datasets are similar to the above structure
 If you choose to store your datasets in a different folder, for instance, `./deepfake/data`, it's important to reflect this change in the dataset path in the [config.yaml](./preprocessing/config.yaml) for preprocessing purposes.
 
 
-### 3. Preprocessing (optional)
+### 3. Preprocessing
 
 <a href="#top">[Back to top]</a>
 
