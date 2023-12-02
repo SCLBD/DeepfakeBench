@@ -378,7 +378,7 @@ def preprocess(dataset_path, mask_path, mode, num_frames, stride, logger):
     num_processes = os.cpu_count()
 
     # Use multiprocessing to process videos in parallel
-    with concurrent.futures.ProcessPoolExecutor(max_workers=num_processes) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=num_processes) as executor:
         futures = []
         for movie_path in movies_path_list:
             # Check if there is a mask for the video
