@@ -173,7 +173,7 @@ def extract_aligned_face_dlib(face_detector, predictor, image, res=256, mask=Non
             mask = cv2.resize(mask, (outsize[1], outsize[0]))
             return img, mask
         else:
-            return img
+            return img, None
 
     # Image size
     height, width = image.shape[:2]
@@ -191,24 +191,20 @@ def extract_aligned_face_dlib(face_detector, predictor, image, res=256, mask=Non
         landmarks = get_keypts(rgb, face, predictor, face_detector)
 
         # Align and crop the face
-        if mask is not None:
-            cropped_face, mask_face = img_align_crop(rgb, landmarks, outsize=(res, res), mask=mask)
-        else:
-            cropped_face = img_align_crop(rgb, landmarks, outsize=(res, res), mask=mask)
+        cropped_face, mask_face = img_align_crop(rgb, landmarks, outsize=(res, res), mask=mask)
         cropped_face = cv2.cvtColor(cropped_face, cv2.COLOR_RGB2BGR)
         
         # Extract the all landmarks from the aligned face
         face_align = face_detector(cropped_face, 1)
+        if len(face_align) == 0:
+            return None, None, None
         landmark = predictor(cropped_face, face_align[0])
         landmark = face_utils.shape_to_np(landmark)
 
-        if mask is not None:
-            return cropped_face, landmark, mask_face
-        else:
-            return cropped_face, landmark
+        return cropped_face, landmark, mask_face
     
     else:
-        return None, None
+        return None, None, None
 
 def video_manipulate(
     movie_path: Path,
@@ -310,7 +306,7 @@ def video_manipulate(
             if mask_path is not None:
                 cropped_face, landmarks, masks = extract_aligned_face_dlib(face_detector, face_predictor, frame_org, mask=frame_mask)
             else:
-                cropped_face, landmarks = extract_aligned_face_dlib(face_detector, face_predictor, frame_org, mask=frame_mask)
+                cropped_face, landmarks, _ = extract_aligned_face_dlib(face_detector, face_predictor, frame_org, mask=frame_mask)
             
             # Check if a face was detected and cropped
             if cropped_face is None:
