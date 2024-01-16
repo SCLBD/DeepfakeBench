@@ -364,7 +364,7 @@ def preprocess(dataset_path, mask_path, mode, num_frames, stride, logger):
         masks_path_list = sorted([Path(p) for p in glob.glob(os.path.join(mask_path, '**/*.mp4'), recursive=True)])
         if len(masks_path_list) == 0:
             logger.error(f"No masks found in {mask_path}")
-            sys.exit()
+            # sys.exit()
         logger.info(f"{len(masks_path_list)} masks found in {mask_path}")    
     
     # Start timer
@@ -439,7 +439,7 @@ if __name__ == '__main__':
     # Define dataset path based on the input arguments
     ## faceforensic++
     if dataset_name == 'FaceForensics++':
-        sub_dataset_names = ["original_sequences/youtube","original_sequences/actors"\
+        sub_dataset_names = ["original_sequences/youtube","original_sequences/actors", \
                              "manipulated_sequences/Deepfakes", \
                             "manipulated_sequences/Face2Face", "manipulated_sequences/FaceSwap", \
                             "manipulated_sequences/NeuralTextures","manipulated_sequences/FaceShifter",\
