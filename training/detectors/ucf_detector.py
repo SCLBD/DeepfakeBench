@@ -281,7 +281,7 @@ class UCFDetector(AbstractDetector):
             pred_dict = {'cls': out_sha, 'feat': sha_feat}
             return  pred_dict
 
-        bs = f_spe.size(0)
+        bs = f_share.size(0)
         # using idx aug in the training mode
         aug_idx = random.random()
         if aug_idx < 0.7:
