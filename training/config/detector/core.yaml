@@ -1,9 +1,9 @@
 # log dir 
-log_dir: /mntcephfs/lab_data/yuanxinhang/benchmark_results/logs_final/core_effi
+log_dir: /data/home/zhiyuanyan/logs/testing_bench
 
 # model setting
 # pretrained: /home/yuanxinhang/resnet34-b627a593.pth   # path to a pre-trained model, if using one
-pretrained: /home/zhiyuanyan/disfin/deepfake_benchmark/training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
+pretrained: /data/home/zhiyuanyan/DeepfakeBench/training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
 model_name: core   # model name
 backbone_name: xception  # backbone name
 
@@ -18,7 +18,6 @@ backbone_config:
 all_dataset: [FaceForensics++, FF-F2F, FF-DF, FF-FS, FF-NT, FaceShifter, DeepFakeDetection, Celeb-DF-v1, Celeb-DF-v2, DFDCP, DFDC, DeeperForensics-1.0, UADFV]
 train_dataset: [FF-NT]
 test_dataset: [FaceForensics++, FF-F2F, FF-DF, FF-FS, FF-NT]
-dataset_json_folder: '/home/zhiyuanyan/disfin/deepfake_benchmark/preprocessing/dataset_json'
 
 compression: c23  # compression-level for videos
 train_batchSize: 32   # training batch size
@@ -30,39 +29,6 @@ with_mask: false   # whether to include mask information in the input
 with_landmark: false   # whether to include facial landmark information in the input
 save_ckpt: true   # whether to save checkpoint
 save_feat: true   # whether to save features
-
-# label settings
-label_dict:
-  # DFD
-  DFD_fake: 1
-  DFD_real: 0
-  # FF++ + FaceShifter(FF-real+FF-FH)
-  FF-SH: 1
-  FF-F2F: 1
-  FF-DF: 1
-  FF-FS: 1
-  FF-NT: 1
-  FF-FH: 1
-  FF-real: 0
-  # CelebDF
-  CelebDFv1_real: 0
-  CelebDFv1_fake: 1
-  CelebDFv2_real: 0
-  CelebDFv2_fake: 1
-  # DFDCP
-  DFDCP_Real: 0
-  DFDCP_FakeA: 1
-  DFDCP_FakeB: 1
-  # DFDC
-  DFDC_Fake: 1
-  DFDC_Real: 0
-  # DeeperForensics-1.0
-  DF_fake: 1
-  DF_real: 0
-  # UADFV
-  UADFV_Fake: 1
-  UADFV_Real: 0
-
 
 
 # data augmentation
@@ -117,6 +83,6 @@ losstype: null
 metric_scoring: auc   # metric for evaluation (auc, acc, eer, ap)
 
 # cuda
-ngpu: 1   # number of GPUs to use
+
 cuda: true   # whether to use CUDA acceleration
 cudnn: true   # whether to use CuDNN for convolution operations

@@ -20,7 +20,7 @@ import torch.nn.functional as F
 import torch.utils.model_zoo as model_zoo
 from torch.nn import init
 from typing import Union
-from utils.registry import BACKBONE
+from metrics.registry import BACKBONE
 
 logger = logging.getLogger(__name__)
 
@@ -165,18 +165,22 @@ class Xception(nn.Module):
         # do relu here
         self.conv4 = SeparableConv2d(1536, 2048, 3, 1, 1)
         self.bn4 = nn.BatchNorm2d(2048)
-
-        self.last_linear = nn.Linear(2048, self.num_classes)
+        # used for iid
+        final_channel = 2048
+        if self.mode == 'adjust_channel_iid':
+            final_channel = 512
+            self.mode = 'adjust_channel'
+        self.last_linear = nn.Linear(final_channel, self.num_classes)
         if dropout:
             self.last_linear = nn.Sequential(
                 nn.Dropout(p=dropout),
-                nn.Linear(2048, self.num_classes)
+                nn.Linear(final_channel, self.num_classes)
             )
 
         self.adjust_channel = nn.Sequential(
             nn.Conv2d(2048, 512, 1, 1),
             nn.BatchNorm2d(512),
-            nn.ReLU(inplace=True),
+            nn.ReLU(inplace=False),
         )
            
     def fea_part1_0(self, x):
@@ -257,12 +261,22 @@ class Xception(nn.Module):
         
         return x
 
-    def classifier(self, features):
-        x = self.relu(features)
+    def classifier(self, features,id_feat=None):
+        # for iid
+        if self.mode == 'adjust_channel':
+            x = features
+        else:
+            x = self.relu(features)
 
-        x = F.adaptive_avg_pool2d(x, (1, 1))
-        x = x.view(x.size(0), -1)
-        out = self.last_linear(x)
+        if len(x.shape) == 4:
+            x = F.adaptive_avg_pool2d(x, (1, 1))
+            x = x.view(x.size(0), -1)
+        self.last_emb = x
+        # for iid
+        if id_feat!=None:
+            out = self.last_linear(x-id_feat)
+        else:
+            out = self.last_linear(x)
         return out
 
     def forward(self, input):

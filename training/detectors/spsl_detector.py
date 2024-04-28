@@ -61,6 +61,7 @@ class SpslDetector(AbstractDetector):
         self.backbone = self.build_backbone(config)
         self.loss_func = self.build_loss(config)
         self.prob, self.label = [], []
+        self.video_names = []
         self.correct, self.total = 0, 0
 
     def build_backbone(self, config):
@@ -116,26 +117,10 @@ class SpslDetector(AbstractDetector):
         # compute metrics for batch data
         auc, eer, acc, ap = calculate_metrics_for_train(label.detach(), pred.detach())
         metric_batch_dict = {'acc': acc, 'auc': auc, 'eer': eer, 'ap': ap}
+        # we dont compute the video-level metrics for training
+        self.video_names = []
         return metric_batch_dict
     
-    def get_test_metrics(self):
-        y_pred = np.concatenate(self.prob)
-        y_true = np.concatenate(self.label)
-        # auc
-        fpr, tpr, thresholds = metrics.roc_curve(y_true, y_pred, pos_label=1)
-        auc = metrics.auc(fpr, tpr)
-        # eer
-        fnr = 1 - tpr
-        eer = fpr[np.nanargmin(np.absolute((fnr - fpr)))]
-        # ap
-        ap = metrics.average_precision_score(y_true,y_pred)
-        # acc
-        acc = self.correct / self.total
-        # reset the prob and label
-        self.prob, self.label = [], []
-        self.correct, self.total = 0, 0
-        return {'acc':acc, 'auc':auc, 'eer':eer, 'ap':ap, 'pred':y_pred, 'label':y_true}
-
     def forward(self, data_dict: dict, inference=False) -> dict:
         # get the phase features
         phase_fea = self.phase_without_amplitude(data_dict['image'])
@@ -167,17 +152,22 @@ class SpslDetector(AbstractDetector):
             correct = (prediction_class == data_dict['label']).sum().item()
             self.correct += correct
             self.total += data_dict['label'].size(0)
+
+            # Save video names for computing video-level AUC
+            self.video_names.extend(data_dict['name'])
         return pred_dict
 
     def phase_without_amplitude(self, img):
         # Convert to grayscale
         gray_img = torch.mean(img, dim=1, keepdim=True) # shape: (batch_size, 1, 256, 256)
         # Compute the DFT of the input signal
-        X = torch.fft.fftn(gray_img)
+        X = torch.fft.fftn(gray_img,dim=(-1,-2))
+        #X = torch.fft.fftn(img)
         # Extract the phase information from the DFT
         phase_spectrum = torch.angle(X)
         # Create a new complex spectrum with the phase information and zero magnitude
         reconstructed_X = torch.exp(1j * phase_spectrum)
         # Use the IDFT to obtain the reconstructed signal
-        reconstructed_x = torch.real(torch.fft.ifftn(reconstructed_X))
+        reconstructed_x = torch.real(torch.fft.ifftn(reconstructed_X,dim=(-1,-2)))
+        # reconstructed_x = torch.real(torch.fft.ifftn(reconstructed_X))
         return reconstructed_x

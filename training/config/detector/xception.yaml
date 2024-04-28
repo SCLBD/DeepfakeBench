@@ -1,8 +1,8 @@
 # log dir 
-log_dir: /mntcephfs/lab_data/wangruotong/benchmark_results/logs_final/xception_64frames
+log_dir: /data/home/zhiyuanyan/DeepfakeBench/logs/testing_bench
 
 # model setting
-pretrained: /home/zhiyuanyan/disfin/deepfake_benchmark/training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
+pretrained: /data/home/zhiyuanyan/DeepfakeBench/training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
 model_name: xception   # model name
 backbone_name: xception  # backbone name
 
@@ -16,57 +16,23 @@ backbone_config:
 # dataset
 all_dataset: [FaceForensics++, FF-F2F, FF-DF, FF-FS, FF-NT, FaceShifter, DeepFakeDetection, Celeb-DF-v1, Celeb-DF-v2, DFDCP, DFDC, DeeperForensics-1.0, UADFV]
 train_dataset: [FaceForensics++]
-test_dataset: [FaceForensics++, FF-F2F, FF-DF, FF-FS, FF-NT]
-dataset_json_folder: '/home/zhiyuanyan/disfin/deepfake_benchmark/preprocessing/dataset_json'
+test_dataset: [FaceForensics++, DeepFakeDetection]
 
 compression: c23  # compression-level for videos
 train_batchSize: 32   # training batch size
 test_batchSize: 32   # test batch size
 workers: 8   # number of data loading workers
-frame_num: {'train': 64, 'test': 32}   # number of frames to use per video in training and testing
+frame_num: {'train': 32, 'test': 32}   # number of frames to use per video in training and testing
 resolution: 256   # resolution of output image to network
 with_mask: false   # whether to include mask information in the input
 with_landmark: false   # whether to include facial landmark information in the input
-
-# label settings
-label_dict:
-  # DFD
-  DFD_fake: 1
-  DFD_real: 0
-  # FF++ + FaceShifter(FF-real+FF-FH)
-  FF-SH: 1
-  FF-F2F: 1
-  FF-DF: 1
-  FF-FS: 1
-  FF-NT: 1
-  FF-FH: 1
-  FF-real: 0
-  # CelebDF
-  CelebDFv1_real: 0
-  CelebDFv1_fake: 1
-  CelebDFv2_real: 0
-  CelebDFv2_fake: 1
-  # DFDCP
-  DFDCP_Real: 0
-  DFDCP_FakeA: 1
-  DFDCP_FakeB: 1
-  # DFDC
-  DFDC_Fake: 1
-  DFDC_Real: 0
-  # DeeperForensics-1.0
-  DF_fake: 1
-  DF_real: 0
-  # UADFV
-  UADFV_Fake: 1
-  UADFV_Real: 0
-
 
 
 # data augmentation
 use_data_augmentation: true  # Add this flag to enable/disable data augmentation
 data_aug:
   flip_prob: 0.5
-  rotate_prob: 0.5
+  rotate_prob: 0.0
   rotate_limit: [-10, 10]
   blur_prob: 0.5
   blur_limit: [3, 7]
@@ -115,6 +81,6 @@ losstype: null
 metric_scoring: auc   # metric for evaluation (auc, acc, eer, ap)
 
 # cuda
-ngpu: 1   # number of GPUs to use
+
 cuda: true   # whether to use CUDA acceleration
 cudnn: true   # whether to use CuDNN for convolution operations

@@ -13,7 +13,7 @@ import torch
 import torchvision
 import torch.nn as nn
 import torch.nn.functional as F
-from utils.registry import BACKBONE
+from metrics.registry import BACKBONE
 
 logger = logging.getLogger(__name__)
 

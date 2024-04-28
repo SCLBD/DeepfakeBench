@@ -1,6 +1,6 @@
 import numpy
 
-from dataset.utils.umeyama import umeyama
+from .umeyama import umeyama
 from numpy.linalg import inv
 import cv2
 
@@ -61,7 +61,7 @@ def get_align_mat(face, size, should_align_eyes):
     return transform_mat
 
 
-from dataset.utils.face_blend import get_5_keypoint
+from .face_blend import get_5_keypoint
 
 def get_align_mat_new(src_lmk, tgt_lmk, size=256, should_align_eyes=False):
     mat_umeyama = umeyama(get_5_keypoint(src_lmk), get_5_keypoint(tgt_lmk), True)[0:2]

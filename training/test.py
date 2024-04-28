@@ -13,7 +13,7 @@ import pickle
 from tqdm import tqdm
 from copy import deepcopy
 from PIL import Image as pil_image
-
+from .metrics.utils import get_test_metrics
 import torch
 import torch.nn as nn
 import torch.nn.parallel
@@ -42,11 +42,12 @@ parser.add_argument('--detector_path', type=str,
 parser.add_argument("--test_dataset", nargs="+")
 parser.add_argument('--weights_path', type=str, 
                     default='/mntcephfs/lab_data/zhiyuanyan/benchmark_results/auc_draw/cnn_aug/resnet34_2023-05-20-16-57-22/test/FaceForensics++/ckpt_epoch_9_best.pth')
+#parser.add_argument("--lmdb", action='store_true', default=False)
 args = parser.parse_args()
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-
+on_2060 = "2060" in torch.cuda.get_device_name()
 def init_seed(config):
     if config['manualSeed'] is None:
         config['manualSeed'] = random.randint(1, 10000)
@@ -72,6 +73,7 @@ def prepare_testing_data(config):
                 shuffle=False, 
                 num_workers=int(config['workers']),
                 collate_fn=test_set.collate_fn,
+                drop_last=False
             )
         return test_data_loader
 
@@ -89,11 +91,14 @@ def choose_metric(config):
 
 
 def test_one_dataset(model, data_loader):
+    prediction_lists = []
+    feature_lists = []
+    label_lists = []
     for i, data_dict in tqdm(enumerate(data_loader), total=len(data_loader)):
         # get data
         data, label, mask, landmark = \
         data_dict['image'], data_dict['label'], data_dict['mask'], data_dict['landmark']
-    
+        label = torch.where(data_dict['label'] != 0, 1, 0)
         # move data to GPU
         data_dict['image'], data_dict['label'] = data.to(device), label.to(device)
         if mask is not None:
@@ -103,13 +108,11 @@ def test_one_dataset(model, data_loader):
 
         # model forward without considering gradient computation
         predictions = inference(model, data_dict)
-
-        # deal with the feat, pooling if needed
-        if len(predictions['feat'].shape) == 4:
-            predictions['feat'] = F.adaptive_avg_pool2d(predictions['feat'], (1, 1)).reshape(predictions['feat'].shape[0], -1)
-        predictions['feat'] = predictions['feat'].cpu().numpy()
+        label_lists += list(data_dict['label'].cpu().detach().numpy())
+        prediction_lists += list(predictions['prob'].cpu().detach().numpy())
+        feature_lists += list(predictions['feat'].cpu().detach().numpy())
     
-    return predictions
+    return np.array(prediction_lists), np.array(label_lists),np.array(feature_lists)
     
 def test_epoch(model, test_data_loaders):
     # set model to eval mode
@@ -121,11 +124,13 @@ def test_epoch(model, test_data_loaders):
     # testing for all test data
     keys = test_data_loaders.keys()
     for key in keys:
+        data_dict = test_data_loaders[key].dataset.data_dict
         # compute loss for each dataset
-        predictions = test_one_dataset(model, test_data_loaders[key])
+        predictions_nps, label_nps,feat_nps = test_one_dataset(model, test_data_loaders[key])
         
         # compute metric for each dataset
-        metric_one_dataset = model.get_test_metrics()
+        metric_one_dataset = get_test_metrics(y_pred=predictions_nps, y_true=label_nps,
+                                              img_names=data_dict['image'])
         metrics_all_datasets[key] = metric_one_dataset
         
         # info for each dataset
@@ -145,7 +150,13 @@ def main():
     # parse options and load config
     with open(args.detector_path, 'r') as f:
         config = yaml.safe_load(f)
-
+    if on_2060:
+        config['lmdb_dir'] = r'I:\transform_2_lmdb'
+        config['train_batchSize'] = 10
+        config['workers'] = 0
+    else:
+        config['workers'] = 8
+        config['lmdb_dir'] = r'./data/LMDBs'
     weights_path = None
     # If arguments are provided, they will overwrite the yaml settings
     if args.test_dataset:

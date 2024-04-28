@@ -7,13 +7,13 @@ import os
 import numpy as np
 import cv2
 import dlib
+import random
 import argparse
 from tqdm import tqdm
 import time
-# from utils import extract_left_eye_center, extract_right_eye_center, get_rotation_matrix, crop_image
 from skimage import transform as trans
 # from color_transfer import color_transfer
-from dataset.utils.warp import gen_warp_params, warp_by_params, warp_mask
+from .warp import gen_warp_params, warp_by_params, warp_mask
 
 
 def crop_img_bbox(img, bbox, res, scale=1.3):
@@ -111,6 +111,33 @@ def random_deform(pt, tgt, scale=0.3):
     y = y1+(y2-y1)*np.random.rand()*scale
     #print('before:', pt, ' after:', [int(x), int(y)])
     return [int(x), int(y)]
+
+
+def get_specific_mask(img, shape, mtype='mouth', random_side=False):
+    if mtype == 'eyes':
+        landmarks = shape[42:45] if random.choice([True, False]) else shape[36:39]
+
+    elif mtype == 'nose':
+        landmarks = shape[27:35]
+
+    elif mtype == 'mouth':
+        landmarks = shape[48:60]
+
+    elif mtype == 'eyebrows':
+        landmarks = shape[22:26] if random.choice([True, False]) else shape[17:21]
+
+    else:
+        raise ValueError(f"Invalid mtype. Choose from 'eyes', 'nose', 'mouth', or 'eyebrows', but got {mtype}")
+
+    # find convex hull
+    hull = cv2.convexHull(landmarks)
+    hull = hull.astype(int)
+
+    # mask
+    hull_mask = np.zeros_like(img)
+    cv2.fillPoly(hull_mask, [hull], (255, 255, 255))
+    mask = hull_mask
+    return mask
 
 
 def get_hull_mask(img, shape, mtype='hull'):

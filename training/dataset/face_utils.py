@@ -137,7 +137,7 @@ def extract_face_MTCNN(face_detector, image, expand_scale=1.3, res=256):
                 bb = ff['box']
                 region = bb[2]*bb[3]
                 if region > max_rigion:
-                    max_rigion = rigion
+                    max_rigion = region
                     face = ff
                     bbox = face['box']
         print(max_region)    

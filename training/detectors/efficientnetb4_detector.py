@@ -65,8 +65,13 @@ class EfficientDetector(AbstractDetector):
         # prepare the backbone
         backbone_class = BACKBONE[config['backbone_name']]
         model_config = config['backbone_config']
+        model_config['pretrained'] = self.config['pretrained']
         backbone = backbone_class(model_config)
-        #FIXME: current load pretrained weights only from the backbone, not here
+        if config['pretrained'] != 'None':
+            logger.info('Load pretrained model successfully!')
+        else:
+            logger.info('No pretrained model.')
+        return backbone
         return backbone
     
     def build_loss(self, config):
@@ -96,24 +101,6 @@ class EfficientDetector(AbstractDetector):
         auc, eer, acc, ap = calculate_metrics_for_train(label.detach(), pred.detach())
         metric_batch_dict = {'acc': acc, 'auc': auc, 'eer': eer, 'ap': ap}
         return metric_batch_dict
-    
-    def get_test_metrics(self):
-        y_pred = np.concatenate(self.prob)
-        y_true = np.concatenate(self.label)
-        # auc
-        fpr, tpr, thresholds = metrics.roc_curve(y_true, y_pred, pos_label=1)
-        auc = metrics.auc(fpr, tpr)
-        # eer
-        fnr = 1 - tpr
-        eer = fpr[np.nanargmin(np.absolute((fnr - fpr)))]
-        # ap
-        ap = metrics.average_precision_score(y_true,y_pred)
-        # acc
-        acc = self.correct / self.total
-        # reset the prob and label
-        self.prob, self.label = [], []
-        self.correct, self.total = 0, 0
-        return {'acc':acc, 'auc':auc, 'eer':eer, 'ap':ap, 'pred':y_pred, 'label':y_true}
 
     def forward(self, data_dict: dict, inference=False) -> dict:
         # get the features by backbone
@@ -144,5 +131,6 @@ class EfficientDetector(AbstractDetector):
             correct = (prediction_class == data_dict['label']).sum().item()
             self.correct += correct
             self.total += data_dict['label'].size(0)
+
         return pred_dict
 

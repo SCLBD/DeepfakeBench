@@ -6,8 +6,8 @@ from torch.nn import functional as F
 from torchvision import models, transforms
 import torch
 import torch.nn as nn
-from loss.abstract_loss_func import AbstractLossClass
-from utils.registry import LOSSFUNC
+from .abstract_loss_func import AbstractLossClass
+from metrics.registry import LOSSFUNC
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

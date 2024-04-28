@@ -21,7 +21,7 @@ class pairDataset(DeepfakeAbstractBaseDataset):
         self.fake_imglist = [(img, label, 1) for img, label in zip(self.image_list, self.label_list) if label != 0]
         self.real_imglist = [(img, label, 0) for img, label in zip(self.image_list, self.label_list) if label == 0]
 
-    def __getitem__(self, index):
+    def __getitem__(self, index, norm=True):
         # Get the fake and real image paths and labels
         fake_image_path, fake_spe_label, fake_label = self.fake_imglist[index]
         real_index = random.randint(0, len(self.real_imglist) - 1)  # Randomly select a real image
@@ -57,6 +57,10 @@ class pairDataset(DeepfakeAbstractBaseDataset):
         # Do transforms for fake and real images
         fake_image_trans, fake_landmarks_trans, fake_mask_trans = self.data_aug(fake_image, fake_landmarks, fake_mask)
         real_image_trans, real_landmarks_trans, real_mask_trans = self.data_aug(real_image, real_landmarks, real_mask)
+
+        if not norm:
+            return {"fake": (fake_image_trans, fake_label), 
+                    "real": (real_image_trans, real_label)}
 
         # To tensor and normalize for fake and real images
         fake_image_trans = self.normalize(self.to_tensor(fake_image_trans))

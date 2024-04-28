@@ -3,8 +3,8 @@ from collections import defaultdict
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from loss.abstract_loss_func import AbstractLossClass
-from utils.registry import LOSSFUNC
+from .abstract_loss_func import AbstractLossClass
+from metrics.registry import LOSSFUNC
 
 
 def swap_spe_features(type_list, value_list):

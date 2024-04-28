@@ -1,8 +1,8 @@
 # log dir 
-log_dir: /mntcephfs/lab_data/zhiyuanyan/benchmark_results/logs_final/ucf_resnet
+log_dir: /data/home/zhiyuanyan/DeepfakeBench/debug_logs/ucf
 
 # model setting
-pretrained: /home/zhiyuanyan/disfin/deepfake_benchmark/training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
+pretrained: /data/home/zhiyuanyan/DeepfakeBench/training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
 # pretrained: '/home/zhiyuanyan/.cache/torch/hub/checkpoints/resnet34-b627a593.pth'   # path to a pre-trained model, if using one
 model_name: ucf   # model name
 backbone_name: xception  # backbone name
@@ -18,8 +18,7 @@ backbone_config:
 # dataset
 all_dataset: [FaceForensics++, FF-F2F, FF-DF, FF-FS, FF-NT, FaceShifter, DeepFakeDetection, Celeb-DF-v1, Celeb-DF-v2, DFDCP, DFDC, DeeperForensics-1.0, UADFV]
 train_dataset: [FF-F2F, FF-DF, FF-FS, FF-NT,]
-test_dataset: [FaceShifter, Celeb-DF-v1, DeeperForensics-1.0,]
-dataset_json_folder: '/home/zhiyuanyan/disfin/deepfake_benchmark/preprocessing/dataset_json'
+test_dataset: [Celeb-DF-v2]
 dataset_type: pair
 
 compression: c23  # compression-level for videos
@@ -65,6 +64,9 @@ label_dict:
   # UADFV
   UADFV_Fake: 1
   UADFV_Real: 0
+  # roop
+  roop_Fake: 1
+  roop_Real: 0
 
 
 
@@ -124,6 +126,6 @@ losstype: null
 metric_scoring: auc   # metric for evaluation (auc, acc, eer, ap)
 
 # cuda
-ngpu: 1   # number of GPUs to use
+
 cuda: true   # whether to use CUDA acceleration
 cudnn: true   # whether to use CuDNN for convolution operations

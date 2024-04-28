@@ -108,24 +108,6 @@ class CapsuleNetDetector(AbstractDetector):
         auc, eer, acc, ap = calculate_metrics_for_train(label.detach(), pred.detach())
         metric_batch_dict = {'acc': acc, 'auc': auc, 'eer': eer, 'ap': ap}
         return metric_batch_dict
-    
-    def get_test_metrics(self):
-        y_pred = np.concatenate(self.prob)
-        y_true = np.concatenate(self.label)
-        # auc
-        fpr, tpr, thresholds = metrics.roc_curve(y_true, y_pred, pos_label=1)
-        auc = metrics.auc(fpr, tpr)
-        # eer
-        fnr = 1 - tpr
-        eer = fpr[np.nanargmin(np.absolute((fnr - fpr)))]
-        # ap
-        ap = metrics.average_precision_score(y_true,y_pred)
-        # acc
-        acc = self.correct / self.total
-        # reset the prob and label
-        self.prob, self.label = [], []
-        self.correct, self.total = 0, 0
-        return {'acc':acc, 'auc':auc, 'eer':eer, 'ap':ap, 'pred':y_pred, 'label':y_true}
 
     def forward(self, data_dict: dict, inference=False) -> dict:
         # get the features by backbone

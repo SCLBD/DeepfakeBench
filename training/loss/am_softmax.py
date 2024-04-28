@@ -18,8 +18,8 @@ import torch.nn.functional as F
 from torch.nn import Parameter
 import torch as th
 
-from loss.abstract_loss_func import AbstractLossClass
-from utils.registry import LOSSFUNC
+from .abstract_loss_func import AbstractLossClass
+from metrics.registry import LOSSFUNC
 
 
 #------------ AMSoftmax Loss ----------------------   

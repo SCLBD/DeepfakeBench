@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
-from loss.abstract_loss_func import AbstractLossClass
-from utils.registry import LOSSFUNC
+from .abstract_loss_func import AbstractLossClass
+from metrics.registry import LOSSFUNC
 
 @LOSSFUNC.register_module(module_name="id_loss")
 class IDLoss(AbstractLossClass):

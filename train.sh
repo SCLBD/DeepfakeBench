@@ -1,0 +1,1 @@
+nohup python3 -m torch.distributed.launch --nproc_per_node=4 training/train.py --detector_path ./training/config/detector/sbi.yaml --no-save_ckpt --no-save_feat --ddp > my_output.log 2>&1 &

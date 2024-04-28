@@ -224,26 +224,9 @@ class UCFDetector(AbstractDetector):
         auc, eer, acc, ap = calculate_metrics_for_train(label.detach(), pred.detach())
         acc_spe = get_accracy(label_spe.detach(), pred_spe.detach())
         metric_batch_dict = {'acc': acc, 'acc_spe': acc_spe, 'auc': auc, 'eer': eer, 'ap': ap}
+        # we dont compute the video-level metrics for training
+        self.video_names = []
         return metric_batch_dict
-    
-    def get_test_metrics(self):
-        y_pred = np.concatenate(self.prob)
-        y_true = np.concatenate(self.label)
-        y_true = np.where(y_true!=0, 1, 0)
-        # auc
-        fpr, tpr, thresholds = metrics.roc_curve(y_true, y_pred, pos_label=1)
-        auc = metrics.auc(fpr, tpr)
-        # eer
-        fnr = 1 - tpr
-        eer = fpr[np.nanargmin(np.absolute((fnr - fpr)))]
-        # ap
-        ap = metrics.average_precision_score(y_true,y_pred)
-        # acc
-        acc = self.correct / self.total
-        # reset the prob and label
-        self.prob, self.label = [], []
-        self.correct, self.total = 0, 0
-        return {'acc':acc, 'auc':auc, 'eer':eer, 'ap':ap, 'pred':y_pred, 'label':y_true}
 
     def forward(self, data_dict: dict, inference=False) -> dict:
         # split the features into the content and forgery
@@ -279,6 +262,8 @@ class UCFDetector(AbstractDetector):
             self.total += data_dict['label'].size(0)
 
             pred_dict = {'cls': out_sha, 'feat': sha_feat}
+            # Save video names for computing video-level AUC
+            self.video_names.extend(data_dict['name'])
             return  pred_dict
 
         bs = self.config['train_batchSize']

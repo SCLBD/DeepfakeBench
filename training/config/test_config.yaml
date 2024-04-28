@@ -1,0 +1,5 @@
+mode: test
+lmdb: True
+dataset_root_rgb: './datasets'
+lmdb_dir:  'I:\transform_2_lmdb'
+dataset_json_folder: 'preprocessing/dataset_json_v3'
