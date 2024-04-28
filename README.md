@@ -7,6 +7,22 @@
 [[paper](https://arxiv.org/abs/2307.01426)] [[pre-trained weights](https://github.com/SCLBD/DeepfakeBench/releases/tag/v1.0.1)]
 
 
+>  ❗️❗️❗️ **DeepfakeBench-v2 Updates:**
+> 
+> 1. **34 Detectors are supported**: *DeepfakeBench*, currently, supports a total of **34** detection methods (27 image detectors + 7 video detectors).
+> 
+> 2. **More SoTA detectors are added**: We have implemented more **SoTA and latest** detectors, including: *LSDA (CVPR'24), IID (CVPR'23), SBI (CVPR'22), SLADD (CVPR'22), FTCN (ICCV'21), etc.*
+> 
+> 3. **Data Preprocessing**: *DeepfakeBench* currently provides **LMDB** for more faster and effective IO.
+> 
+> 4. **Multi-GPUs Training**: *DeepfakeBench* offers **DDP** for multiple GPUs training.
+>
+> 5. **Integrated Framework**: *DeepfakeBench* offers an integrated framework, including training, data loading, evaluation at both image-level and video-level.
+>
+> 6. **More Evaluation Metrics**: *DeepfakeBench* facilitates a more comprehensive evaluation by including following metrics: frame-level AUC, video-level AUC, ACC (fake and real), EER, PR, AP.
+
+
+
 <div align="center"> 
 </div>
 <div style="text-align:center;">
@@ -49,10 +65,34 @@ Welcome to *DeepfakeBench*, your one-stop solution for deepfake detection! Here 
 
 DeepfakeBench has the following features:
 
-⭐️  **Detectors** (15 detectors):
+⭐️  **Detectors** (**34** detectors):
   - 5 Naive Detectors: [Xception](./training/detectors/xception_detector.py), [MesoNet](./training/detectors/meso4_detector.py), [MesoInception](./training/detectors/meso4Inception_detector.py), [CNN-Aug](./training/detectors/resnet34_detector.py), [EfficientNet-B4](./training/detectors/efficientnetb4_detector.py)
-  - 7 Spatial Detectors: [Capsule](./training/detectors/capsule_net_detector.py), [DSP-FWA](./training/detectors/fwa_detector.py), [Face X-ray](./training/detectors/facexray_detector.py), [FFD](./training/detectors/ffd_detector.py), [CORE](./training/detectors/core_detector.py), [RECCE](./training/detectors/recce_detector.py), [UCF](./training/detectors/ucf_detector.py)
+  - 19 Spatial Detectors: [Capsule](./training/detectors/capsule_net_detector.py), [DSP-FWA](./training/detectors/fwa_detector.py), [Face X-ray](./training/detectors/facexray_detector.py), [FFD](./training/detectors/ffd_detector.py), [CORE](./training/detectors/core_detector.py), [RECCE](./training/detectors/recce_detector.py), [UCF](./training/detectors/ucf_detector.py), [Local-relation](./training/detectors/lrl_detector.py), [IID](./training/detectors/lrl_detector.py), [RFM](./training/detectors/rfm_detector.py), [SIA](./training/detectors/sia_detector.py), [SLADD](./training/detectors/sladd_detector.py), [UIA-ViT](./training/detectors/uia_vit_detector.py), [CLIP](./training/detectors/clip_detector.py), [SBI](./training/detectors/sbi_detector.py), [PCL-I2G](./training/detectors/pcl_xception_detector.py), [Multi-Attention](./training/detectors/multi_attention_detector.py), [LSDA](./training/detectors/lsda_detector.py)
   - 3 Frequency Detectors: [F3Net](./training/detectors/f3net_detector.py), [SPSL](./training/detectors/spsl_detector.py), [SRM](./training/detectors/srm_detector.py)
+  - 7 Video Detectors: [AltFreezing](./training/detectors/altfreezing_detector.py), [I3D](./training/detectors/i3d_detector.py), [STIL](./training/detectors/stil_detector.py), [FTCN](./training/detectors/ftcn_detector.py), [X-CLIP](./training/detectors/xclip_detector.py), [TimeTransformer](./training/detectors/timetransfromer_detector.py), [VideoMAE](./training/detectors/videomae_detector.py)
+
+The below table highlights the **update** new detectors compared to our original DeepfakeBench version.
+
+|                  | File name                               | Paper                                                                                                                                                                                                                                                                                                                                                         |
+|------------------|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| LSDA          | [lsda_detector.py](./training/detectors/lsda_detector.py)         | [Transcending forgery specificity with latent space augmentation for generalizable deepfake detection](https://arxiv.org/pdf/2311.11278) CVPR 2024 |
+| IID          | [iid_detector.py](./training/detectors/iid_detector.py)       | [Implicit Identity Driven Deepfake Face Swapping Detection](https://openaccess.thecvf.com/content/CVPR2023/papers/Huang_Implicit_Identity_Driven_Deepfake_Face_Swapping_Detection_CVPR_2023_paper.pdf) CVPR 2023                                                                                                                                                                                                                                     |
+| SBI          | [sbi_detector.py](./training/detectors/sbi_detector.py)       | [Detecting Deepfakes with Self-Blended Images](https://arxiv.org/pdf/2204.08376) CVPR 2022                                                                                                                                                                                                                                             |
+| SLADD              | [sladd_detector.py](./training/detectors/sladd_detector.py)               | [Self-supervised Learning of Adversarial Example: Towards Good Generalizations for Deepfake Detection](https://arxiv.org/abs/2203.12208) CVPR 2022                                            |
+| AltFreezing      | [altfreezing_detector.py](./training/detectors/altfreezing_detector.py) | [AltFreezing for More General Face Forgery Detection](https://openaccess.thecvf.com/content/CVPR2023/papers/Wang_AltFreezing_for_More_General_Video_Face_Forgery_Detection_CVPR_2023_paper.pdf) CVPR 2023                                                                                                                                                                                                                 |
+| FTCN | [ftcn_detector.py](./training/detectors/ftcn_detector.py)                 | [Exploring Temporal Coherence for More General Video Face Forgery Detection](https://openaccess.thecvf.com/content/ICCV2021/papers/Zheng_Exploring_Temporal_Coherence_for_More_General_Video_Face_Forgery_Detection_ICCV_2021_paper.pdf) ICCV 2021                                                                                                 |
+| PCL-I2G    | [pcl_xception_detector.py](./training/detectors/pcl_xception_detector.py)                 | [Learning Self-Consistency for Deepfake Detection](https://openaccess.thecvf.com/content/ICCV2021/papers/Zhao_Learning_Self-Consistency_for_Deepfake_Detection_ICCV_2021_paper.pdf) ICCV 2021                                                                                                                                |
+| Local-relation             | [lrl_detector.py](./training/detectors/lrl_detector.py)             | [Local Relation Learning for Face Forgery Detection](https://arxiv.org/pdf/2105.02577) AAAI 2021                                                                                                                                               |
+| UIA-ViT              | [uia_vit_detector.py](./training/detectors/uia_vit_detector.py)               | [UIA-ViT: Unsupervised Inconsistency-Aware Method based on Vision Transformer for Face Forgery Detection](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136650384.pdf) ECCV 2022                                                                                                                                                                                                                                           |
+| SIA             | [sia_detector.py](./training/detectors/sia_detector.py)             | [An Information Theoretic Approach for Attention-Driven Face Forgery Detection](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136740105.pdf) ECCV 2022                                                                                                                                                                                                     |
+| Multi-attention         | [multi_attention_detector.py](./training/detectors/multi_attention_detector.py)     | [Multi-Attentional Deepfake Detection](https://openaccess.thecvf.com/content/CVPR2021/html/Zhao_Multi-Attentional_Deepfake_Detection_CVPR_2021_paper.html) CVPR 2021                                                                                                                                                                                               |
+| CLIP            | [clip_detector.py](./training/detectors/clip_detector.py)           | [Learning Transferable Visual Models From Natural Language Supervision](https://arxiv.org/abs/2103.00020) ICML 2021                                                                                                                                                                                   |
+| STIL  | [stil_detector.py](./training/detectors/stil_detector.py)     | [Spatiotemporal Inconsistency Learning for DeepFake Video Detection](https://dl.acm.org/doi/pdf/10.1145/3474085.3475508) ACMMM 2021                                                                                                                                                                                                                                                                                 |
+| RFM   | [rfm_detector.py](./training/detectors/rfm_detector.py)       | [Representative Forgery Mining for Fake Face Detection](https://openaccess.thecvf.com/content/CVPR2021/papers/Wang_Representative_Forgery_Mining_for_Fake_Face_Detection_CVPR_2021_paper.pdf) CVPR 2021                                                                                                                                                                                                                                                                   |
+| TimeTransformer    | [timetransformer_detector.py](./training/detectors/timetransfromer_detector.py)         | [Is space-time attention all you need for video understanding?](https://proceedings.mlr.press/v139/bertasius21a/bertasius21a-supp.pdf) ICMLv 2021                                                       |
+| VideoMAE    | [videomae_detector.py](./training/detectors/videomae_detectors.py)         | [Videomae: Masked autoencoders are data-efficient learners for self-supervised video pre-training](https://proceedings.neurips.cc/paper_files/paper/2022/file/416f9cb3276121c42eebb86352a4354a-Paper-Conference.pdf) NIPS 2022                                                       |
+| X-CLIP    | [xclip_detector.py](./training/detectors/xclip_detector.py)         | [Expanding Language-Image Pretrained Models for General Video Recognition](https://arxiv.org/pdf/2208.02816) ECCV 2022                                                       |
+
 
 ⭐️ **Datasets** (9 datasets): [FaceForensics++](https://github.com/ondyari/FaceForensics), [FaceShifter](https://github.com/ondyari/FaceForensics/tree/master/dataset), [DeepfakeDetection](https://github.com/ondyari/FaceForensics/tree/master/dataset), [Deepfake Detection Challenge (Preview)](https://ai.facebook.com/datasets/dfdc/), [Deepfake Detection Challenge](https://www.kaggle.com/c/deepfake-detection-challenge/data), [Celeb-DF-v1](https://github.com/yuezunli/celeb-deepfakeforensics/tree/master/Celeb-DF-v1), [Celeb-DF-v2](https://github.com/yuezunli/celeb-deepfakeforensics), [DeepForensics-1.0](https://github.com/EndlessSora/DeeperForensics-1.0/tree/master/dataset), [UADFV](https://docs.google.com/forms/d/e/1FAIpQLScKPoOv15TIZ9Mn0nGScIVgKRM9tFWOmjh9eHKx57Yp-XcnxA/viewform)
 
@@ -272,6 +312,8 @@ python training/train.py \
 --no-save_feat
 ```
 
+For **multi-gpus training** (DDP), please refer to [`train.sh`](./train.sh) file for details.
+
 To train other detectors using the code mentioned above, you can specify the config file accordingly. However, for the Face X-ray detector, an additional step is required before training. To save training time, a pickle file is generated to store the Top-N nearest images for each given image. To generate this file, you should run the [`generate_xray_nearest.py`](./training/dataset/generate_xray_nearest.py) file. Once the pickle file is created, you can train the Face X-ray detector using the same way above. If you want to check/use the files I have already generated, please refer to the [`link`](https://github.com/SCLBD/DeepfakeBench/releases/tag/v1.0.2).
 
 
@@ -287,38 +329,19 @@ python3 training/test.py \
 **Note that we have provided the pre-trained weights for each detector (you can download them from the [`link`](https://github.com/SCLBD/DeepfakeBench/releases/tag/v1.0.1)).** Make sure to put these weights in the `./training/weights` folder.
 
 
-## 📦 Supported Detectors
-
-<a href="#top">[Back to top]</a>
-
-|                  | File name                               | Paper                                                                                                                                                                                                                                                                                                                                                         |
-|------------------|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Xception          | [xception_detector.py](./training/detectors/xception_detector.py)         | [FaceForensics++: Learning to Detect Manipulated Facial Images](https://openaccess.thecvf.com/content_ICCV_2019/html/Rossler_FaceForensics_Learning_to_Detect_Manipulated_Facial_Images_ICCV_2019_paper.html) ICCV 2019 |
-| Meso4          | [meso4_detector.py](./training/detectors/meso4_detector.py)       | [MesoNet: a Compact Facial Video Forgery Detection Network](https://ieeexplore.ieee.org/abstract/document/8630761/) WIFS 2018                                                                                                                                                                                                                                     |
-| Meso4Inception          | [meso4Inception_detector.py](./training/detectors/meso4Inception_detector.py)       | [MesoNet: a Compact Facial Video Forgery Detection Network](https://ieeexplore.ieee.org/abstract/document/8630761/) WIFS 2018                                                                                                                                                                                                                                             |
-| CNN-Aug              | [resnet34_detector.py](./training/detectors/resnet34_detector.py)               | [CNN-generated images are surprisingly easy to spot... for now](https://openaccess.thecvf.com/content_CVPR_2020/papers/Wang_CNN-Generated_Images_Are_Surprisingly_Easy_to_Spot..._for_Now_CVPR_2020_paper.pdf) CVPR 2020                                            |
-| EfficientNet-B4      | [efficientnetb4_detector.py](./training/detectors/efficientnetb4_detector.py) | [Efficientnet: Rethinking model scaling for convolutional neural networks](http://proceedings.mlr.press/v97/tan19a.html) ICML 2019                                                                                                                                                                                                                 |
-| Capsule | [capsule_net_detector.py](./training/detectors/capsule_net_detector.py)                 | [Capsule-Forensics: Using Capsule Networks to Detect Forged Images and Videos](https://ieeexplore.ieee.org/abstract/document/8682602) ICASSP 2019                                                                                                 |
-| DSP-FWA    | [fwa_detector.py](./training/detectors/fwa_detector.py)                 | [Exposing DeepFake Videos By Detecting Face Warping Artifacts](https://openaccess.thecvf.com/content_CVPRW_2019/papers/Media%20Forensics/Li_Exposing_DeepFake_Videos_By_Detecting_Face_Warping_Artifacts_CVPRW_2019_paper.pdf) CVPRW 2019                                                                                                                                |
-| Face X-ray             | [facexray_detector.py](./training/detectors/facexray_detector.py)             | [Face X-ray for More General Face Forgery Detection](https://openaccess.thecvf.com/content_CVPR_2020/papers/Li_Face_X-Ray_for_More_General_Face_Forgery_Detection_CVPR_2020_paper.pdf) CVPR 2020                                                                                                                                               |
-| FFD              | [ffd_detector.py](./training/detectors/ffd_detector.py)               | [On the Detection of Digital Face Manipulation](http://cvlab.cse.msu.edu/pdfs/dang_liu_stehouwer_liu_jain_cvpr2020.pdf) CVPR 2020                                                                                                                                                                                                                                           |
-| CORE             | [facexray_detector.py](./training/detectors/facexray_detector.py)             | [CORE: COnsistent REpresentation Learning for Face Forgery Detection](https://openaccess.thecvf.com/content/CVPR2022W/WMF/papers/Ni_CORE_COnsistent_REpresentation_Learning_for_Face_Forgery_Detection_CVPRW_2022_paper.pdf) CVPRW 2022                                                                                                                                                    |
-| RECCE         | [recce_detector.py](./training/detectors/recce_detector.py)     | [End-to-End Reconstruction-Classification Learning for Face Forgery Detection](https://openaccess.thecvf.com/content/CVPR2022/papers/Cao_End-to-End_Reconstruction-Classification_Learning_for_Face_Forgery_Detection_CVPR_2022_paper.pdf) CVPR 2022                                                                                                                                                                                               |
-| UCF            | [ucf_detector.py](./training/detectors/ucf_detector.py)           | [UCF: Uncovering Common Features for Generalizable Deepfake Detection](https://arxiv.org/pdf/2304.13949.pdf) ICCV 2023                                                                                                                                                                                   |
-| F3Net  | [f3net_detector.py](./training/detectors/f3net_detector.py)     | [Thinking in Frequency: Face Forgery Detection by Mining Frequency-aware Clues](https://www.ecva.net/papers/eccv_2020/papers_ECCV/papers/123570086.pdf) ECCV 2020                                                                                                                                                                                                                                                                                 |
-| SPSL   | [spsl_detector.py](./training/detectors/spsl_detector.py)       | [Spatial-Phase Shallow Learning: Rethinking Face Forgery Detection in Frequency Domain](https://openaccess.thecvf.com/content/CVPR2021/papers/Liu_Spatial-Phase_Shallow_Learning_Rethinking_Face_Forgery_Detection_in_Frequency_Domain_CVPR_2021_paper.pdf) CVPR 2021                                                                                                                                                                                                                                                                   |
-| SRM    | [srm_detector.py](./training/detectors/srm_detector.py)         | [Generalizing Face Forgery Detection with High-frequency Features](https://openaccess.thecvf.com/content/CVPR2021/papers/Luo_Generalizing_Face_Forgery_Detection_With_High-Frequency_Features_CVPR_2021_paper.pdf) CVPR 2021                                                       |
-
-
-
 
 ## 🏆 Results
 
 <a href="#top">[Back to top]</a>
 
+>  ❗️❗️❗️ **DeepfakeBench-v2 Updates:**
+> 
+> The below results are cited from our [paper](https://arxiv.org/abs/2307.01426). We have conducted more comprehensive evaluations using the DeepfakeBench-v2, with more datasets used and more detectors implemented. We will update the below table soon.
+> 
+
 In our Benchmark, we apply [TensorBoard](https://github.com/tensorflow/tensorboard) to monitor the progress of training models. It provides a visual representation of the training process, allowing users to examine training results conveniently.
 
-To demonstrate the effectiveness of different detectors, we present partial results from both within-domain and cross-domain evaluations. The evaluation metric used is the frame-level Area Under the Curve (AUC). In this particular scenario, we train the detectors on the FF++ (c23) dataset and assess their performance on other datasets.
+To demonstrate the effectiveness of different detectors, we present **partial results** from both within-domain and cross-domain evaluations. The evaluation metric used is the frame-level Area Under the Curve (AUC). In this particular scenario, we train the detectors on the FF++ (c23) dataset and assess their performance on other datasets.
 
 For a comprehensive overview of the results, we strongly recommend referring to our [paper](https://arxiv.org/abs/2307.01426). These resources provide a detailed analysis of the training outcomes and offer a deeper understanding of the methodology and findings.
 
