@@ -43,7 +43,16 @@ RUN pip install --no-cache-dir certifi setuptools \
     timm==0.6.12\
     segmentation-models-pytorch==0.3.2\
     torchtoolbox==0.1.8.2\
-    tensorboard==2.10.1
+    tensorboard==2.10.1\
+    pip install setuptools==59.5.0 \
+    pip install loralib \
+    pip install pytorchvideo \
+    pip install einops \
+    pip install transformers \
+    pip install filterpy \
+    pip install simplejson \
+    pip install kornia \
+    pip install git+https://github.com/openai/CLIP.git
 
 ENV MODEL_NAME=deepfakebench
 
