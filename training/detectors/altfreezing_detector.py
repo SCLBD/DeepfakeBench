@@ -62,7 +62,7 @@ OUTPUT_DIR: .
 # author: Zhiyuan Yan
 # email: zhiyuanyan@link.cuhk.edu.cn
 # date: 2023-0706
-# description: Class for the XceptionDetector
+# description: Class for the AltFreezingDetector
 
 Functions in the Class are summarized as:
 1. __init__: Initialization
@@ -76,12 +76,13 @@ Functions in the Class are summarized as:
 9. forward: Forward-propagation
 
 Reference:
-@inproceedings{rossler2019faceforensics++,
-  title={Faceforensics++: Learning to detect manipulated facial images},
-  author={Rossler, Andreas and Cozzolino, Davide and Verdoliva, Luisa and Riess, Christian and Thies, Justus and Nie{\ss}ner, Matthias},
-  booktitle={Proceedings of the IEEE/CVF international conference on computer vision},
-  pages={1--11},
-  year={2019}
+@InProceedings{Wang_2023_CVPR,
+    author    = {Wang, Zhendong and Bao, Jianmin and Zhou, Wengang and Wang, Weilun and Li, Houqiang},
+    title     = {AltFreezing for More General Video Face Forgery Detection},
+    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+    month     = {June},
+    year      = {2023},
+    pages     = {4129-4138}
 }
 '''
 
@@ -141,8 +142,12 @@ class AltFreezingDetector(AbstractDetector):
         self.resnet = ResNetOri(cfg)
         if config['pretrained'] is not None:
             print(f"loading pretrained model from {config['pretrained']}")
-            pretrained_weights = torch.load(config['pretrained'])
+            pretrained_weights = torch.load(config['pretrained'], map_location='cpu', encoding='latin1')
             modified_weights = {k.replace("resnet.", ""): v for k, v in pretrained_weights.items()}
+            # fit from 400 num_classes to 1
+            modified_weights["head.projection.weight"] = modified_weights["head.projection.weight"][:1, :]
+            modified_weights["head.projection.bias"] = modified_weights["head.projection.bias"][:1]
+            # load final ckpt
             self.resnet.load_state_dict(modified_weights, strict=True)
 
         self.loss_func = nn.BCELoss()  # The output of the model is a probability value between 0 and 1 (haved used sigmoid)
