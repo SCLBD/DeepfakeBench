@@ -89,7 +89,7 @@ The below table highlights the **update** new detectors compared to our original
 | CLIP            | [clip_detector.py](./training/detectors/clip_detector.py)           | [Learning Transferable Visual Models From Natural Language Supervision](https://arxiv.org/abs/2103.00020) ICML 2021                                                                                                                                                                                   |
 | STIL  | [stil_detector.py](./training/detectors/stil_detector.py)     | [Spatiotemporal Inconsistency Learning for DeepFake Video Detection](https://dl.acm.org/doi/pdf/10.1145/3474085.3475508) ACMMM 2021                                                                                                                                                                                                                                                                                 |
 | RFM   | [rfm_detector.py](./training/detectors/rfm_detector.py)       | [Representative Forgery Mining for Fake Face Detection](https://openaccess.thecvf.com/content/CVPR2021/papers/Wang_Representative_Forgery_Mining_for_Fake_Face_Detection_CVPR_2021_paper.pdf) CVPR 2021                                                                                                                                                                                                                                                                   |
-| TimeTransformer    | [timetransformer_detector.py](./training/detectors/timetransfromer_detector.py)         | [Is space-time attention all you need for video understanding?](https://proceedings.mlr.press/v139/bertasius21a/bertasius21a-supp.pdf) ICMLv 2021                                                       |
+| TimeTransformer    | [timetransformer_detector.py](./training/detectors/timetransfromer_detector.py)         | [Is space-time attention all you need for video understanding?](https://proceedings.mlr.press/v139/bertasius21a/bertasius21a-supp.pdf) ICML 2021                                                       |
 | VideoMAE    | [videomae_detector.py](./training/detectors/videomae_detectors.py)         | [Videomae: Masked autoencoders are data-efficient learners for self-supervised video pre-training](https://proceedings.neurips.cc/paper_files/paper/2022/file/416f9cb3276121c42eebb86352a4354a-Paper-Conference.pdf) NIPS 2022                                                       |
 | X-CLIP    | [xclip_detector.py](./training/detectors/xclip_detector.py)         | [Expanding Language-Image Pretrained Models for General Video Recognition](https://arxiv.org/pdf/2208.02816) ECCV 2022                                                       |
 
@@ -407,21 +407,34 @@ Also, we provide all experimental results in [Link (code: qjpd)](https://pan.bai
 If you find our benchmark useful to your research, please cite it as follows:
 
 ```
-@article{yan2023deepfakebench,
-  title={DeepfakeBench: A Comprehensive Benchmark of Deepfake Detection},
-  author={Yan, Zhiyuan and Zhang, Yong and Yuan, Xinhang and Lyu, Siwei and Wu, Baoyuan},
-  journal={arXiv preprint arXiv:2307.01426},
-  year={2023}
+@inproceedings{DeepfakeBench_YAN_NEURIPS2023,
+ author = {Yan, Zhiyuan and Zhang, Yong and Yuan, Xinhang and Lyu, Siwei and Wu, Baoyuan},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {A. Oh and T. Neumann and A. Globerson and K. Saenko and M. Hardt and S. Levine},
+ pages = {4534--4565},
+ publisher = {Curran Associates, Inc.},
+ title = {DeepfakeBench: A Comprehensive Benchmark of Deepfake Detection},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2023/file/0e735e4b4f07de483cbe250130992726-Paper-Datasets_and_Benchmarks.pdf},
+ volume = {36},
+ year = {2023}
 }
 ```
 
 If interested, you can read our recent works about deepfake detection, and more works about trustworthy AI can be found [here](https://sites.google.com/site/baoyuanwu2015/home).
 ```
-@article{yan2023ucf,
-  title={UCF: Uncovering Common Features for Generalizable Deepfake Detection},
-  author={Yan, Zhiyuan and Zhang, Yong and Fan, Yanbo and Wu, Baoyuan},
-  journal={arXiv preprint arXiv:2304.13949},
-  year={2023}
+@inproceedings{UCF_YAN_ICCV2023,
+ title={Ucf: Uncovering common features for generalizable deepfake detection},
+ author={Yan, Zhiyuan and Zhang, Yong and Fan, Yanbo and Wu, Baoyuan},
+ booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
+ pages={22412--22423},
+ year={2023}
+}
+
+@inproceedings{LSDA_YAN_CVPR2024,
+  title={Transcending forgery specificity with latent space augmentation for generalizable deepfake detection},
+  author={Yan, Zhiyuan and Luo, Yuhao and Lyu, Siwei and Liu, Qingshan and Wu, Baoyuan},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  year={2024}
 }
 ```
 
