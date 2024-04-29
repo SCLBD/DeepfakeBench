@@ -490,11 +490,6 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
                 image_trans, landmarks_trans, mask_trans = self.data_aug(image, landmarks, mask, augmentation_seed)
             else:
                 image_trans, landmarks_trans, mask_trans = deepcopy(image), deepcopy(landmarks), deepcopy(mask)
-
-            
-
-            image_trans = create_bbox_face(image_trans, landmarks_trans, margin=10)
-            image_trans = cv2.resize(image_trans, (256, 256))
             
 
             # To tensor and normalize
@@ -582,42 +577,6 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
         """
         assert len(self.image_list) == len(self.label_list), 'Number of images and labels are not equal'
         return len(self.image_list)
-
-
-def create_bbox_face(image, landmarks, margin=0):
-    # Convert landmarks to a NumPy array if not already
-    landmarks = np.array(landmarks)
-
-    # Find the minimum and maximum x and y coordinates
-    min_x, min_y = np.min(landmarks, axis=0)
-    max_x, max_y = np.max(landmarks, axis=0)
-
-    # Calculate width and height of the bounding box
-    width = max_x - min_x
-    height = max_y - min_y
-
-    # Find the maximum of the two to get the side length of the square
-    max_side = max(width, height)
-
-    # Adjust the bounding box to be a square
-    min_x = min_x - ((max_side - width) / 2)
-    max_x = min_x + max_side
-    min_y = min_y - ((max_side - height) / 2)
-    max_y = min_y + max_side
-
-    # Add margin
-    min_x = max(0, min_x - margin)
-    min_y = max(0, min_y - margin)
-    max_x = min(image.shape[1], max_x + margin)
-    max_y = min(image.shape[0], max_y + margin)
-
-    # Convert coordinates to integers
-    min_x, min_y, max_x, max_y = map(int, [min_x, min_y, max_x, max_y])
-
-    # Crop original image within the bbox
-    face = image[min_y:max_y, min_x:max_x]
-
-    return face
 
 
 if __name__ == "__main__":
