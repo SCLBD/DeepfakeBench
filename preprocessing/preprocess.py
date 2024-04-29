@@ -478,7 +478,8 @@ if __name__ == '__main__':
     elif dataset_name == 'DeeperForensics-1.0':
         real_sub_dataset_names = ['source_videos/' + name for name in os.listdir(os.path.join(dataset_path, 'source_videos'))]
         fake_sub_dataset_names = ['manipulated_videos/' + name for name in os.listdir(os.path.join(dataset_path, 'manipulated_videos'))]
-        sub_dataset_names = real_sub_dataset_names.extend(fake_sub_dataset_names)
+        real_sub_dataset_names.extend(fake_sub_dataset_names)
+        sub_dataset_names = real_sub_dataset_names
         sub_dataset_paths = [Path(os.path.join(dataset_path, name)) for name in sub_dataset_names]
         
     ## UADFV

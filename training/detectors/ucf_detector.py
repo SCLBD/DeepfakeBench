@@ -266,7 +266,7 @@ class UCFDetector(AbstractDetector):
             self.video_names.extend(data_dict['name'])
             return  pred_dict
 
-        bs = self.config['train_batchSize']
+        bs = f_share.size(0)
         # using idx aug in the training mode
         aug_idx = random.random()
         if aug_idx < 0.7:
