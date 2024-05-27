@@ -71,7 +71,8 @@ DeepfakeBench has the following features:
   - 3 Frequency Detectors: [F3Net](./training/detectors/f3net_detector.py), [SPSL](./training/detectors/spsl_detector.py), [SRM](./training/detectors/srm_detector.py)
   - 7 Video Detectors: [AltFreezing](./training/detectors/altfreezing_detector.py), [I3D](./training/detectors/i3d_detector.py), [STIL](./training/detectors/stil_detector.py), [FTCN](./training/detectors/ftcn_detector.py), [X-CLIP](./training/detectors/xclip_detector.py), [TimeTransformer](./training/detectors/timetransfromer_detector.py), [VideoMAE](./training/detectors/videomae_detector.py)
 
-The below table highlights the **update** new detectors compared to our original DeepfakeBench version.
+The table below highlights the **update** new detectors compared to our original DeepfakeBench version.
+The pretrained weights of 3D R50 for training I3D, FTCN, and AltFreezing are [here](https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.3/I3D_8x8_R50.pth)
 
 |                  | File name                               | Paper                                                                                                                                                                                                                                                                                                                                                         |
 |------------------|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
