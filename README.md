@@ -6,6 +6,7 @@
 
 [[paper](https://arxiv.org/abs/2307.01426)] [[pre-trained weights](https://github.com/SCLBD/DeepfakeBench/releases/tag/v1.0.1)]
 
+The pretrained weights of 3D R50 for training I3D, FTCN, and AltFreezing are [here](https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.3/I3D_8x8_R50.pth)
 
 >  ❗️❗️❗️ **DeepfakeBench-v2 Updates:**
 > 
@@ -72,7 +73,6 @@ DeepfakeBench has the following features:
   - 7 Video Detectors: [AltFreezing](./training/detectors/altfreezing_detector.py), [I3D](./training/detectors/i3d_detector.py), [STIL](./training/detectors/stil_detector.py), [FTCN](./training/detectors/ftcn_detector.py), [X-CLIP](./training/detectors/xclip_detector.py), [TimeTransformer](./training/detectors/timetransfromer_detector.py), [VideoMAE](./training/detectors/videomae_detector.py)
 
 The table below highlights the **update** new detectors compared to our original DeepfakeBench version.
-The pretrained weights of 3D R50 for training I3D, FTCN, and AltFreezing are [here](https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.3/I3D_8x8_R50.pth)
 
 |                  | File name                               | Paper                                                                                                                                                                                                                                                                                                                                                         |
 |------------------|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
