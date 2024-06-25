@@ -145,7 +145,7 @@ class SBI_API:
 			assert landmark is not None, "landmark of the facial image should not be None."  
 			# img_r,img_f,mask_f=self.self_blending(img.copy(),landmark.copy())  
 			
-			if random.random() < 0.0:
+			if random.random() < 1.0:
 				# apply sbi
 				img_r,img_f,mask_f=self.self_blending(img.copy(),landmark.copy())
 			else:
