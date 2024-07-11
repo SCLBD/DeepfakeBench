@@ -46,6 +46,7 @@ parser.add_argument('--no-save_ckpt', dest='save_ckpt', action='store_false', de
 parser.add_argument('--no-save_feat', dest='save_feat', action='store_false', default=True)
 parser.add_argument("--ddp", action='store_true', default=False)
 parser.add_argument('--local_rank', type=int, default=0)
+parser.add_argument('--task_target', type=str, default="", help='specify the target of current training task')
 args = parser.parse_args()
 torch.cuda.set_device(args.local_rank)
 
@@ -63,21 +64,17 @@ def prepare_training_data(config):
     # Only use the blending dataset class in training
     if 'dataset_type' in config and config['dataset_type'] == 'blend':
         if config['model_name'] == 'facexray':
-            train_set = FFBlendDataset(config, mode='train')
+            train_set = FFBlendDataset(config)
         elif config['model_name'] == 'fwa':
-            train_set = FWABlendDataset(config, mode='train')
+            train_set = FWABlendDataset(config)
         elif config['model_name'] == 'sbi':
             train_set = SBIDataset(config, mode='train')
         elif config['model_name'] == 'lsda':
             train_set = LSDADataset(config, mode='train')
-        elif config['model_name'] == 'yzy':
-            train_set = YZYDataset(config, mode='train')
         else:
             raise NotImplementedError(
                 'Only facexray, fwa, sbi, and lsda are currently supported for blending dataset'
             )
-    elif 'dataset_type' in config and config['dataset_type'] == 'shuffle':
-        train_set = ShuffleDataset(config, mode='train')
     elif 'dataset_type' in config and config['dataset_type'] == 'pair':
         train_set = pairDataset(config, mode='train')  # Only use the pair dataset class in training
     elif 'dataset_type' in config and config['dataset_type'] == 'iid':
@@ -92,7 +89,7 @@ def prepare_training_data(config):
                     mode='train',
                 )
     if config['model_name'] == 'lsda':
-        from .dataset.lsda_dataset import CustomSampler
+        from dataset.lsda_dataset import CustomSampler
         custom_sampler = CustomSampler(num_groups=2*360, n_frame_per_vid=config['frame_num']['train'], batch_size=config['train_batchSize'], videos_per_group=5)
         train_data_loader = \
             torch.utils.data.DataLoader(
@@ -230,6 +227,8 @@ def main():
         config = yaml.safe_load(f)
     with open('./training/config/train_config.yaml', 'r') as f:
         config2 = yaml.safe_load(f)
+    if 'label_dict' in config:
+        config2['label_dict']=config['label_dict']
     config.update(config2)
     config['local_rank']=args.local_rank
     if config['dry_run']:
@@ -245,7 +244,12 @@ def main():
     if config['lmdb']:
         config['dataset_json_folder'] = 'preprocessing/dataset_json_v3'
     # create logger
-    logger_path = config['log_dir']
+    timenow=datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+    task_str = f"_{config['task_target']}" if config['task_target'] is not None else ""
+    logger_path =  os.path.join(
+                config['log_dir'],
+                config['model_name'] + task_str + '_' + timenow
+            )
     os.makedirs(logger_path, exist_ok=True)
     logger = create_logger(os.path.join(logger_path, 'training.log'))
     logger.info('Save log to {}'.format(logger_path))
