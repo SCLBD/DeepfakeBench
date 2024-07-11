@@ -1,0 +1,135 @@
+# log dir 
+log_dir: logs/evaluations/lsda
+
+# model setting
+pretrained: ./training/pretrained/efficientnet-b4-6ed6700e.pth   # path to a pre-trained model, if using one
+model_name: lsda   # model name
+backbone_name: efficientnetb4  # backbone name
+
+#backbone setting
+backbone_config:
+  mode: original
+  num_classes: 2
+  inc: 3
+  dropout: false
+
+# dataset
+all_dataset: [FaceForensics++, FF-F2F, FF-DF, FF-FS, FF-NT, FaceShifter, DeepFakeDetection, Celeb-DF-v1, Celeb-DF-v2, DFDCP, DFDC, DeeperForensics-1.0, UADFV, stargan]
+train_dataset: [FaceForensics++]
+test_dataset: [Celeb-DF-v2]
+dataset_type: blend
+
+compression: c23  # compression-level for videos
+train_batchSize: 20   # training batch size
+test_batchSize: 32   # test batch size
+workers: 4   # number of data loading workers
+frame_num: {'train': 32, 'test': 32}   # number of frames to use per video in training and testing
+resolution: 256   # resolution of output image to network
+with_mask: false   # whether to include mask information in the input
+with_landmark: false   # whether to include facial landmark information in the input
+save_ckpt: false   # whether to save checkpoint
+save_feat: false   # whether to save features
+
+# label settings
+label_dict:
+  # DFD
+  DFD_fake: 1
+  DFD_real: 0
+  # FF++ + FaceShifter(FF-real+FF-FH)
+  FF-SH: 1
+  FF-F2F: 1
+  FF-DF: 1
+  FF-FS: 1
+  FF-NT: 1
+  FF-FH: 1
+  FF-real: 0
+  # CelebDF
+  CelebDFv1_real: 0
+  CelebDFv1_fake: 1
+  CelebDFv2_real: 0
+  CelebDFv2_fake: 1
+  # DFDCP
+  DFDCP_Real: 0
+  DFDCP_FakeA: 1
+  DFDCP_FakeB: 1
+  # DFDC
+  DFDC_Fake: 1
+  DFDC_Real: 0
+  # DeeperForensics-1.0
+  DF_fake: 1
+  DF_real: 0
+  # UADFV
+  UADFV_Fake: 1
+  UADFV_Real: 0
+  #stargan
+  0_real: 0
+  1_fake: 1
+  real: 0
+  fake: 1
+
+
+
+# data augmentation
+use_data_augmentation: false  # Add this flag to enable/disable data augmentation
+data_aug:
+  flip_prob: 0.5
+  rotate_prob: 0.5
+  rotate_limit: [-10, 10]
+  blur_prob: 0.5
+  blur_limit: [3, 7]
+  brightness_prob: 0.5
+  brightness_limit: [-0.1, 0.1]
+  contrast_limit: [-0.1, 0.1]
+  quality_lower: 40
+  quality_upper: 100
+
+# mean and std for normalization
+mean: [0.5, 0.5, 0.5]
+std: [0.5, 0.5, 0.5]
+
+# optimizer config
+optimizer:
+  # choose between 'adam' and 'sgd'
+  type: adam
+  adam:
+    lr: 0.0002  # learning rate
+    beta1: 0.9  # beta1 for Adam optimizer
+    beta2: 0.999 # beta2 for Adam optimizer
+    eps: 0.00000001  # epsilon for Adam optimizer
+    weight_decay: 0.0005  # weight decay for regularization
+    amsgrad: false
+  sgd:
+    lr: 0.0002  # learning rate
+    momentum: 0.9  # momentum for SGD optimizer
+    weight_decay: 0.0005  # weight decay for regularization
+  sam:
+    lr: 0.001  # learning rate
+    momentum: 0.9  # momentum for SGD optimizer
+
+# training config
+lr_scheduler: null   # learning rate scheduler
+nEpochs: 50   # number of epochs to train for
+start_epoch: 0   # manual epoch number (useful for restarts)
+save_epoch: 1   # interval epochs for saving models
+rec_iter: 100   # interval iterations for recording
+logdir: ./logs   # folder to output images and logs
+manualSeed: 1024   # manual seed for random number generation
+
+# loss function
+loss_func: cross_entropy   # loss function to use
+losstype: null
+
+# metric
+metric_scoring: auc   # metric for evaluation (auc, acc, eer, ap)
+
+# cuda
+
+cuda: true   # whether to use CUDA acceleration
+cudnn: true   # whether to use CuDNN for convolution operations
+
+
+
+# lsda
+teacher: efficientnetb4
+student: efficientnetb4
+real_encoder: null
