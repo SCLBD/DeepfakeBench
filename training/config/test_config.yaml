@@ -1,8 +1,8 @@
 mode: test
 lmdb: True
-dataset_root_rgb: './datasets/rgb'
+rgb_dir: './datasets/rgb'
 lmdb_dir:  './datasets/lmdb'
-dataset_json_folder: 'preprocessing/dataset_json_v3'
+dataset_json_folder: './preprocessing/dataset_json'
 label_dict:
   # DFD
   DFD_fake: 1
