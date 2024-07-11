@@ -13,7 +13,7 @@ import pickle
 from tqdm import tqdm
 from copy import deepcopy
 from PIL import Image as pil_image
-from .metrics.utils import get_test_metrics
+from metrics.utils import get_test_metrics
 import torch
 import torch.nn as nn
 import torch.nn.parallel
@@ -47,7 +47,6 @@ args = parser.parse_args()
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-on_2060 = "2060" in torch.cuda.get_device_name()
 def init_seed(config):
     if config['manualSeed'] is None:
         config['manualSeed'] = random.randint(1, 10000)
@@ -150,13 +149,10 @@ def main():
     # parse options and load config
     with open(args.detector_path, 'r') as f:
         config = yaml.safe_load(f)
-    if on_2060:
-        config['lmdb_dir'] = r'I:\transform_2_lmdb'
-        config['train_batchSize'] = 10
-        config['workers'] = 0
-    else:
-        config['workers'] = 8
-        config['lmdb_dir'] = r'./data/LMDBs'
+    with open('./training/config/test_config.yaml', 'r') as f:
+        config2 = yaml.safe_load(f)
+    if 'label_dict' in config:
+        config2['label_dict']=config['label_dict']
     weights_path = None
     # If arguments are provided, they will overwrite the yaml settings
     if args.test_dataset:
