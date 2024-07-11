@@ -36,7 +36,7 @@ def get_test_metrics(y_pred, y_true, img_names):
         # print(pred.shape)
         # print(label.shape)
         for item in np.transpose(np.stack((image, pred, label)), (1, 0)):
-            # 分割字符串，获取'a'和'b'的值
+
             s = item[0]
             if '\\' in s:
                 parts = s.split('\\')
@@ -45,14 +45,11 @@ def get_test_metrics(y_pred, y_true, img_names):
             a = parts[-2]
             b = parts[-1]
 
-            # 如果'a'的值还没有在字典中，添加一个新的键值对
             if a not in result_dict:
                 result_dict[a] = []
 
-            # 将'b'的值添加到'a'的列表中
             result_dict[a].append(item)
         image_arr = list(result_dict.values())
-        # 将字典的值转换为一个列表，得到二维数组
 
         for video in image_arr:
             pred_sum = 0
