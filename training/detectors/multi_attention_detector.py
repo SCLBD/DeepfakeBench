@@ -99,6 +99,7 @@ class MultiAttentionDetector(AbstractDetector):
     def build_backbone(self, config):
         backbone_class = BACKBONE[config['backbone_name']]
         model_config = config['backbone_config']
+        model_config['pretrained'] = self.config['pretrained']
         backbone = backbone_class(model_config)
         return backbone
         # # FIXME: current load pretrained weights only from the backbone, not here

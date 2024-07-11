@@ -87,7 +87,6 @@ class SRMDetector(AbstractDetector):
 
         # recorder
         self.prob, self.label = [], []
-        self.video_names = []
         self.correct, self.total = 0, 0
         
     def build_backbone(self, config):
@@ -199,9 +198,6 @@ class SRMDetector(AbstractDetector):
             correct = (prediction_class == data_dict['label']).sum().item()
             self.correct += correct
             self.total += data_dict['label'].size(0)
-
-            # Save video names for computing video-level AUC
-            self.video_names.extend(data_dict['name'])
         return pred_dict
 
 

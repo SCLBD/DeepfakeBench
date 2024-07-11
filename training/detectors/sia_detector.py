@@ -109,6 +109,7 @@ class SIADetector(AbstractDetector):
         # prepare the backbone
         backbone_class = BACKBONE[config['backbone_name']]
         model_config = config['backbone_config']
+        model_config['pretrained'] = self.config['pretrained']
         backbone = backbone_class(model_config)
         
         #FIXME: current load pretrained weights only from the backbone, not here

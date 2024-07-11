@@ -61,7 +61,6 @@ class SpslDetector(AbstractDetector):
         self.backbone = self.build_backbone(config)
         self.loss_func = self.build_loss(config)
         self.prob, self.label = [], []
-        self.video_names = []
         self.correct, self.total = 0, 0
 
     def build_backbone(self, config):
@@ -153,8 +152,6 @@ class SpslDetector(AbstractDetector):
             self.correct += correct
             self.total += data_dict['label'].size(0)
 
-            # Save video names for computing video-level AUC
-            self.video_names.extend(data_dict['name'])
         return pred_dict
 
     def phase_without_amplitude(self, img):

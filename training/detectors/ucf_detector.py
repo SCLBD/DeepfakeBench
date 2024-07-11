@@ -225,7 +225,6 @@ class UCFDetector(AbstractDetector):
         acc_spe = get_accracy(label_spe.detach(), pred_spe.detach())
         metric_batch_dict = {'acc': acc, 'acc_spe': acc_spe, 'auc': auc, 'eer': eer, 'ap': ap}
         # we dont compute the video-level metrics for training
-        self.video_names = []
         return metric_batch_dict
 
     def forward(self, data_dict: dict, inference=False) -> dict:
@@ -262,8 +261,6 @@ class UCFDetector(AbstractDetector):
             self.total += data_dict['label'].size(0)
 
             pred_dict = {'cls': out_sha, 'feat': sha_feat}
-            # Save video names for computing video-level AUC
-            self.video_names.extend(data_dict['name'])
             return  pred_dict
 
         bs = f_share.size(0)
