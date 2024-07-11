@@ -72,7 +72,8 @@ class LRLDataset(DeepfakeAbstractBaseDataset):
         image_trans = self.normalize(self.to_tensor(image_trans))
         img_idct_trans = self.to_tensor(img_idct)
         mask_trans = torch.from_numpy(mask_trans)
-        mask_trans = mask_trans.squeeze(2).unsqueeze(0).float()
+        mask_trans = mask_trans.squeeze(2).permute(2, 0, 1)
+        mask_trans = torch.mean(mask_trans, dim=0, keepdim=True)
         return image_trans, label, img_idct_trans, mask_trans
 
     def __len__(self):

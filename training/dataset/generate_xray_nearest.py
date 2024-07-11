@@ -60,7 +60,7 @@ def get_landmark_dict(dataset_folder):
         for frame_path in video_info['frames']
     }
     # Save the dictionary to a pickle file
-    with open('landmark_dict_new.pkl', 'wb') as f:
+    with open('landmark_dict_ffall.pkl', 'wb') as f:
         pickle.dump(landmark_dict, f)
     return landmark_dict
 
@@ -104,8 +104,8 @@ def get_nearest_faces(landmark_info, num_neighbors):
     random.seed(1024)  # Fix the random seed for reproducibility
 
     # Check if the dictionary has already been created
-    if os.path.exists('nearest_face_info_new.pkl'):
-        with open('nearest_face_info_new.pkl', 'rb') as f:
+    if os.path.exists('nearest_face_info.pkl'):
+        with open('nearest_face_info.pkl', 'rb') as f:
             return pickle.load(f)
 
     landmarks_array = np.array([lmk.flatten() for lmk in landmark_info.values()])
@@ -122,7 +122,7 @@ def get_nearest_faces(landmark_info, num_neighbors):
         nearest_faces[landmark_ids[idx]] = [landmark_ids[i] for i in indices[1:]]
 
     # Save the dictionary to a pickle file
-    with open('nearest_face_info_new.pkl', 'wb') as f:
+    with open('nearest_face_info.pkl', 'wb') as f:
         pickle.dump(nearest_faces, f)
 
     return nearest_faces

@@ -130,7 +130,13 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
             keypoint_params=A.KeypointParams(format='xy') if self.config['with_landmark'] else None
         )
         return trans
-       
+
+    def rescale_landmarks(self, landmarks, original_size=256, new_size=224):
+        scale_factor = new_size / original_size
+        rescaled_landmarks = landmarks * scale_factor
+        return rescaled_landmarks
+
+
     def collect_img_and_label_for_one_dataset(self, dataset_name: str):
         """Collects image and label lists.
 
@@ -289,6 +295,8 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
         """
         size = self.config['resolution'] # if self.mode == "train" else self.config['resolution']
         if not self.lmdb:
+            if not file_path[0] == '.':
+                file_path =  f'./{self.config["dataset_root_rgb"]}\\'+file_path
             assert os.path.exists(file_path), f"{file_path} does not exist"
             img = cv2.imread(file_path)
             if img is None:
@@ -335,10 +343,14 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
                 # transfer the path format from rgb-path to lmdb-key
                 if file_path[0]=='.':
                     file_path=file_path.replace('./datasets\\','')
+
                 image_bin = txn.get(file_path.encode())
-                image_buf = np.frombuffer(image_bin, dtype=np.uint8)
-                # cv2.IMREAD_GRAYSCALE为灰度图，cv2.IMREAD_COLOR为彩色图
-                mask = cv2.imdecode(image_buf, cv2.IMREAD_COLOR)
+                if image_bin is None:
+                    mask = np.zeros((size, size,3))
+                else:
+                    image_buf = np.frombuffer(image_bin, dtype=np.uint8)
+                    # cv2.IMREAD_GRAYSCALE为灰度图，cv2.IMREAD_COLOR为彩色图
+                    mask = cv2.imdecode(image_buf, cv2.IMREAD_COLOR)
         mask = cv2.resize(mask, (size, size)) / 255
         mask = np.expand_dims(mask, axis=2)
         return np.float32(mask)
@@ -370,7 +382,8 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
                     file_path=file_path.replace('./datasets\\','')
                 binary = txn.get(file_path.encode())
                 landmark = np.frombuffer(binary, dtype=np.uint32).reshape((81, 2))
-        return np.float32(landmark)
+                landmark=self.rescale_landmarks(np.float32(landmark), original_size=256, new_size=self.config['resolution'])
+        return landmark
 
     def to_tensor(self, img):
         """
@@ -413,7 +426,9 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
             kwargs['keypoints'] = landmark
             kwargs['keypoint_params'] = A.KeypointParams(format='xy')
         if mask is not None:
-            kwargs['mask'] = mask
+            mask = mask.squeeze(2)
+            if mask.max() > 0:
+                kwargs['mask'] = mask
 
         # Apply data augmentation
         transformed = self.transform(**kwargs)
@@ -421,7 +436,7 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
         # Get the augmented image, landmark, and mask
         augmented_img = transformed['image']
         augmented_landmark = transformed.get('keypoints')
-        augmented_mask = transformed.get('mask')
+        augmented_mask = transformed.get('mask',mask)
 
         # Convert the augmented landmark to a numpy array
         if augmented_landmark is not None:

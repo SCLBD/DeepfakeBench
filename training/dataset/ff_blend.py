@@ -11,6 +11,8 @@ import sys
 import json
 import pickle
 import time
+
+import lmdb
 import numpy as np
 import albumentations as A
 import cv2
@@ -19,7 +21,7 @@ from PIL import Image
 from skimage.util import random_noise
 from scipy import linalg
 import heapq as hq
-
+import lmdb
 import torch
 from torch.autograd import Variable
 from torch.utils import data
@@ -56,6 +58,12 @@ class RandomDownScale(A.core.transforms_interface.ImageOnlyTransform):
 
 class FFBlendDataset(data.Dataset):
     def __init__(self, config=None):
+
+        self.lmdb = config.get('lmdb', False)
+        if self.lmdb:
+            lmdb_path = os.path.join(config['lmdb_dir'], f"FaceForensics++_lmdb")
+            self.env = lmdb.open(lmdb_path, create=False, subdir=True, readonly=True, lock=False)
+
         # Check if the dictionary has already been created
         if os.path.exists('training/lib/nearest_face_info.pkl'):
             with open('training/lib/nearest_face_info.pkl', 'rb') as f:
@@ -81,7 +89,7 @@ class FFBlendDataset(data.Dataset):
         self.data_dict = {
             'imid_list': self.imid_list
         }
-
+        self.config=config
     # def data_aug(self, im):
     #     """
     #     Apply data augmentation on the input image.
@@ -137,17 +145,116 @@ class FFBlendDataset(data.Dataset):
         random.shuffle(imid_list)
         return imid_list
 
+    def load_rgb(self, file_path):
+        """
+        Load an RGB image from a file path and resize it to a specified resolution.
+
+        Args:
+            file_path: A string indicating the path to the image file.
+
+        Returns:
+            An Image object containing the loaded and resized image.
+
+        Raises:
+            ValueError: If the loaded image is None.
+        """
+        size = self.config['resolution'] # if self.mode == "train" else self.config['resolution']
+        if not self.lmdb:
+            if not file_path[0] == '.':
+                file_path =  f'./{self.config["dataset_root_rgb"]}\\'+file_path
+            assert os.path.exists(file_path), f"{file_path} does not exist"
+            img = cv2.imread(file_path)
+            if img is None:
+                raise ValueError('Loaded image is None: {}'.format(file_path))
+        elif self.lmdb:
+            with self.env.begin(write=False) as txn:
+                # transfer the path format from rgb-path to lmdb-key
+                if file_path[0]=='.':
+                    file_path=file_path.replace('./datasets\\','')
+
+                image_bin = txn.get(file_path.encode())
+                image_buf = np.frombuffer(image_bin, dtype=np.uint8)
+                img = cv2.imdecode(image_buf, cv2.IMREAD_COLOR)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img = cv2.resize(img, (size, size), interpolation=cv2.INTER_CUBIC)
+        return np.array(img, dtype=np.uint8)
+
+
+    def load_mask(self, file_path):
+        """
+        Load a binary mask image from a file path and resize it to a specified resolution.
+
+        Args:
+            file_path: A string indicating the path to the mask file.
+
+        Returns:
+            A numpy array containing the loaded and resized mask.
+
+        Raises:
+            None.
+        """
+        size = self.config['resolution']
+        if file_path is None:
+            return np.zeros((size, size, 1))
+        if not self.lmdb:
+            if os.path.exists(file_path):
+                mask = cv2.imread(file_path, 0)
+                if mask is None:
+                    mask = np.zeros((size, size))
+            else:
+                return np.zeros((size, size, 1))
+        else:
+            with self.env.begin(write=False) as txn:
+                # transfer the path format from rgb-path to lmdb-key
+                if file_path[0]=='.':
+                    file_path=file_path.replace('./datasets\\','')
+                image_bin = txn.get(file_path.encode())
+                image_buf = np.frombuffer(image_bin, dtype=np.uint8)
+                # cv2.IMREAD_GRAYSCALE为灰度图，cv2.IMREAD_COLOR为彩色图
+                mask = cv2.imdecode(image_buf, cv2.IMREAD_COLOR)
+        mask = cv2.resize(mask, (size, size)) / 255
+        mask = np.expand_dims(mask, axis=2)
+        return np.float32(mask)
+
+    def load_landmark(self, file_path):
+        """
+        Load 2D facial landmarks from a file path.
+
+        Args:
+            file_path: A string indicating the path to the landmark file.
+
+        Returns:
+            A numpy array containing the loaded landmarks.
+
+        Raises:
+            None.
+        """
+        if file_path is None:
+            return np.zeros((81, 2))
+        if not self.lmdb:
+            if os.path.exists(file_path):
+                landmark = np.load(file_path)
+            else:
+                return np.zeros((81, 2))
+        else:
+            with self.env.begin(write=False) as txn:
+                # transfer the path format from rgb-path to lmdb-key
+                if file_path[0]=='.':
+                    file_path=file_path.replace('./datasets\\','')
+                binary = txn.get(file_path.encode())
+                landmark = np.frombuffer(binary, dtype=np.uint32).reshape((81, 2))
+        return np.float32(landmark)
 
     def preprocess_images(self, imid_fg, imid_bg):
         """
         Load foreground and background images and face shapes.
         """
-        fg_im = cv2.imread(imid_fg.replace('landmarks', 'frames').replace('npy', 'png'))
+        fg_im = self.load_rgb(imid_fg.replace('landmarks', 'frames').replace('npy', 'png'))
         fg_im = np.array(self.data_aug(fg_im))
         fg_shape = self.landmark_dict[imid_fg]
         fg_shape = np.array(fg_shape, dtype=np.int32)
 
-        bg_im = cv2.imread(imid_bg.replace('landmarks', 'frames').replace('npy', 'png'))
+        bg_im = self.load_rgb(imid_bg.replace('landmarks', 'frames').replace('npy', 'png'))
         bg_im = np.array(self.data_aug(bg_im))
         bg_shape = self.landmark_dict[imid_bg]
         bg_shape = np.array(bg_shape, dtype=np.int32)
@@ -170,6 +277,7 @@ class FFBlendDataset(data.Dataset):
             fg_lmk_path = random.choice(self.face_info[bg_lmk_path])
         else:
             fg_lmk_path = bg_lmk_path
+
         return fg_lmk_path, bg_lmk_path
 
 
@@ -366,7 +474,10 @@ class FFBlendDataset(data.Dataset):
         Get an item from the dataset by index.
         """
         one_lmk_path = self.imid_list[index]
-        label = 1 if one_lmk_path.split('/')[6]=='manipulated_sequences' else 0
+        try:
+            label = 1 if one_lmk_path.split('/')[6]=='manipulated_sequences' else 0
+        except Exception as e:
+            label = 1 if one_lmk_path.split('\\')[6] == 'manipulated_sequences' else 0
         imid_fg, imid_bg = self.get_fg_bg(one_lmk_path)
         manipulate_img, boundary, imid_bg = self.process_images(imid_fg, imid_bg, index)
 

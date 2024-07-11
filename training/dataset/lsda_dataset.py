@@ -162,7 +162,7 @@ class CustomSampler(Sampler):
 
 class LSDADataset(DeepfakeAbstractBaseDataset):
 
-    on_2060 = "2060" in torch.cuda.get_device_name()
+    on_3060 = "3060" in torch.cuda.get_device_name()
     transfer_dict = {
         'youtube':'FF-real',
         'Deepfakes':'FF-DF',
@@ -172,22 +172,15 @@ class LSDADataset(DeepfakeAbstractBaseDataset):
 
 
     }
-    if on_2060:
-        data_root = r'H:\code\DeepFakebench_v2\datasets\FaceForensics++'
+    if on_3060:
+        data_root = r'F:\Datasets\rgb\FaceForensics++'
     else:
-        data_root = r'/mnt/chongqinggeminiceph1fs/geminicephfs/mm-base-vision/jikangcheng/data/FaceForensics++'
-    if on_2060:
-        data_list = {
-            'test': r'H:\code\DeepFakebench_v2\datasets\FaceForensics++\test.json',
-            'train': r'H:\code\DeepFakebench_v2\datasets\FaceForensics++\train.json',
-            'eval': r'H:\code\DeepFakebench_v2\datasets\FaceForensics++\eval.json'
-        }
-    else:
-        data_list = {
-            'test': r'/mnt/chongqinggeminiceph1fs/geminicephfs/mm-base-vision/jikangcheng/data/FaceForensics++/ft_local/test.json',
-            'train': r'/mnt/chongqinggeminiceph1fs/geminicephfs/mm-base-vision/jikangcheng/data/FaceForensics++/ft_local/train.json',
-            'eval': r'/mnt/chongqinggeminiceph1fs/geminicephfs/mm-base-vision/jikangcheng/data/FaceForensics++/ft_local/eval.json'
-        }
+        data_root = r'./datasets/FaceForensics++'
+    data_list = {
+        'test': r'./datasets/FaceForensics++/test.json',
+        'train': r'./datasets/FaceForensics++/train.json',
+        'eval': r'./datasets/FaceForensics++/val.json'
+    }
 
     def __init__(self, config=None, mode='train', with_dataset=['Deepfakes', 'Face2Face', 'FaceSwap', 'NeuralTextures']):
         super().__init__(config, mode)

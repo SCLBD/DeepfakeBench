@@ -12,6 +12,8 @@ import sys
 import json
 import pickle
 import time
+
+import dlib
 import numpy as np
 from copy import deepcopy
 import cv2
@@ -46,7 +48,7 @@ from dataset.abstract_dataset import DeepfakeAbstractBaseDataset
 
 # Define face detector and predictor models
 face_detector = dlib.get_frontal_face_detector()
-predictor_path = '../preprocessing/dlib_tools/shape_predictor_81_face_landmarks.dat'
+predictor_path = 'preprocessing/dlib_tools/shape_predictor_81_face_landmarks.dat'
 face_predictor = dlib.shape_predictor(predictor_path)
 
 
@@ -363,7 +365,8 @@ class FWABlendDataset(DeepfakeAbstractBaseDataset):
 
 
     def blend_images(self, img_path):
-        im = cv2.imread(img_path)
+        #im = cv2.imread(img_path)
+        im = np.array(self.load_rgb(img_path))
 
         # Get the alignment of the head
         face_cache = align(im, face_detector, face_predictor)
@@ -408,7 +411,7 @@ class FWABlendDataset(DeepfakeAbstractBaseDataset):
         blended_im, mask = self.blend_images(img_path)
 
         # Prepare images and titles for the combined image
-        imid_fg = cv2.imread(img_path)
+        imid_fg = np.array(self.load_rgb(img_path))
         imid_fg = np.array(self.data_aug(imid_fg))
 
         if blended_im is None or mask is None:
@@ -488,7 +491,10 @@ class FWABlendDataset(DeepfakeAbstractBaseDataset):
         Get an item from the dataset by index.
         """
         one_img_path = self.data_dict['image'][index]
-        label = 1 if one_img_path.split('/')[6]=='manipulated_sequences' else 0
+        try:
+            label = 1 if one_img_path.split('/')[6]=='manipulated_sequences' else 0
+        except Exception as e:
+            label = 1 if one_img_path.split('\\')[6] == 'manipulated_sequences' else 0
         blend_label = 1
         imid, manipulate_img = self.process_images(one_img_path, index)
 
