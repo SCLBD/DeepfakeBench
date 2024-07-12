@@ -66,11 +66,11 @@ Welcome to *DeepfakeBench*, your one-stop solution for deepfake detection! Here 
 
 DeepfakeBench has the following features:
 
-⭐️  **Detectors** (**34** detectors):
+⭐️  **Detectors** (**33** detectors):
   - 5 Naive Detectors: [Xception](./training/detectors/xception_detector.py), [MesoNet](./training/detectors/meso4_detector.py), [MesoInception](./training/detectors/meso4Inception_detector.py), [CNN-Aug](./training/detectors/resnet34_detector.py), [EfficientNet-B4](./training/detectors/efficientnetb4_detector.py)
   - 19 Spatial Detectors: [Capsule](./training/detectors/capsule_net_detector.py), [DSP-FWA](./training/detectors/fwa_detector.py), [Face X-ray](./training/detectors/facexray_detector.py), [FFD](./training/detectors/ffd_detector.py), [CORE](./training/detectors/core_detector.py), [RECCE](./training/detectors/recce_detector.py), [UCF](./training/detectors/ucf_detector.py), [Local-relation](./training/detectors/lrl_detector.py), [IID](./training/detectors/lrl_detector.py), [RFM](./training/detectors/rfm_detector.py), [SIA](./training/detectors/sia_detector.py), [SLADD](./training/detectors/sladd_detector.py), [UIA-ViT](./training/detectors/uia_vit_detector.py), [CLIP](./training/detectors/clip_detector.py), [SBI](./training/detectors/sbi_detector.py), [PCL-I2G](./training/detectors/pcl_xception_detector.py), [Multi-Attention](./training/detectors/multi_attention_detector.py), [LSDA](./training/detectors/lsda_detector.py)
   - 3 Frequency Detectors: [F3Net](./training/detectors/f3net_detector.py), [SPSL](./training/detectors/spsl_detector.py), [SRM](./training/detectors/srm_detector.py)
-  - 7 Video Detectors: [AltFreezing](./training/detectors/altfreezing_detector.py), [I3D](./training/detectors/i3d_detector.py), [STIL](./training/detectors/stil_detector.py), [FTCN](./training/detectors/ftcn_detector.py), [X-CLIP](./training/detectors/xclip_detector.py), [TimeTransformer](./training/detectors/timetransfromer_detector.py), [VideoMAE](./training/detectors/videomae_detector.py)
+  - 6 Video Detectors: [I3D](./training/detectors/i3d_detector.py), [STIL](./training/detectors/stil_detector.py), [FTCN](./training/detectors/ftcn_detector.py), [X-CLIP](./training/detectors/xclip_detector.py), [TimeTransformer](./training/detectors/timetransfromer_detector.py), [VideoMAE](./training/detectors/videomae_detector.py)
 
 The table below highlights the **update** new detectors compared to our original DeepfakeBench version.
 
@@ -80,7 +80,6 @@ The table below highlights the **update** new detectors compared to our original
 | IID          | [iid_detector.py](./training/detectors/iid_detector.py)       | [Implicit Identity Driven Deepfake Face Swapping Detection](https://openaccess.thecvf.com/content/CVPR2023/papers/Huang_Implicit_Identity_Driven_Deepfake_Face_Swapping_Detection_CVPR_2023_paper.pdf) CVPR 2023                                                                                                                                                                                                                                     |
 | SBI          | [sbi_detector.py](./training/detectors/sbi_detector.py)       | [Detecting Deepfakes with Self-Blended Images](https://arxiv.org/pdf/2204.08376) CVPR 2022                                                                                                                                                                                                                                             |
 | SLADD              | [sladd_detector.py](./training/detectors/sladd_detector.py)               | [Self-supervised Learning of Adversarial Example: Towards Good Generalizations for Deepfake Detection](https://arxiv.org/abs/2203.12208) CVPR 2022                                            |
-| AltFreezing      | [altfreezing_detector.py](./training/detectors/altfreezing_detector.py) | [AltFreezing for More General Face Forgery Detection](https://openaccess.thecvf.com/content/CVPR2023/papers/Wang_AltFreezing_for_More_General_Video_Face_Forgery_Detection_CVPR_2023_paper.pdf) CVPR 2023                                                                                                                                                                                                                 |
 | FTCN | [ftcn_detector.py](./training/detectors/ftcn_detector.py)                 | [Exploring Temporal Coherence for More General Video Face Forgery Detection](https://openaccess.thecvf.com/content/ICCV2021/papers/Zheng_Exploring_Temporal_Coherence_for_More_General_Video_Face_Forgery_Detection_ICCV_2021_paper.pdf) ICCV 2021                                                                                                 |
 | PCL-I2G    | [pcl_xception_detector.py](./training/detectors/pcl_xception_detector.py)                 | [Learning Self-Consistency for Deepfake Detection](https://openaccess.thecvf.com/content/ICCV2021/papers/Zhao_Learning_Self-Consistency_for_Deepfake_Detection_ICCV_2021_paper.pdf) ICCV 2021                                                                                                                                |
 | Local-relation             | [lrl_detector.py](./training/detectors/lrl_detector.py)             | [Local Relation Learning for Face Forgery Detection](https://arxiv.org/pdf/2105.02577) AAAI 2021                                                                                                                                               |
@@ -126,19 +125,28 @@ Note we used Docker version `19.03.14` in our setup. We highly recommend using t
 
 <a href="#top">[Back to top]</a>
 
-All datasets used in DeepfakeBench can be downloaded from their own websites or repositories.
-For convenience, we also provide the data we use in our research. All the downloaded datasets have been organized and arranged in the same folder. **Users can easily access and download the preprocessed data**, including original videos, mask videos, frames, and landmarks:
+All datasets used in DeepfakeBench can be downloaded from their own websites or repositories and preprocessed accordingly.
+For convenience, we also provide the data we use in our research, including:
 
-| Dataset Name                    | OneDrive Link                                                                                           | Notes                   |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------- |
-| Celeb-DF-v1                     | [Password: cdfv1](https://cuhko365-my.sharepoint.com/:u:/g/personal/222041040_link_cuhk_edu_cn/Ebtbcp8jZ3hCioAqUN6B8zkB8wXhNdaebk4GKba-zaa1bQ?e=XTiypw)   | -                       |
-| Celeb-DF-v2                     | [Password: cdfv2](https://cuhko365-my.sharepoint.com/:u:/g/personal/222041040_link_cuhk_edu_cn/EaWGnMVgNbJGkFvyUIarFCABTFyw0tWbkfwT6AFvvR86Mg?e=pQQqnd)   | -                       |
-| FaceForensics++, DeepfakeDetection, FaceShifter | [NEW_Link](https://cuhko365-my.sharepoint.com/:u:/g/personal/222041040_link_cuhk_edu_cn/EXkAJatERVFGk6Tbk2kZoGkBmKRlCaUmYbf2FElCPGyjQg?e=owW9kn)                                                                                                      | Only with pre-processed data       |
-| UADFV                           | [Password: uadfv](https://cuhko365-my.sharepoint.com/:u:/g/personal/222041040_link_cuhk_edu_cn/ERduMejcZRNDhqsCfZwhVuMBjLjtAMA7UyxDBs1qFhxs-w?e=gDYKqn)                                                                                            | -                       |
-| Deepfake Detection Challenge (Preview) | [Password: dfdcp](https://cuhko365-my.sharepoint.com/:u:/g/personal/222041040_link_cuhk_edu_cn/EazUIp_cEFFOg73BKRdO6BgBLa0u-thQEI9h_gk1GsggcA?e=7oSBTb)                                                                                       | -                       |
-| Deepfake Detection Challenge     | [Password: dfdc](https://cuhko365-my.sharepoint.com/:f:/g/personal/222041040_link_cuhk_edu_cn/EjzENPTWrmxKokvW3ddTUysBJuELSKkGHvOm-zDLaPOtAA?e=awwtnp)                                                                                         | Only Test Data                       |
-| DeepForensics-1.0               | Coming Soon                                                                                                    | Only Test Data                       |
+| Type                     | Links| Note|       
+| -------------------------|------- | ----------------------- |
+| **Rgb-format Datasets**  | [Password: ogjn](https://pan.baidu.com/s/1NAMUHcZvsIm7l6hMHeEQjQ?pwd=ogjn)| Preprocessed data|       
+| **Lmdb-format Datasets** | [Password: g3gj](https://pan.baidu.com/s/1riMCN5iXTJ2g9fQjtlZswg?pwd=g3gj)| LMDB database for each dataset|       
+| **Json Configurations**  | [Password: dcwv](https://pan.baidu.com/s/1d7PTV2GK-fpGibcbtnQDqQ?pwd=dcwv)| Data arrangement|       
+     
+All the downloaded datasets are are already **preprocessed** to cropped faces (32 frames per video) with their masks and landmarks, which can be **directly deployed to evaluate our benchmark**.
 
+The provided datasets are:
+
+| Dataset Name                    | Notes                   |
+| ------------------------------- | ----------------------- |
+| Celeb-DF-v1                     | -                       |
+| Celeb-DF-v2                     | -                       |
+| FaceForensics++, DeepfakeDetection, FaceShifter | Only c23      |
+| UADFV                           | -                       |
+| Deepfake Detection Challenge (Preview) | -                       |
+| Deepfake Detection Challenge     |  Only Test Data                       |
+| DeepForensics-1.0               | Coming Soon    |
 
 🛡️ **Copyright of the above datasets belongs to their original providers.**
 
@@ -163,82 +171,94 @@ Upon downloading the datasets, please ensure to store them in the [`./datasets`]
 
 ```
 datasets
-├── FaceForensics++
-│   ├── original_sequences
-│   │   ├── youtube
-│   │   │   ├── c23
-│   │   │   │   ├── videos
-│   │   │   │   │   └── *.mp4
-│   │   │   │   └── frames (if you download my processed data)
-│   │   │   │   │   └── *.png
-|   |   |   |   └── masks (if you download my processed data)
-│   │   │   │   │   └── *.png
-│   │   │   │   └── landmarks (if you download my processed data)
-│   │   │   │   │   └── *.png
-│   │   │   └── c40
-│   │   │   │   ├── videos
-│   │   │   │   │   └── *.mp4
-│   │   │   │   └── frames (if you download my processed data)
-│   │   │   │   │   └── *.png
-|   |   |   |   └── masks (if you download my processed data)
-│   │   │   │   │   └── *.png
-│   │   │   │   └── landmarks (if you download my processed data)
-│   │   │   │       └── *.npy
-│   │   ├── actors
-│   │   │   ├── c23
-│   │   │   │   ├── videos
-│   │   │   │   │   └── *.mp4
-│   │   │   │   └── frames (if you download my processed data)
-│   │   │   │   │   └── *.png
-|   |   |   |   └── masks (if you download my processed data)
-│   │   │   │   │   └── *.png
-│   │   │   │   └── landmarks (if you download my processed data)
-│   │   │   │       └── *.npy
-│   │   │   └── c40
-│   │   │   │   ├── videos
-│   │   │   │   │   └── *.mp4
-│   │   │   │   └── frames (if you download my processed data)
-│   │   │   │   │   └── *.png
-|   |   |   |   └── masks (if you download my processed data)
-│   │   │   │   │   └── *.png
-│   │   │   │   └── landmarks (if you download my processed data)
-│   │   │   │       └── *.npy
-│   ├── manipulated_sequences
-│   │   ├── Deepfakes
-│   │   │   ├── c23
-│   │   │   │   └── videos
-│   │   │   │   │   └── *.mp4
-│   │   │   │   └── frames (if you download my processed data)
-│   │   │   │   │   └── *.png
-|   |   |   |   └── masks (if you download my processed data)
-│   │   │   │   │   └── *.png
-│   │   │   │   └── landmarks (if you download my processed data)
-│   │   │   │       └── *.npy
-│   │   │   └── c40
-│   │   │   │   ├── videos
-│   │   │   │   │   └── *.mp4
-│   │   │   │   └── frames (if you download my processed data)
-│   │   │   │   │   └── *.png
-|   |   |   |   └── masks (if you download my processed data)
-│   │   │   │   │   └── *.png
-│   │   │   │   └── landmarks (if you download my processed data)
-│   │   │   │       └── *.npy
-│   │   ├── Face2Face
-│   │   │   ├── ...
-│   │   ├── FaceSwap
-│   │   │   ├── ...
-│   │   ├── NeuralTextures
-│   │   │   ├── ...
-│   │   ├── FaceShifter
-│   │   │   ├── ...
-│   │   └── DeepFakeDetection
-│   │       ├── ...
-
+├── lmdb
+|   ├── FaceForensics++_lmdb
+|   |   ├── data.mdb
+|   |   ├── lock.mdb
+├── rgb
+|   ├── FaceForensics++
+|   │   ├── original_sequences
+|   │   │   ├── youtube
+|   │   │   │   ├── c23
+|   │   │   │   │   ├── videos
+|   │   │   │   │   │   └── *.mp4
+|   │   │   │   │   └── frames (if you download my processed data)
+|   │   │   │   │   │   └── *.png
+|   |   |   |   |   └── masks (if you download my processed data)
+|   │   │   │   │   │   └── *.png
+|   │   │   │   │   └── landmarks (if you download my processed data)
+|   │   │   │   │   │   └── *.png
+|   │   │   │   └── c40
+|   │   │   │   │   ├── videos
+|   │   │   │   │   │   └── *.mp4
+|   │   │   │   │   └── frames (if you download my processed data)
+|   │   │   │   │   │   └── *.png
+|   |   |   |   |   └── masks (if you download my processed data)
+|   │   │   │   │   │   └── *.png
+|   │   │   │   │   └── landmarks (if you download my processed data)
+|   │   │   │   │       └── *.npy
+|   │   │   ├── actors
+|   │   │   │   ├── c23
+|   │   │   │   │   ├── videos
+|   │   │   │   │   │   └── *.mp4
+|   │   │   │   │   └── frames (if you download my processed data)
+|   │   │   │   │   │   └── *.png
+|   |   |   |   |   └── masks (if you download my processed data)
+|   │   │   │   │   │   └── *.png
+|   │   │   │   │   └── landmarks (if you download my processed data)
+|   │   │   │   │       └── *.npy
+|   │   │   │   └── c40
+|   │   │   │   │   ├── videos
+|   │   │   │   │   │   └── *.mp4
+|   │   │   │   │   └── frames (if you download my processed data)
+|   │   │   │   │   │   └── *.png
+|   |   |   |   |   └── masks (if you download my processed data)
+|   │   │   │   │   │   └── *.png
+|   │   │   │   │   └── landmarks (if you download my processed data)
+|   │   │   │   │       └── *.npy
+|   │   ├── manipulated_sequences
+|   │   │   ├── Deepfakes
+|   │   │   │   ├── c23
+|   │   │   │   │   └── videos
+|   │   │   │   │   │   └── *.mp4
+|   │   │   │   │   └── frames (if you download my processed data)
+|   │   │   │   │   │   └── *.png
+|   |   |   |   |   └── masks (if you download my processed data)
+|   │   │   │   │   │   └── *.png
+|   │   │   │   │   └── landmarks (if you download my processed data)
+|   │   │   │   │       └── *.npy
+|   │   │   │   └── c40
+|   │   │   │   │   ├── videos
+|   │   │   │   │   │   └── *.mp4
+|   │   │   │   │   └── frames (if you download my processed data)
+|   │   │   │   │   │   └── *.png
+|   |   |   |   |   └── masks (if you download my processed data)
+│   │   │   │   |   │   └── *.png
+│   │   │   │   |   └── landmarks (if you download my processed data)
+│   │   │   |   │       └── *.npy
+│   │   |   ├── Face2Face
+│   |   │   │   ├── ...
+|   │   │   ├── FaceSwap
+|   │   │   │   ├── ...
+|   │   │   ├── NeuralTextures
+|   │   │   │   ├── ...
+|   │   │   ├── FaceShifter
+|   │   │   │   ├── ...
+|   │   │   └── DeepFakeDetection
+|   │   │       ├── ...
 Other datasets are similar to the above structure
 ```
 
-If you choose to store your datasets in a different folder, for instance, `./deepfake/data`, it's important to reflect this change in the dataset path in the [config.yaml](./preprocessing/config.yaml) for preprocessing purposes.
+If you choose to store your datasets in a different folder, you may specified the `rgb_dir` or `lmdb_dir` in `training\test_config.yaml` and `training\train_config.yaml`.
 
+The downloaded json configurations should be arranged as:
+```
+preprocessing
+├── dataset_json
+|   ├── FaceForensics++.json
+```
+
+You may also store your configurations in a different folder by specifying the `dataset_json_folder` in `training\test_config.yaml` and `training\train_config.yaml`.
 
 ### 3. Preprocessing (optional)
 
