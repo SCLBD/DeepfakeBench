@@ -10,7 +10,7 @@ The pretrained weights of 3D R50 for training I3D, FTCN, and AltFreezing are [he
 
 >  ❗️❗️❗️ **DeepfakeBench-v2 Updates:**
 > 
-> 1. **34 Detectors are supported**: *DeepfakeBench*, currently, supports a total of **34** detection methods (27 image detectors + 7 video detectors).
+> 1. **33 Detectors are supported**: *DeepfakeBench*, currently, supports a total of **33** detection methods (27 image detectors + 6 video detectors).
 > 
 > 2. **More SoTA detectors are added**: We have implemented more **SoTA and latest** detectors, including: *LSDA (CVPR'24), IID (CVPR'23), SBI (CVPR'22), SLADD (CVPR'22), FTCN (ICCV'21), etc.*
 > 
