@@ -284,7 +284,7 @@ cd preprocessing
 
 python preprocess.py
 ```
-
+You may skip the preprocessing step by downloading the provided data.
 
 ### 4. Rearrangement
 To simplify the handling of different datasets, we propose a unified and convenient way to load them. The function eliminates the need to write separate input/output (I/O) code for each dataset, reducing duplication of effort and easing data management.
