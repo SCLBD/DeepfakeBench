@@ -128,7 +128,7 @@ Note we used Docker version `19.03.14` in our setup. We highly recommend using t
 All datasets used in DeepfakeBench can be downloaded from their own websites or repositories and preprocessed accordingly.
 For convenience, we also provide the data we use in our research, including:
 
-| Type                     | Links| Note|       
+| Types                     | Links| Notes|       
 | -------------------------|------- | ----------------------- |
 | **Rgb-format Datasets**  | [Password: ogjn](https://pan.baidu.com/s/1NAMUHcZvsIm7l6hMHeEQjQ?pwd=ogjn)| Preprocessed data|       
 | **Lmdb-format Datasets** | [Password: g3gj](https://pan.baidu.com/s/1riMCN5iXTJ2g9fQjtlZswg?pwd=g3gj)| LMDB database for each dataset|       
