@@ -69,6 +69,8 @@ def get_test_metrics(y_pred, y_true, img_names):
 
 
     y_pred = y_pred.squeeze()
+    # For UCF, where labels for different manipulations are not consistent.
+    y_true[y_true >= 1] = 1
     # auc
     fpr, tpr, thresholds = metrics.roc_curve(y_true, y_pred, pos_label=1)
     auc = metrics.auc(fpr, tpr)
