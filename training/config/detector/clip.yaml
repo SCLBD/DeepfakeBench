@@ -51,7 +51,7 @@ optimizer:
   # choose between 'adam' and 'sgd'
   type: adam
   adam:
-    lr: 0.0002  # learning rate
+    lr: 0.00001  # learning rate
     beta1: 0.9  # beta1 for Adam optimizer
     beta2: 0.999 # beta2 for Adam optimizer
     eps: 0.00000001  # epsilon for Adam optimizer
