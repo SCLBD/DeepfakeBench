@@ -151,6 +151,7 @@ def main():
         config = yaml.safe_load(f)
     with open('./training/config/test_config.yaml', 'r') as f:
         config2 = yaml.safe_load(f)
+    config.update(config2)
     if 'label_dict' in config:
         config2['label_dict']=config['label_dict']
     weights_path = None
