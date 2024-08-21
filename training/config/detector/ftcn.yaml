@@ -1,10 +1,10 @@
 # log dir 
-log_dir: /data/home/zhiyuanyan/DeepfakeBench/logs_debug/video_baseline
+log_dir: /Youtu_Pangu_Security_Public/youtu-pangu-public/zhiyuanyan/logs/benchv2/ftcn
 
 # model setting
-pretrained: /data/home/zhiyuanyan/torch_ckpts/I3D_8x8_R50.pth   # path to a pre-trained model, if using one
-model_name: video_baseline   # model name
-backbone_name: null  # backbone name
+pretrained: ../torch_ckpts/I3D_8x8_R50.pth   # path to a pre-trained model, if using one
+model_name: ftcn   # model name
+backbone_name: xception  # backbone name
 
 #backbone setting
 backbone_config:
@@ -22,7 +22,7 @@ compression: c23  # compression-level for videos
 train_batchSize: 8   # training batch size
 test_batchSize: 8   # test batch size
 workers: 8   # number of data loading workers
-frame_num: {'train': 300, 'test': 300}   # number of frames to use per video in training and testing
+frame_num: {'train': 32, 'test': 32}   # number of frames to use per video in training and testing
 resolution: 224   # resolution of output image to network
 with_mask: false   # whether to include mask information in the input
 with_landmark: false   # whether to include facial landmark information in the input
@@ -83,6 +83,7 @@ losstype: null
 metric_scoring: auc   # metric for evaluation (auc, acc, eer, ap)
 
 # cuda
-
+ngpu: 1   # number of GPUs to use
 cuda: true   # whether to use CUDA acceleration
 cudnn: true   # whether to use CuDNN for convolution operations
+
