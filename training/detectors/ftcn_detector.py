@@ -62,7 +62,7 @@ OUTPUT_DIR: .
 # author: Zhiyuan Yan
 # email: zhiyuanyan@link.cuhk.edu.cn
 # date: 2023-0706
-# description: Class for the FTCNDetector
+# description: Class for the XceptionDetector
 
 Functions in the Class are summarized as:
 1. __init__: Initialization
@@ -76,12 +76,12 @@ Functions in the Class are summarized as:
 9. forward: Forward-propagation
 
 Reference:
-@inproceedings{zheng2021exploring,
-  title={Exploring temporal coherence for more general video face forgery detection},
-  author={Zheng, Yinglin and Bao, Jianmin and Chen, Dong and Zeng, Ming and Wen, Fang},
+@inproceedings{rossler2019faceforensics++,
+  title={Faceforensics++: Learning to detect manipulated facial images},
+  author={Rossler, Andreas and Cozzolino, Davide and Verdoliva, Luisa and Riess, Christian and Thies, Justus and Nie{\ss}ner, Matthias},
   booktitle={Proceedings of the IEEE/CVF international conference on computer vision},
-  pages={15044--15054},
-  year={2021}
+  pages={1--11},
+  year={2019}
 }
 '''
 
@@ -141,10 +141,20 @@ class FTCNDetector(AbstractDetector):
         cfg.TRAIN.BATCH_SIZE = 1
         cfg.DATA.NUM_FRAMES = config['clip_size']
         self.resnet = ResNetOri(cfg)
+        if config['pretrained'] is not None:
+            print(f"loading pretrained model from {config['pretrained']}")
+            pretrained_weights = torch.load(config['pretrained'], map_location='cpu', encoding='latin1')
+            modified_weights = {k.replace("resnet.", ""): v for k, v in pretrained_weights.items()}
+            # fit from 400 num_classes to 1
+            modified_weights["head.projection.weight"] = modified_weights["head.projection.weight"][:1, :]
+            modified_weights["head.projection.bias"] = modified_weights["head.projection.bias"][:1]
+            # load final ckpt
+            self.resnet.load_state_dict(modified_weights, strict=True)
+        
+
         temporal_only_conv(self.resnet, "model", 0)
 
         stop_point = 5
-
         for i in [5, 4, 3]:
             if stop_point <= i:
                 setattr(self.resnet, f"s{i}", nn.Identity())
@@ -159,12 +169,6 @@ class FTCNDetector(AbstractDetector):
         }[stop_point]
 
         self.resnet.head = TransformerHead(**params)
-
-        if config['pretrained'] is not None:
-            print(f"loading pretrained model from {config['pretrained']}")
-            pretrained_weights = torch.load(config['pretrained'])
-            modified_weights = {k.replace("resnet.", ""): v for k, v in pretrained_weights.items()}
-            self.resnet.load_state_dict(modified_weights, strict=True)
 
         self.loss_func = nn.BCELoss()  # The output of the model is a probability value between 0 and 1 (haved used sigmoid)
         self.prob, self.label = [], []
