@@ -6,9 +6,17 @@
 
 [[paper](https://arxiv.org/abs/2307.01426)] [[pre-trained weights](https://github.com/SCLBD/DeepfakeBench/releases/tag/v1.0.1)]
 
-The pretrained weights of 3D R50 for training I3D, FTCN, and AltFreezing are [here](https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.3/I3D_8x8_R50.pth)
 
->  ❗️❗️❗️ **DeepfakeBench-v2 Updates:**
+
+>  ❗️❗️❗️ **News:**
+> 1. We are excited to introduce our **brand-new deepfake dataset** called DF40, comprising **40 distinct deepfake techniques, even the just released SoTAs**. DF40 is designed for seamless integration into the workflow of DeepfakeBench, allowing you to train or test just as you would with other datasets like Celeb-DF and FF++. Please refer to [DF40](https://github.com/YZY-stack/DF40) for details.
+> 
+> 2. The pre-trained weights of 3D R50 for training I3D, FTCN, and AltFreezing are [here](https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.3/I3D_8x8_R50.pth)
+
+
+
+
+>  😊 **DeepfakeBench-v2 Updates:**
 > 
 > 1. **33 Detectors are supported**: *DeepfakeBench*, currently, supports a total of **33** detection methods (27 image detectors + 6 video detectors).
 > 
