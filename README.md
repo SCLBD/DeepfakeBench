@@ -18,22 +18,6 @@
 > 4. The pre-trained weights of 3D R50 for training I3D, FTCN, and AltFreezing are [here](https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.3/I3D_8x8_R50.pth)
 
 
----
-
-
->  😊 **DeepfakeBench-v2 Updates:**
-> 
-> 1. **33 Detectors are supported**: *DeepfakeBench*, currently, supports a total of **33** detection methods (27 image detectors + 6 video detectors).
-> 
-> 2. **More SoTA detectors are added**: We have implemented more **SoTA and latest** detectors, including: *LSDA (CVPR'24), IID (CVPR'23), SBI (CVPR'22), SLADD (CVPR'22), FTCN (ICCV'21), etc.*
-> 
-> 3. **Data Preprocessing**: *DeepfakeBench* currently provides **LMDB** for more faster and effective IO.
-> 
-> 4. **Multi-GPUs Training**: *DeepfakeBench* offers **DDP** for multiple GPUs training.
->
-> 5. **Integrated Framework**: *DeepfakeBench* offers an integrated framework, including training, data loading, evaluation at both image-level and video-level.
->
-> 6. **More Evaluation Metrics**: *DeepfakeBench* facilitates a more comprehensive evaluation by including following metrics: frame-level AUC, video-level AUC, ACC (fake and real), EER, PR, AP.
 
 ---
 
@@ -54,6 +38,25 @@ Welcome to *DeepfakeBench*, your one-stop solution for deepfake detection! Here 
 > ✅ **Standardized Evaluations**: *DeepfakeBench* introduces standardized evaluation metrics and protocols to enhance the transparency and reproducibility of performance evaluations.
 > 
 > ✅ **Extensive Analysis and Insights**: *DeepfakeBench* facilitates an extensive analysis from various perspectives, providing new insights to inspire the development of new technologies.
+
+
+---
+
+
+
+>  😊 **DeepfakeBench-v2 Updates:**
+> 
+> 1. **34 Detectors are supported**: *DeepfakeBench*, currently, supports a total of **34** detection methods (27 image detectors + 7 video detectors).
+> 
+> 2. **More SoTA detectors are added**: We have implemented more **SoTA and latest** detectors, including: *LSDA (CVPR'24), TALL (ICCV'23), IID (CVPR'23), SBI (CVPR'22), SLADD (CVPR'22), FTCN (ICCV'21), etc.*
+> 
+> 3. **Data Preprocessing**: *DeepfakeBench* currently provides **LMDB** for more faster and effective IO.
+> 
+> 4. **Multi-GPUs Training**: *DeepfakeBench* offers **DDP** for multiple GPUs training.
+>
+> 5. **Integrated Framework**: *DeepfakeBench* offers an integrated framework, including training, data loading, and evaluation at both the image and video levels.
+>
+> 6. **More Evaluation Metrics**: *DeepfakeBench* facilitates a more comprehensive evaluation by including the following metrics: frame-level AUC, video-level AUC, ACC (fake and real), EER, PR, and AP.
 
 ---
 
@@ -80,16 +83,17 @@ Welcome to *DeepfakeBench*, your one-stop solution for deepfake detection! Here 
 
 DeepfakeBench has the following features:
 
-⭐️  **Detectors** (**33** detectors):
+⭐️  **Detectors** (**34** detectors):
   - 5 Naive Detectors: [Xception](./training/detectors/xception_detector.py), [MesoNet](./training/detectors/meso4_detector.py), [MesoInception](./training/detectors/meso4Inception_detector.py), [CNN-Aug](./training/detectors/resnet34_detector.py), [EfficientNet-B4](./training/detectors/efficientnetb4_detector.py)
   - 19 Spatial Detectors: [Capsule](./training/detectors/capsule_net_detector.py), [DSP-FWA](./training/detectors/fwa_detector.py), [Face X-ray](./training/detectors/facexray_detector.py), [FFD](./training/detectors/ffd_detector.py), [CORE](./training/detectors/core_detector.py), [RECCE](./training/detectors/recce_detector.py), [UCF](./training/detectors/ucf_detector.py), [Local-relation](./training/detectors/lrl_detector.py), [IID](./training/detectors/lrl_detector.py), [RFM](./training/detectors/rfm_detector.py), [SIA](./training/detectors/sia_detector.py), [SLADD](./training/detectors/sladd_detector.py), [UIA-ViT](./training/detectors/uia_vit_detector.py), [CLIP](./training/detectors/clip_detector.py), [SBI](./training/detectors/sbi_detector.py), [PCL-I2G](./training/detectors/pcl_xception_detector.py), [Multi-Attention](./training/detectors/multi_attention_detector.py), [LSDA](./training/detectors/lsda_detector.py)
   - 3 Frequency Detectors: [F3Net](./training/detectors/f3net_detector.py), [SPSL](./training/detectors/spsl_detector.py), [SRM](./training/detectors/srm_detector.py)
-  - 6 Video Detectors: [I3D](./training/detectors/i3d_detector.py), [STIL](./training/detectors/stil_detector.py), [FTCN](./training/detectors/ftcn_detector.py), [X-CLIP](./training/detectors/xclip_detector.py), [TimeTransformer](./training/detectors/timetransfromer_detector.py), [VideoMAE](./training/detectors/videomae_detector.py)
+  - 7 Video Detectors: [TALL](./training/detectors/tall_detector.py), [I3D](./training/detectors/i3d_detector.py), [STIL](./training/detectors/stil_detector.py), [FTCN](./training/detectors/ftcn_detector.py), [X-CLIP](./training/detectors/xclip_detector.py), [TimeTransformer](./training/detectors/timetransfromer_detector.py), [VideoMAE](./training/detectors/videomae_detector.py)
 
 The table below highlights the **update** new detectors compared to our original DeepfakeBench version.
 
 |                  | File name                               | Paper                                                                                                                                                                                                                                                                                                                                                         |
 |------------------|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| TALL          | [tall_detector.py](./training/detectors/tall_detector.py)         | [TALL: Thumbnail Layout for Deepfake Video Detection](https://openaccess.thecvf.com/content/ICCV2023/papers/Xu_TALL_Thumbnail_Layout_for_Deepfake_Video_Detection_ICCV_2023_paper.pdf) ICCV 2023 |
 | LSDA          | [lsda_detector.py](./training/detectors/lsda_detector.py)         | [Transcending forgery specificity with latent space augmentation for generalizable deepfake detection](https://arxiv.org/pdf/2311.11278) CVPR 2024 |
 | IID          | [iid_detector.py](./training/detectors/iid_detector.py)       | [Implicit Identity Driven Deepfake Face Swapping Detection](https://openaccess.thecvf.com/content/CVPR2023/papers/Huang_Implicit_Identity_Driven_Deepfake_Face_Swapping_Detection_CVPR_2023_paper.pdf) CVPR 2023                                                                                                                                                                                                                                     |
 | SBI          | [sbi_detector.py](./training/detectors/sbi_detector.py)       | [Detecting Deepfakes with Self-Blended Images](https://arxiv.org/pdf/2204.08376) CVPR 2022                                                                                                                                                                                                                                             |
@@ -111,7 +115,7 @@ The table below highlights the **update** new detectors compared to our original
 ⭐️ **Datasets** (9 datasets): [FaceForensics++](https://github.com/ondyari/FaceForensics), [FaceShifter](https://github.com/ondyari/FaceForensics/tree/master/dataset), [DeepfakeDetection](https://github.com/ondyari/FaceForensics/tree/master/dataset), [Deepfake Detection Challenge (Preview)](https://ai.facebook.com/datasets/dfdc/), [Deepfake Detection Challenge](https://www.kaggle.com/c/deepfake-detection-challenge/data), [Celeb-DF-v1](https://github.com/yuezunli/celeb-deepfakeforensics/tree/master/Celeb-DF-v1), [Celeb-DF-v2](https://github.com/yuezunli/celeb-deepfakeforensics), [DeepForensics-1.0](https://github.com/EndlessSora/DeeperForensics-1.0/tree/master/dataset), [UADFV](https://docs.google.com/forms/d/e/1FAIpQLScKPoOv15TIZ9Mn0nGScIVgKRM9tFWOmjh9eHKx57Yp-XcnxA/viewform)
 
 DeepfakeBench will be continuously updated to track the latest advances in deepfake detection.
-The implementations of more detection methods, as well as their evaluations, are on the way. **You are welcome to contribute your detection methods to DeepfakeBench.**
+The implementation of more detection methods, as well as their evaluations, are on the way. **You are welcome to contribute your detection methods to DeepfakeBench.**
 
 
 ## ⏳ Quick Start
@@ -148,7 +152,7 @@ For convenience, we also provide the data we use in our research, including:
 | **Lmdb-format Datasets** | [Password: g3gj](https://pan.baidu.com/s/1riMCN5iXTJ2g9fQjtlZswg?pwd=g3gj)| LMDB database for each dataset|       
 | **Json Configurations**  | [Password: dcwv](https://pan.baidu.com/s/1d7PTV2GK-fpGibcbtnQDqQ?pwd=dcwv)| Data arrangement|       
      
-All the downloaded datasets are are already **preprocessed** to cropped faces (32 frames per video) with their masks and landmarks, which can be **directly deployed to evaluate our benchmark**.
+All the downloaded datasets are already **preprocessed** to cropped faces (32 frames per video) with their masks and landmarks, which can be **directly deployed to evaluate our benchmark**.
 
 The provided datasets are:
 
@@ -160,7 +164,6 @@ The provided datasets are:
 | UADFV                           | -                       |
 | Deepfake Detection Challenge (Preview) | -                       |
 | Deepfake Detection Challenge     |  Only Test Data                       |
-| DeepForensics-1.0               | Coming Soon    |
 
 🛡️ **Copyright of the above datasets belongs to their original providers.**
 
