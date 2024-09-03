@@ -33,7 +33,7 @@
 >
 > 6. **More Evaluation Metrics**: *DeepfakeBench* facilitates a more comprehensive evaluation by including following metrics: frame-level AUC, video-level AUC, ACC (fake and real), EER, PR, AP.
 
-
+---
 
 <div align="center"> 
 </div>
@@ -53,6 +53,7 @@ Welcome to *DeepfakeBench*, your one-stop solution for deepfake detection! Here 
 > 
 > ✅ **Extensive Analysis and Insights**: *DeepfakeBench* facilitates an extensive analysis from various perspectives, providing new insights to inspire the development of new technologies.
 
+---
 
 <font size=4><b> Table of Contents </b></font>
 
