@@ -12,8 +12,10 @@
 > 1. We are excited to introduce our **brand-new deepfake dataset** called DF40, comprising **40 distinct deepfake techniques, even the just released SoTAs**. DF40 is designed for seamless integration into the workflow of DeepfakeBench, allowing you to train or test just as you would with other datasets like Celeb-DF and FF++. Please refer to [DF40 dataset](https://github.com/YZY-stack/DF40) for details.
 > 
 > 2. Our latest powerful ***video model*** [StA detector](https://github.com/YZY-stack/StA4Deepfake) has been released, which can equip a pre-trained image model (such as CLIP) with the ability to capture both spatial and temporal features jointly and efficiently. All codes, demos, and checkpoints are publicly available!
-> 
-> 3. The pre-trained weights of 3D R50 for training I3D, FTCN, and AltFreezing are [here](https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.3/I3D_8x8_R50.pth)
+>
+> 3. We implement another recent SoTA video detector: [TALL (ICCV 2023)](https://openaccess.thecvf.com/content/ICCV2023/papers/Xu_TALL_Thumbnail_Layout_for_Deepfake_Video_Detection_ICCV_2023_paper.pdf) on our benchmark. We release its pre-trained weights on FF++ via [Google Drive](https://drive.google.com/file/d/1BStEqTzHSszSwDOxAjia_jvc-0O_fHy9/view?usp=drive_link). If you can also use our codebase to retrain this model from scratch. The training and evaluation processes will be the same as other detectors on DeepfakeBench.
+>    
+> 4. The pre-trained weights of 3D R50 for training I3D, FTCN, and AltFreezing are [here](https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.3/I3D_8x8_R50.pth)
 
 
 ---
