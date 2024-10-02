@@ -61,8 +61,6 @@ class XCLIPDetector(AbstractDetector):
         # self.temporal_module = self.build_temporal_module(config)
         self.head = nn.Linear(768, 2)
         self.loss_func = self.build_loss(config)
-        self.prob, self.label = [], []
-        self.correct, self.total = 0, 0
 
     def build_backbone(self, config):
         from transformers import XCLIPVisionModel
