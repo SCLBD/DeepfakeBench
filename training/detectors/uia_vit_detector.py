@@ -45,9 +45,6 @@ class UIAViTDetector(AbstractDetector):
     def __init__(self, config):
         super().__init__()
 
-        self.prob, self.label = [], []
-        self.correct, self.total = 0, 0
-
         self.config = config
         self.batch_per_epoch = config["batch_per_epoch"]
         self.num_epoch = config["nEpochs"]
