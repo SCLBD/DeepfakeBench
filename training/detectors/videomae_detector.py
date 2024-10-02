@@ -59,8 +59,6 @@ class VideoMAEDetector(AbstractDetector):
         self.fc_norm = nn.LayerNorm(768)
         self.head = nn.Linear(768, 2)
         self.loss_func = self.build_loss(config)
-        self.prob, self.label = [], []
-        self.correct, self.total = 0, 0
 
     def build_backbone(self, config):
         from transformers import VideoMAEModel
