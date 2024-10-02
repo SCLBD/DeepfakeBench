@@ -151,8 +151,6 @@ class AltFreezingDetector(AbstractDetector):
             self.resnet.load_state_dict(modified_weights, strict=True)
 
         self.loss_func = nn.BCELoss()  # The output of the model is a probability value between 0 and 1 (haved used sigmoid)
-        self.prob, self.label = [], []
-        self.correct, self.total = 0, 0
     
     def build_backbone(self, config):
         pass
@@ -193,26 +191,5 @@ class AltFreezingDetector(AbstractDetector):
         prob = self.features(data_dict)
         # build the prediction dict for each output
         pred_dict = {'cls': prob, 'prob': prob, 'feat': None}
-        if inference:
-            self.prob.extend(
-                pred_dict['prob']
-                .detach()
-                .squeeze()
-                .cpu()
-                .numpy()
-            )
-            self.label.extend(
-                data_dict['label']
-                .detach()
-                .squeeze()
-                .cpu()
-                .numpy()
-            )
-            # deal with acc
-            prediction_class = (prob >= 0.5).type(torch.int).view(-1)
-            assert prediction_class.shape == data_dict['label'].shape
-            correct = (prediction_class == data_dict['label']).sum().item()
-            self.correct += correct
-            self.total += data_dict['label'].size(0)
         
         return pred_dict
