@@ -56,8 +56,6 @@ class MultiAttentionDetector(AbstractDetector):
         self.mid_dim = config["mid_dim"]
         self.backbone = self.build_backbone(config)
         self.loss_func = self.build_loss(config)
-        self.prob, self.label = [], []
-        self.correct, self.total = 0, 0
         self.batch_cnt = 0
 
         with torch.no_grad():
@@ -257,26 +255,6 @@ class MultiAttentionDetector(AbstractDetector):
                          "feat": layer_output["final"],
                          "attentions": attention_maps,
                          "feature_maps_d": feature_maps_d}
-        if inference:
-            self.prob.append(
-                pred_dict['prob']
-                .detach()
-                .squeeze()
-                .cpu()
-                .numpy()
-            )
-            self.label.append(
-                data_dict['label']
-                .detach()
-                .squeeze()
-                .cpu()
-                .numpy()
-            )
-            # deal with acc
-            _, prediction_class = torch.max(pred, 1)
-            correct = (prediction_class == data_dict['label']).sum().item()
-            self.correct += correct
-            self.total += data_dict['label'].size(0)
 
         return pred_dict
 
