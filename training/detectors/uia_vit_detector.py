@@ -156,30 +156,9 @@ class UIAViTDetector(AbstractDetector):
 
         del attention_map, feature_patch
 
-        if inference:
-            self.prob.append(
-                pred_dict['prob']
-                .detach()
-                .squeeze()
-                .cpu()
-                .numpy()
-            )
-            self.label.append(
-                data_dict['label']
-                .detach()
-                .squeeze()
-                .cpu()
-                .numpy()
-            )
-            # deal with acc
-            _, prediction_class = torch.max(pred, 1)
-            correct = (prediction_class == data_dict['label']).sum().item()
-            self.correct += correct
-            self.total += data_dict['label'].size(0)
-        else:
-            pred_dict["attention_map_real"] = attention_map_real
-            pred_dict["attention_map_fake"] = attention_map_fake
-            self.batch_cnt += 1
+        pred_dict["attention_map_real"] = attention_map_real
+        pred_dict["attention_map_fake"] = attention_map_fake
+        self.batch_cnt += 1
 
         return pred_dict
 
