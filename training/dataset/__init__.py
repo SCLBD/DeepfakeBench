@@ -16,4 +16,4 @@ from .lrl_dataset import LRLDataset
 from .pair_dataset import pairDataset
 from .sbi_dataset import SBIDataset
 from .lsda_dataset import LSDADataset
-from .tall_dataset import TallDataset
+from .tall_dataset import TALLDataset

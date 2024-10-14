@@ -1,4 +1,4 @@
-'''
+"""
 # author: Kangran Zhao
 # email: kangranzhao@link.cuhk.edu.cn
 # date: 2023-0822
@@ -23,7 +23,7 @@ Reference:
   pages={22658--22668},
   year={2023}
 }
-'''
+"""
 
 import logging
 
@@ -60,7 +60,7 @@ class TALLDetector(AbstractDetector):
                             drop_path_rate=config['drop_path_rate'], use_checkpoint=False, bottleneck=False,
                             duration=config['clip_size'])
         default_cfg = {
-            'url': 'https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_base_patch4_window7_224_22k.pth',
+            'url': config['pretrained'],
             'num_classes': 1000, 'input_size': (3, 224, 224), 'pool_size': None,
             'crop_pct': .9, 'interpolation': 'bicubic',
             'mean': IMAGENET_DEFAULT_MEAN, 'std': IMAGENET_DEFAULT_STD,
@@ -68,7 +68,8 @@ class TALLDetector(AbstractDetector):
         backbone = SwinTransformer(img_size=config['resolution'], **model_kwargs)
         backbone.default_cfg = default_cfg
         load_pretrained(backbone, num_classes=config['num_classes'], in_chans=model_kwargs.get('in_chans', 3),
-                        filter_fn=_conv_filter, img_size=config['resolution'], pretrained_window_size=7, pretrained_model='')
+                        filter_fn=_conv_filter, img_size=config['resolution'], pretrained_window_size=7,
+                        pretrained_model='')
 
         return backbone
 
@@ -76,13 +77,14 @@ class TALLDetector(AbstractDetector):
         # prepare the loss function
         loss_class = LOSSFUNC[config['loss_func']]
         loss_func = loss_class()
+
         return loss_func
 
     def features(self, data_dict: dict) -> torch.tensor:
-        # STIL requires the input with the shape of (n, t*c, h, w), where n is the batch_size, t is num_segment
         bs, t, c, h, w = data_dict['image'].shape
         inputs = data_dict['image'].view(bs, t * c, h, w)
         pred = self.model(inputs)
+
         return pred
 
     def classifier(self, features: torch.tensor):
@@ -93,23 +95,20 @@ class TALLDetector(AbstractDetector):
         pred = pred_dict['cls']
         loss = self.loss_func(pred, label)
         loss_dict = {'overall': loss}
+
         return loss_dict
 
     def get_train_metrics(self, data_dict: dict, pred_dict: dict) -> dict:
         label = data_dict['label']
         pred = pred_dict['cls']
-        # compute metrics for batch data
         auc, eer, acc, ap = calculate_metrics_for_train(label.detach(), pred.detach())
         metric_batch_dict = {'acc': acc, 'auc': auc, 'eer': eer, 'ap': ap}
-        # we dont compute the video-level metrics for training
+
         return metric_batch_dict
 
     def forward(self, data_dict: dict, inference=False) -> dict:
-        # get the prediction by backbone
         pred = self.features(data_dict)
-        # get the probability of the pred
         prob = torch.softmax(pred, dim=1)[:, 1]
-        # build the prediction dict for each output
         pred_dict = {'cls': pred, 'prob': prob, 'feat': prob}
 
         return pred_dict
@@ -814,7 +813,6 @@ def load_pretrained(model, cfg=None, num_classes=1000, in_chans=3, filter_fn=Non
             conv1_weight *= (3 / float(in_chans))
             conv1_weight = conv1_weight.to(conv1_type)
             state_dict[conv1_name + '.weight'] = conv1_weight
-
 
     classifier_name = cfg['classifier']
     if num_classes == 1000 and cfg['num_classes'] == 1001:
