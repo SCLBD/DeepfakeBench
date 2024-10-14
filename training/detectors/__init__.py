@@ -26,7 +26,7 @@ from .fwa_detector import FWADetector
 from .ffd_detector import FFDDetector
 from .videomae_detector import VideoMAEDetector
 from .clip_detector import CLIPDetector
-from .timetransfromer_detector import TimeTransfromerDetector
+from .timesformer_detector import TimeSformerDetector
 from .xclip_detector import XCLIPDetector
 from .sbi_detector import SBIDetector
 from .ftcn_detector import FTCNDetector
