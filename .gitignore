@@ -1,0 +1,7 @@
+﻿.idea
+*__pycache__*
+*.vscode*
+*.pyc
+*.pth
+*.pt
+*.dat
