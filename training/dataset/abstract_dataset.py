@@ -218,7 +218,7 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
                     total_frames = self.frame_num
                     if self.video_level:
                         # Select clip_size continuous frames
-                        start_frame = random.randint(0, total_frames - self.frame_num)
+                        start_frame = random.randint(0, total_frames - self.frame_num) if self.mode == 'train' else 0
                         frame_paths = frame_paths[start_frame:start_frame + self.frame_num]  # update total_frames
                     else:
                         # Select self.frame_num frames evenly distributed throughout the video
@@ -244,13 +244,13 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
                             # Select clip_size continuous frames from each part of the video
                             for i in range(num_clips):
                                 # Ensure start_frame + self.clip_size - 1 does not exceed the index of the last frame
-                                start_frame = random.randrange(i * clip_step, min((i + 1) * clip_step, total_frames - self.clip_size + 1))
+                                start_frame = random.randrange(i * clip_step, min((i + 1) * clip_step, total_frames - self.clip_size + 1)) if self.mode == 'train' else i * clip_step
                                 continuous_frames = frame_paths[start_frame:start_frame + self.clip_size]
                                 assert len(continuous_frames) == self.clip_size, 'clip_size is not equal to the length of frame_path_list'
                                 selected_clips.append(continuous_frames)
 
                         else:
-                            start_frame = random.randrange(0, total_frames - self.clip_size + 1)
+                            start_frame = random.randrange(0, total_frames - self.clip_size + 1) if self.mode == 'train' else 0
                             continuous_frames = frame_paths[start_frame:start_frame + self.clip_size]
                             assert len(continuous_frames)==self.clip_size, 'clip_size is not equal to the length of frame_path_list'
                             selected_clips.append(continuous_frames)
