@@ -11,7 +11,7 @@
 >  ❗️❗️❗️ **News:**
 > 1. **NEW DATASET**: We are excited to introduce our **brand-new deepfake dataset** called DF40, comprising **40 distinct deepfake techniques, even the just released SoTAs**. DF40 is designed for seamless integration into the workflow of DeepfakeBench, allowing you to train or test just as you would with other datasets like Celeb-DF and FF++. Please refer to [DF40 dataset](https://github.com/YZY-stack/DF40) for details.
 > 
-> 2. **NEW MODEL**: Our latest powerful ***video model*** [StA detector](https://github.com/YZY-stack/StA4Deepfake) has been released, which can equip a pre-trained image model (such as CLIP) with the ability to capture both spatial and temporal features jointly and efficiently. All codes, demos, and checkpoints are publicly available!
+> 2. **NEW MODEL**: Our latest powerful ***video model*** [StA detector](https://github.com/YZY-stack/StA4Deepfake) has been released, achieving about **95% AUC on Celeb-DF-v2** and 84% AUC on DFDC. We implement it using the released data and codes of DeepfakeBench. All codes, demos, and checkpoints are publicly available!
 >
 > 3. We **implement two recent SoTA video detectors**: [AltFreezing (CVPR 2023)](https://openaccess.thecvf.com/content/CVPR2023/papers/Wang_AltFreezing_for_More_General_Video_Face_Forgery_Detection_CVPR_2023_paper.pdf) and [TALL (ICCV 2023)](https://openaccess.thecvf.com/content/ICCV2023/papers/Xu_TALL_Thumbnail_Layout_for_Deepfake_Video_Detection_ICCV_2023_paper.pdf) on our benchmark. We release their pre-trained weights on FF++ via Google Drive [AltFreezing](https://drive.google.com/file/d/1LAzMhq5FZJfCl2po1WzwVhflISmGudzR/view?usp=sharing) and [TALL](https://drive.google.com/file/d/1BStEqTzHSszSwDOxAjia_jvc-0O_fHy9/view?usp=drive_link). You can also use our codebase to retrain this model from scratch. The training and evaluation processes will be the same as those of other detectors on DeepfakeBench.
 >    
@@ -46,9 +46,9 @@ Welcome to *DeepfakeBench*, your one-stop solution for deepfake detection! Here 
 
 >  😊 **DeepfakeBench-v2 Updates:**
 > 
-> 1. **34 Detectors are supported**: *DeepfakeBench*, currently, supports a total of **34** detection methods (27 image detectors + 7 video detectors).
+> 1. **34 Detectors are supported**: *DeepfakeBench*, currently, supports a total of **35** detection methods (27 image detectors + 8 video detectors).
 > 
-> 2. **More SoTA detectors are added**: We have implemented more **SoTA and latest** detectors, including: *LSDA (CVPR'24), TALL (ICCV'23), IID (CVPR'23), SBI (CVPR'22), SLADD (CVPR'22), FTCN (ICCV'21), etc.*
+> 2. **More SoTA detectors are added**: We have implemented more **SoTA and latest** detectors, including: *LSDA (CVPR'24), AltFreezing (CVPR'23), TALL (ICCV'23), IID (CVPR'23), SBI (CVPR'22), SLADD (CVPR'22), FTCN (ICCV'21), etc.*
 > 
 > 3. **Data Preprocessing**: *DeepfakeBench* currently provides **LMDB** for more faster and effective IO.
 > 
@@ -93,6 +93,7 @@ The table below highlights the **update** new detectors compared to our original
 
 |                  | File name                               | Paper                                                                                                                                                                                                                                                                                                                                                         |
 |------------------|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| AltFreezing          | [altfreezing_detector.py](./training/detectors/altfreezing_detector.py)         | [AltFreezing for More General Video Face Forgery Detection](https://openaccess.thecvf.com/content/CVPR2023/papers/Wang_AltFreezing_for_More_General_Video_Face_Forgery_Detection_CVPR_2023_paper.pdf) CVPR 2023 |
 | TALL          | [tall_detector.py](./training/detectors/tall_detector.py)         | [TALL: Thumbnail Layout for Deepfake Video Detection](https://openaccess.thecvf.com/content/ICCV2023/papers/Xu_TALL_Thumbnail_Layout_for_Deepfake_Video_Detection_ICCV_2023_paper.pdf) ICCV 2023 |
 | LSDA          | [lsda_detector.py](./training/detectors/lsda_detector.py)         | [Transcending forgery specificity with latent space augmentation for generalizable deepfake detection](https://arxiv.org/pdf/2311.11278) CVPR 2024 |
 | IID          | [iid_detector.py](./training/detectors/iid_detector.py)       | [Implicit Identity Driven Deepfake Face Swapping Detection](https://openaccess.thecvf.com/content/CVPR2023/papers/Huang_Implicit_Identity_Driven_Deepfake_Face_Swapping_Detection_CVPR_2023_paper.pdf) CVPR 2023                                                                                                                                                                                                                                     |
