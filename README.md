@@ -11,7 +11,7 @@
 >  ❗️❗️❗️ **News:**
 > 1. **NEW DATASET**: We are excited to introduce our **brand-new deepfake dataset** called DF40, comprising **40 distinct deepfake techniques, even the just released SoTAs**. DF40 is designed for seamless integration into the workflow of DeepfakeBench, allowing you to train or test just as you would with other datasets like Celeb-DF and FF++. Please refer to [DF40 dataset](https://github.com/YZY-stack/DF40) for details.
 > 
-> 2. **NEW MODEL**: Our latest powerful ***video model*** [StA detector](https://github.com/YZY-stack/StA4Deepfake) has been released (a very easy but highly effective detector), achieving about **95% AUC on Celeb-DF-v2** and **84% AUC on DFDC** by training on FF++_c23. We implement it using the released data and codes of DeepfakeBench. All codes, demos, and checkpoints are publicly available!
+> 2. ** OUR LATEST WORK **: Our latest research paper has been released at [ArXiv](https://arxiv.org/abs/2411.15633). We propose a highly generalizable and efficient detection model that can be used to detect both face deepfake images and synthetic images (not limited to face). We will soon release all the codes implemented by the DeepfakeBench codebase.
 >
 > 3. We **implement two recent SoTA video detectors**: [AltFreezing (CVPR 2023)](https://openaccess.thecvf.com/content/CVPR2023/papers/Wang_AltFreezing_for_More_General_Video_Face_Forgery_Detection_CVPR_2023_paper.pdf) and [TALL (ICCV 2023)](https://openaccess.thecvf.com/content/ICCV2023/papers/Xu_TALL_Thumbnail_Layout_for_Deepfake_Video_Detection_ICCV_2023_paper.pdf) on our benchmark. We release their pre-trained weights on FF++ via Google Drive [AltFreezing](https://drive.google.com/file/d/1LAzMhq5FZJfCl2po1WzwVhflISmGudzR/view?usp=sharing) and [TALL](https://drive.google.com/file/d/1BStEqTzHSszSwDOxAjia_jvc-0O_fHy9/view?usp=drive_link). You can also use our codebase to retrain this model from scratch. The training and evaluation processes will be the same as those of other detectors on DeepfakeBench.
 >    
@@ -473,6 +473,34 @@ If interested, you can read our recent works about deepfake detection, and more 
   title={Transcending forgery specificity with latent space augmentation for generalizable deepfake detection},
   author={Yan, Zhiyuan and Luo, Yuhao and Lyu, Siwei and Liu, Qingshan and Wu, Baoyuan},
   booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  year={2024}
+}
+
+@inproceedings{cheng2024can,
+  title={Can We Leave Deepfake Data Behind in Training Deepfake Detector?},
+  author={Cheng, Jikang and Yan, Zhiyuan and Zhang, Ying and Luo, Yuhao and Wang, Zhongyuan and Li, Chen},
+  booktitle={Advances in Neural Information Processing Systems},
+  year={2024}
+}
+
+@article{yan2024effort,
+  title={Effort: Efficient Orthogonal Modeling for Generalizable AI-Generated Image Detection},
+  author={Yan, Zhiyuan and Wang, Jiangming and Wang, Zhendong and Jin, Peng and Zhang, Ke-Yue and Chen, Shen and Yao, Taiping and Ding, Shouhong and Wu, Baoyuan and Yuan, Li},
+  journal={arXiv preprint arXiv:2411.15633},
+  year={2024}
+}
+
+@article{chen2024textit,
+  title={$$\backslash$textit $\{$X$\}$\^{} 2$-DFD: A framework for e $$\{$X$\}$ $ plainable and e $$\{$X$\}$ $ tendable Deepfake Detection},
+  author={Chen, Yize and Yan, Zhiyuan and Lyu, Siwei and Wu, Baoyuan},
+  journal={arXiv preprint arXiv:2410.06126},
+  year={2024}
+}
+
+@article{cheng2024stacking,
+  title={Stacking Brick by Brick: Aligned Feature Isolation for Incremental Face Forgery Detection},
+  author={Cheng, Jikang and Yan, Zhiyuan and Zhang, Ying and Hao, Li and Ai, Jiaxin and Zou, Qin and Li, Chen and Wang, Zhongyuan},
+  journal={arXiv preprint arXiv:2411.11396},
   year={2024}
 }
 ```
