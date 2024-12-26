@@ -149,9 +149,9 @@ For convenience, we also provide the data we use in our research, including:
 
 | Types                     | Links| Notes|       
 | -------------------------|------- | ----------------------- |
-| **Rgb-format Datasets**  | [Password: ogjn](https://pan.baidu.com/s/1NAMUHcZvsIm7l6hMHeEQjQ?pwd=ogjn)| Preprocessed data|       
-| **Lmdb-format Datasets** | [Password: g3gj](https://pan.baidu.com/s/1riMCN5iXTJ2g9fQjtlZswg?pwd=g3gj)| LMDB database for each dataset|       
-| **Json Configurations**  | [Password: dcwv](https://pan.baidu.com/s/1d7PTV2GK-fpGibcbtnQDqQ?pwd=dcwv)| Data arrangement|       
+| **Rgb-format Datasets**  | [Baidu, Password: ogjn](https://pan.baidu.com/s/1NAMUHcZvsIm7l6hMHeEQjQ?pwd=ogjn), [Google Drive](https://drive.google.com/drive/folders/1N4X3rvx9IhmkEZK-KIk4OxBrQb9BRUcs?usp=drive_link) | Preprocessed data|       
+| **Lmdb-format Datasets** | [Baidu, Password: g3gj](https://pan.baidu.com/s/1riMCN5iXTJ2g9fQjtlZswg?pwd=g3gj)| LMDB database for each dataset|       
+| **Json Configurations**  | [Baidu, Password: dcwv](https://pan.baidu.com/s/1d7PTV2GK-fpGibcbtnQDqQ?pwd=dcwv), [Google Drive](https://drive.google.com/drive/folders/1ZV3fz5MZZU5BTB5neziN6i8Yv0Z21_LO?usp=drive_link)| Data arrangement|       
      
 All the downloaded datasets are already **preprocessed** to cropped faces (32 frames per video) with their masks and landmarks, which can be **directly deployed to evaluate our benchmark**.
 
