@@ -9,7 +9,7 @@ backbone_name: efficientnetb4  # backbone name
 #backbone setting
 backbone_config:
   mode: original
-  num_classes: 3
+  num_classes: 2
   inc: 3
   dropout: false
   pretrained: true
