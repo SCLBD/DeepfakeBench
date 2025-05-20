@@ -43,3 +43,4 @@ from .uia_vit_detector import UIAViTDetector
 from .multi_attention_detector import MultiAttentionDetector
 from .sia_detector import SIADetector
 from .tall_detector import TALLDetector
+from .effort_detector import EffortDetector
