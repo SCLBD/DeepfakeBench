@@ -9,9 +9,9 @@
 
 
 >  ❗️❗️❗️ **News:**
-> 1. **NEW DATASET**: We are excited to introduce our **brand-new deepfake dataset** called DF40, comprising **40 distinct deepfake techniques, even the just released SoTAs**. DF40 is designed for seamless integration into the workflow of DeepfakeBench, allowing you to train or test just as you would with other datasets like Celeb-DF and FF++. Please refer to [DF40 dataset](https://github.com/YZY-stack/DF40) for details.
+> 1. **LATEST DETECTOR**: Our **most powerful model** ([paper](https://arxiv.org/abs/2411.15633)) has been accepted by **ICML 25 Spotlight** ⭐. We propose a highly generalizable and efficient detection method that can be used to **detect both face deepfake images and synthetic images** (not limited to face). We have released the [code](https://github.com/YZY-stack/Effort-AIGI-Detection) based on the DeepfakeBench codebase.
 > 
-> 2. **OUR LATEST DETECTION METHOD**: Our **most powerful model** ([paper](https://arxiv.org/abs/2411.15633)) has been accepted by **ICML 25 Spotlight** ⭐. We propose a highly generalizable and efficient detection method that can be used to **detect both face deepfake images and synthetic images** (not limited to face). We have released the [code](https://github.com/YZY-stack/Effort-AIGI-Detection) based on the DeepfakeBench codebase.
+> 2. **NEW DATASET**: We are excited to introduce our **brand-new deepfake dataset** called DF40, comprising **40 distinct deepfake techniques, even the just released SoTAs**. DF40 is designed for seamless integration into the workflow of DeepfakeBench, allowing you to train or test just as you would with other datasets like Celeb-DF and FF++. Please refer to [DF40 dataset](https://github.com/YZY-stack/DF40) for details.
 >    
 > 3. The pre-trained weights of 3D R50 for training I3D, FTCN, and AltFreezing are [here](https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.3/I3D_8x8_R50.pth)
 
