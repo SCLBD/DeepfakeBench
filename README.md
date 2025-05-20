@@ -481,15 +481,8 @@ If interested, you can read our recent works about deepfake detection, and more 
   year={2024}
 }
 
-@article{yan2024effort,
-  title={Effort: Efficient Orthogonal Modeling for Generalizable AI-Generated Image Detection},
-  author={Yan, Zhiyuan and Wang, Jiangming and Wang, Zhendong and Jin, Peng and Zhang, Ke-Yue and Chen, Shen and Yao, Taiping and Ding, Shouhong and Wu, Baoyuan and Yuan, Li},
-  journal={arXiv preprint arXiv:2411.15633},
-  year={2024}
-}
-
 @article{chen2024textit,
-  title={$$\backslash$textit $\{$X$\}$\^{} 2$-DFD: A framework for e $$\{$X$\}$ $ plainable and e $$\{$X$\}$ $ tendable Deepfake Detection},
+  title={X^2-DFD: A framework for eXplainable and eXtendable Deepfake Detection},
   author={Chen, Yize and Yan, Zhiyuan and Lyu, Siwei and Wu, Baoyuan},
   journal={arXiv preprint arXiv:2410.06126},
   year={2024}
@@ -501,6 +494,14 @@ If interested, you can read our recent works about deepfake detection, and more 
   journal={arXiv preprint arXiv:2411.11396},
   year={2024}
 }
+
+@article{yan2024effort,
+  title={Effort: Efficient Orthogonal Modeling for Generalizable AI-Generated Image Detection},
+  author={Yan, Zhiyuan and Wang, Jiangming and Wang, Zhendong and Jin, Peng and Zhang, Ke-Yue and Chen, Shen and Yao, Taiping and Ding, Shouhong and Wu, Baoyuan and Yuan, Li},
+  journal={arXiv preprint arXiv:2411.15633},
+  year={2024}
+}
+
 ```
 
 
