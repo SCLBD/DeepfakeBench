@@ -44,7 +44,7 @@ Welcome to *DeepfakeBench*, your one-stop solution for deepfake detection! Here 
 
 >  😊 **DeepfakeBench-v2 Updates:**
 > 
-> 1. **34 Detectors are supported**: *DeepfakeBench*, currently, supports a total of **36** detection methods (28 image detectors + 8 video detectors).
+> 1. **36 Detectors are supported**: *DeepfakeBench*, currently, supports a total of **36** detection methods (28 image detectors + 8 video detectors).
 > 
 > 2. **More SoTA detectors are added**: We have implemented more **SoTA and latest** detectors, including: *Effort (ICML'25 spotlight), LSDA (CVPR'24), AltFreezing (CVPR'23), TALL (ICCV'23), IID (CVPR'23), SBI (CVPR'22), SLADD (CVPR'22), FTCN (ICCV'21), etc.*
 > 
@@ -81,11 +81,11 @@ Welcome to *DeepfakeBench*, your one-stop solution for deepfake detection! Here 
 
 DeepfakeBench has the following features:
 
-⭐️  **Detectors** (**34** detectors):
+⭐️  **Detectors** (**36** detectors):
   - 5 Naive Detectors: [Xception](./training/detectors/xception_detector.py), [MesoNet](./training/detectors/meso4_detector.py), [MesoInception](./training/detectors/meso4Inception_detector.py), [CNN-Aug](./training/detectors/resnet34_detector.py), [EfficientNet-B4](./training/detectors/efficientnetb4_detector.py)
   - 20 Spatial Detectors: [Capsule](./training/detectors/capsule_net_detector.py), [DSP-FWA](./training/detectors/fwa_detector.py), [Face X-ray](./training/detectors/facexray_detector.py), [FFD](./training/detectors/ffd_detector.py), [CORE](./training/detectors/core_detector.py), [RECCE](./training/detectors/recce_detector.py), [UCF](./training/detectors/ucf_detector.py), [Local-relation](./training/detectors/lrl_detector.py), [IID](./training/detectors/lrl_detector.py), [RFM](./training/detectors/rfm_detector.py), [SIA](./training/detectors/sia_detector.py), [SLADD](./training/detectors/sladd_detector.py), [UIA-ViT](./training/detectors/uia_vit_detector.py), [CLIP](./training/detectors/clip_detector.py), [SBI](./training/detectors/sbi_detector.py), [PCL-I2G](./training/detectors/pcl_xception_detector.py), [Multi-Attention](./training/detectors/multi_attention_detector.py), [LSDA](./training/detectors/lsda_detector.py), [Effort](./training/detectors/effort_detector.py)
   - 3 Frequency Detectors: [F3Net](./training/detectors/f3net_detector.py), [SPSL](./training/detectors/spsl_detector.py), [SRM](./training/detectors/srm_detector.py)
-  - 7 Video Detectors: [TALL](./training/detectors/tall_detector.py), [I3D](./training/detectors/i3d_detector.py), [STIL](./training/detectors/stil_detector.py), [FTCN](./training/detectors/ftcn_detector.py), [X-CLIP](./training/detectors/xclip_detector.py), [TimeTransformer](./training/detectors/timesformer_detector.py), [VideoMAE](./training/detectors/videomae_detector.py)
+  - 8 Video Detectors: [TALL](./training/detectors/tall_detector.py), [I3D](./training/detectors/i3d_detector.py), [STIL](./training/detectors/stil_detector.py), [FTCN](./training/detectors/ftcn_detector.py), [X-CLIP](./training/detectors/xclip_detector.py), [TimeTransformer](./training/detectors/timesformer_detector.py), [VideoMAE](./training/detectors/videomae_detector.py)
 
 The table below highlights the **update** new detectors compared to our original DeepfakeBench version.
 
