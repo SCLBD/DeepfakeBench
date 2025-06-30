@@ -1,5 +1,5 @@
 # log dir 
-log_dir: /data/home/zhiyuanyan/DeepfakeBench/logs/testing_bench
+log_dir: ./logs/training/xception
 
 # model setting
 pretrained: ./training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
@@ -64,7 +64,7 @@ optimizer:
 
 # training config
 lr_scheduler: null   # learning rate scheduler
-nEpochs: 10   # number of epochs to train for
+nEpochs: 1   # number of epochs to train for
 start_epoch: 0   # manual epoch number (useful for restarts)
 save_epoch: 1   # interval epochs for saving models
 rec_iter: 100   # interval iterations for recording

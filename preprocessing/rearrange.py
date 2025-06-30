@@ -500,7 +500,7 @@ def generate_dataset_file(dataset_name, dataset_root_path, output_file_path, com
 
 if __name__ == '__main__':
     # from config.yaml load parameters
-    yaml_path = './config.yaml'
+    yaml_path = './preprocessing/config.yaml'
     # open the yaml file
     try:
         with open(yaml_path, 'r') as f:

@@ -5,3 +5,4 @@
 *.pth
 *.pt
 *.dat
+.envrc
