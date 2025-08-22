@@ -14,6 +14,7 @@ import math
 import yaml
 import glob
 import json
+from pathlib import Path
 
 import numpy as np
 from copy import deepcopy
@@ -115,11 +116,11 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
             A.HorizontalFlip(p=self.config['data_aug']['flip_prob']),
             A.Rotate(limit=self.config['data_aug']['rotate_limit'], p=self.config['data_aug']['rotate_prob']),
             A.GaussianBlur(blur_limit=self.config['data_aug']['blur_limit'], p=self.config['data_aug']['blur_prob']),
-            A.OneOf([                
-                IsotropicResize(max_side=self.config['resolution'], interpolation_down=cv2.INTER_AREA, interpolation_up=cv2.INTER_CUBIC),
-                IsotropicResize(max_side=self.config['resolution'], interpolation_down=cv2.INTER_AREA, interpolation_up=cv2.INTER_LINEAR),
-                IsotropicResize(max_side=self.config['resolution'], interpolation_down=cv2.INTER_LINEAR, interpolation_up=cv2.INTER_LINEAR),
-            ], p = 0 if self.config['with_landmark'] else 1),
+            # A.OneOf([                
+            #     IsotropicResize(max_side=self.config['resolution'], interpolation_down=cv2.INTER_AREA, interpolation_up=cv2.INTER_CUBIC),
+            #     IsotropicResize(max_side=self.config['resolution'], interpolation_down=cv2.INTER_AREA, interpolation_up=cv2.INTER_LINEAR),
+            #     IsotropicResize(max_side=self.config['resolution'], interpolation_down=cv2.INTER_LINEAR, interpolation_up=cv2.INTER_LINEAR),
+            # ], p = 0 if self.config['with_landmark'] else 1),
             A.OneOf([
                 A.RandomBrightnessContrast(brightness_limit=self.config['data_aug']['brightness_limit'], contrast_limit=self.config['data_aug']['contrast_limit']),
                 A.FancyPCA(),
@@ -296,7 +297,7 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
         size = self.config['resolution'] # if self.mode == "train" else self.config['resolution']
         if not self.lmdb:
             if not file_path[0] == '.':
-                file_path =  f'./{self.config["rgb_dir"]}\\'+file_path
+                file_path =  f'./{self.config["rgb_dir"]}/'+file_path
             assert os.path.exists(file_path), f"{file_path} does not exist"
             img = cv2.imread(file_path)
             if img is None:
@@ -469,7 +470,9 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
         label = self.data_dict['label'][index]
 
         if not isinstance(image_paths, list):
-            image_paths = [image_paths]  # for the image-level IO, only one frame is used
+            image_paths = [Path(image_paths)]  # for the image-level IO, only one frame is used
+        
+        image_paths = [Path(path) for path in image_paths]  # Sanitize image paths
 
         image_tensors = []
         landmark_tensors = []
@@ -477,6 +480,11 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
         augmentation_seed = None
 
         for image_path in image_paths:
+            # check if this is a valid path
+            if not image_path.exists():
+                raise ValueError(f"Image path {image_path.absolute()} does not exist.")
+
+            image_path = str(image_path)
             # Initialize a new seed for data augmentation at the start of each video
             if self.video_level and image_path == image_paths[0]:
                 augmentation_seed = random.randint(0, 2**32 - 1)

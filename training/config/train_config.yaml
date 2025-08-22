@@ -1,9 +1,9 @@
 mode: train
-lmdb: True
+lmdb: False
 dry_run: false
-rgb_dir: './datasets/rgb'
+rgb_dir: '.'
 lmdb_dir:  './datasets/lmdb'
-dataset_json_folder: './preprocessing/dataset_json'
+dataset_json_folder: './datasets/json'
 SWA: False
 save_avg: True
 log_dir: ./logs/training/

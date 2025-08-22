@@ -37,7 +37,7 @@ from logger import create_logger
 
 parser = argparse.ArgumentParser(description='Process some paths.')
 parser.add_argument('--detector_path', type=str, 
-                    default='/home/zhiyuanyan/DeepfakeBench/training/config/detector/resnet34.yaml',
+                    default='config/detector/resnet34.yaml',
                     help='path to detector YAML file')
 parser.add_argument("--test_dataset", nargs="+")
 parser.add_argument('--weights_path', type=str, 
