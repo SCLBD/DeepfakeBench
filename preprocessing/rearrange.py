@@ -63,6 +63,11 @@ import yaml
 import pandas as pd
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[1]  # .../DeepfakeBench
+def rel_to_repo(p: Path) -> str:
+    p = Path(p).resolve()
+    return str(p.relative_to(REPO_ROOT))
+
 
 def generate_dataset_file(dataset_name, dataset_root_path, output_file_path, compression_level='c23', perturbation = 'end_to_end'):
     """
@@ -146,7 +151,7 @@ def generate_dataset_file(dataset_name, dataset_root_path, output_file_path, com
                     if video_path.is_dir():
                         video_name = video_path.name
                         mode = video_to_mode[video_name]
-                        frame_paths = [os.path.join(video_path, frame.name) for frame in os.scandir(video_path)]
+                        frame_paths = [rel_to_repo(Path(video_path.path) / frame.name)  for frame in os.scandir(video_path)]
                         dataset_dict['FaceForensics++']['FF-real'][mode][compression_level][video_name] = {'label': ff_dict[label], 'frames': frame_paths}
                         
             label = 'DFD_Real'  
@@ -164,7 +169,7 @@ def generate_dataset_file(dataset_name, dataset_root_path, output_file_path, com
                 for video_path in os.scandir(os.path.join(dataset_path, 'original_sequences', 'actors', compression_level, 'frames')):
                     if video_path.is_dir():
                         video_name = video_path.name
-                        frame_paths = [os.path.join(video_path, frame.name) for frame in os.scandir(video_path)]
+                        frame_paths = [rel_to_repo(Path(video_path.path) / frame.name)  for frame in os.scandir(video_path)]
                         dataset_dict['FaceForensics++']['DFD_real']['train'][compression_level][video_name] = {'label': ff_dict[label], 'frames': frame_paths}
                         dataset_dict['FaceForensics++']['DFD_real']['test'][compression_level][video_name] = {'label': ff_dict[label], 'frames': frame_paths}
                         dataset_dict['FaceForensics++']['DFD_real']['val'][compression_level][video_name] = {'label': ff_dict[label], 'frames': frame_paths}
@@ -190,7 +195,7 @@ def generate_dataset_file(dataset_name, dataset_root_path, output_file_path, com
                             for video_path in os.scandir(os.path.join(dataset_path, 'manipulated_sequences', label, compression_level, 'frames')):
                                 if video_path.is_dir():
                                     video_name = video_path.name
-                                    frame_paths = [os.path.join(video_path, frame.name) for frame in os.scandir(video_path)]
+                                    frame_paths = [rel_to_repo(Path(video_path.path) / frame.name)  for frame in os.scandir(video_path)]
                                     if label != 'FaceShifter':
                                         mask_paths = os.path.join(dataset_path, 'manipulated_sequences', label, 'c23','masks', video_name)
                                         # mask is all the same for all compression levels
@@ -274,7 +279,7 @@ def generate_dataset_file(dataset_name, dataset_root_path, output_file_path, com
             for video_path in os.scandir(os.path.join(dataset_path, folder.name, 'frames')):
                 if video_path.is_dir():
                     video_name = video_path.name
-                    frame_paths = [os.path.join(video_path, frame.name) for frame in os.scandir(video_path)]
+                    frame_paths = [rel_to_repo(Path(video_path.path) / frame.name)  for frame in os.scandir(video_path)]
                     dataset_dict[dataset_name][label]['train'][video_name] = {'label': label, 'frames': frame_paths}
         
         # Special case for test&val data of Celeb-DF-v1/2
@@ -314,7 +319,7 @@ def generate_dataset_file(dataset_name, dataset_root_path, output_file_path, com
             for video_path in os.scandir(os.path.join(dataset_path, folder.name, 'frames')):
                 if video_path.is_dir():
                     video_name = video_path.name
-                    frame_paths = [os.path.join(video_path, frame.name) for frame in os.scandir(video_path)]
+                    frame_paths = [rel_to_repo(Path(video_path.path) / frame.name)  for frame in os.scandir(video_path)]
                     dataset_dict[dataset_name][label]['train'][video_name] = {'label': label, 'frames': frame_paths}
         
         # Special case for test&val data of Celeb-DF-v1/2
@@ -408,7 +413,7 @@ def generate_dataset_file(dataset_name, dataset_root_path, output_file_path, com
                                 label = 'DFDC_Real'
                             else:
                                 label = 'DFDC_Fake'
-                            frame_paths = [os.path.join(video_path, frame.name) for frame in os.scandir(video_path)]
+                            frame_paths = [rel_to_repo(Path(video_path.path) / frame.name)  for frame in os.scandir(video_path)]
                             dataset_dict[dataset_name][label]['train'][video_name] = {'label': label, 'frames': frame_paths}
                             dataset_dict[dataset_name][label]['val'][video_name] = {'label': label, 'frames': frame_paths}
 
@@ -441,7 +446,7 @@ def generate_dataset_file(dataset_name, dataset_root_path, output_file_path, com
                 else:
                     raise ValueError(f"wrong in processing vidname {dataset_name}: {line}")
                 label = 'DF_fake'
-                frame_paths = [os.path.join(video_path, frame.name) for frame in os.scandir(video_path)]
+                frame_paths = [rel_to_repo(Path(video_path.path) / frame.name)  for frame in os.scandir(video_path)]
                 ## if frame image in frame_paths is not the correct png, skip this frame yxh
                 for frame_path in frame_paths:
                     if cv2.imread(frame_path) is None:
@@ -455,7 +460,7 @@ def generate_dataset_file(dataset_name, dataset_root_path, output_file_path, com
             video_paths = [os.path.join(actor_path, 'frames', video.name) for video in os.scandir(os.path.join(actor_path, 'frames'))]
             for video_path in video_paths:
                 video_name = video_path.split('/')[-1]
-                frame_paths = [os.path.join(video_path, frame.name) for frame in os.scandir(video_path)]
+                frame_paths = [rel_to_repo(Path(video_path.path) / frame.name)  for frame in os.scandir(video_path)]
                 ## if frame image in frame_paths is not the correct png, skip this frame yxh
                 for frame_path in frame_paths:
                     if cv2.imread(frame_path) is None:
@@ -477,7 +482,7 @@ def generate_dataset_file(dataset_name, dataset_root_path, output_file_path, com
                     if video_path.is_dir():
                         video_name = video_path.name
                         label = 'UADFV_Fake'
-                        frame_paths = [os.path.join(video_path, frame.name) for frame in os.scandir(video_path)]
+                        frame_paths = [rel_to_repo(Path(video_path.path) / frame.name)  for frame in os.scandir(video_path)]
                         dataset_dict[dataset_name][label]['train'][video_name] = {'label': label, 'frames': frame_paths}
                         dataset_dict[dataset_name][label]['test'][video_name] = {'label': label, 'frames': frame_paths}
                         dataset_dict[dataset_name][label]['val'][video_name] = {'label': label, 'frames': frame_paths}
@@ -486,7 +491,7 @@ def generate_dataset_file(dataset_name, dataset_root_path, output_file_path, com
                     if video_path.is_dir():
                         video_name = video_path.name
                         label = 'UADFV_Real'
-                        frame_paths = [os.path.join(video_path, frame.name) for frame in os.scandir(video_path)]
+                        frame_paths = [rel_to_repo(Path(video_path.path) / frame.name)  for frame in os.scandir(video_path)]
                         dataset_dict[dataset_name][label]['train'][video_name] = {'label': label, 'frames': frame_paths}
                         dataset_dict[dataset_name][label]['test'][video_name] = {'label': label, 'frames': frame_paths}
                         dataset_dict[dataset_name][label]['val'][video_name] = {'label': label, 'frames': frame_paths}

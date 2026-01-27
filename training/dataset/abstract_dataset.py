@@ -470,9 +470,7 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
             try:
                 image = self.load_rgb(image_path)
             except Exception as e:
-                # Skip this image and return the first one
-                print(f"Error loading image at index {index}: {e}")
-                return self.__getitem__(0)
+                raise RuntimeError(f"[Dataset] Failed to load index={index}, path={image_path}: {e}")
             image = np.array(image)  # Convert to numpy array for data augmentation
 
             # Load mask and landmark (if needed)

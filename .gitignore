@@ -1,0 +1,21 @@
+# Datasets
+datasets/
+*.zip
+
+# Logs
+logs/
+preprocessing/logs/
+
+# Generated dataset metadata
+preprocessing/dataset_json/
+
+# Python cache
+__pycache__/
+**/__pycache__/
+
+# Model weights
+*.pth
+
+# Environment / misc
+.env
+*.log

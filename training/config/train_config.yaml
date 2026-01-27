@@ -3,7 +3,7 @@ lmdb: False
 dry_run: false
 dataset_root_rgb: './datasets'
 lmdb_dir:  'I:\transform_2_lmdb'
-dataset_json_folder: '/data/home/zhiyuanyan/DeepfakeBenchv2/preprocessing/dataset_json'
+dataset_json_folder: './preprocessing/dataset_json'
 SWA: False
 
 # label settings

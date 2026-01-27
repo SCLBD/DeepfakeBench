@@ -1,8 +1,8 @@
 # log dir 
-log_dir: /data/home/zhiyuanyan/DeepfakeBench/logs/testing_bench
+log_dir: ./logs/testing_bench
 
 # model setting
-pretrained: /data/home/zhiyuanyan/DeepfakeBench/training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
+pretrained: ./training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
 model_name: xception   # model name
 backbone_name: xception  # backbone name
 
@@ -21,7 +21,7 @@ test_dataset: [FaceForensics++, DeepFakeDetection]
 compression: c23  # compression-level for videos
 train_batchSize: 32   # training batch size
 test_batchSize: 32   # test batch size
-workers: 8   # number of data loading workers
+workers: 0   # number of data loading workers
 frame_num: {'train': 32, 'test': 32}   # number of frames to use per video in training and testing
 resolution: 256   # resolution of output image to network
 with_mask: false   # whether to include mask information in the input

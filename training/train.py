@@ -243,7 +243,7 @@ def main():
     config['save_ckpt'] = args.save_ckpt
     config['save_feat'] = args.save_feat
     if config['lmdb']:
-        config['dataset_json_folder'] = 'preprocessing/dataset_json_v3'
+        config.setdefault('dataset_json_folder', 'preprocessing/dataset_json_v3')
     # create logger
     logger_path = config['log_dir']
     os.makedirs(logger_path, exist_ok=True)
