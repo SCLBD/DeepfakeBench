@@ -19,3 +19,7 @@ __pycache__/
 # Environment / misc
 .env
 *.log
+
+
+#wandb
+wandb*

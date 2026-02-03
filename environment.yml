@@ -1,0 +1,8 @@
+name: DeepfakeBench
+channels:
+  - defaults
+dependencies:
+  - python=3.7.12
+  - dlib=19.24
+  - cmake
+prefix: /home/rcmpm/miniconda3/envs/DeepfakeBench
