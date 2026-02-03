@@ -7,7 +7,7 @@ TRAIN:
   CHECKPOINT_PERIOD: 1
   AUTO_RESUME: True
 DATA:
-  NUM_FRAMES: 16
+  NUM_FRAMES: 8
   SAMPLING_RATE: 8
   TRAIN_JITTER_SCALES: [256, 320]
   TRAIN_CROP_SIZE: 224
@@ -125,9 +125,10 @@ import random
 
 
 random_select = True
-no_time_pool = True
+no_time_pool = False
 
 logger = logging.getLogger(__name__)
+
 
 @DETECTOR.register_module(module_name='altfreezing')
 class AltFreezingDetector(AbstractDetector):
@@ -138,7 +139,7 @@ class AltFreezingDetector(AbstractDetector):
         cfg.NUM_GPUS = 1
         cfg.TEST.BATCH_SIZE = 1
         cfg.TRAIN.BATCH_SIZE = 1
-        cfg.DATA.NUM_FRAMES = 16
+        cfg.DATA.NUM_FRAMES = config['clip_size']
         self.resnet = ResNetOri(cfg)
         if config['pretrained'] is not None:
             print(f"loading pretrained model from {config['pretrained']}")
@@ -150,10 +151,43 @@ class AltFreezingDetector(AbstractDetector):
             # load final ckpt
             self.resnet.load_state_dict(modified_weights, strict=True)
 
+        self.conv_dict = self.find_conv_layers(self.resnet)
+        print("1x3x3 Conv: {}\n3x1x1 Conv:{}".format(self.conv_dict['spatial'], self.conv_dict['temporal']))
+        self.train_batch_cnt = 0
+
         self.loss_func = nn.BCELoss()  # The output of the model is a probability value between 0 and 1 (haved used sigmoid)
-        self.prob, self.label = [], []
-        self.correct, self.total = 0, 0
-    
+
+    def find_conv_layers(self, module, parent_name='', conv_dict=None):
+        if conv_dict is None:
+            conv_dict = {'temporal': [], 'spatial': []}
+
+        for name, sub_module in module.named_children():
+            full_name = f'{parent_name}.{name}' if parent_name else name
+
+            if isinstance(sub_module, nn.Conv3d):
+                if sub_module.kernel_size == (3, 1, 1):
+                    conv_dict['temporal'].append(full_name)
+                if sub_module.kernel_size == (1, 3, 3):
+                    conv_dict['spatial'].append(full_name)
+            else:
+                self.find_conv_layers(sub_module, full_name, conv_dict)
+
+        return conv_dict
+
+    def alternate_mode(self, target_mode):
+        for layer_name in self.conv_dict['temporal']:
+            layer = dict(self.resnet.named_modules())[layer_name]
+            layer.weight.requires_grad = True if target_mode == 'temporal' else False
+            if layer.bias is not None:
+                layer.bias.requires_grad = True if target_mode == 'temporal' else False
+
+        for layer_name in self.conv_dict['spatial']:
+            layer = dict(self.resnet.named_modules())[layer_name]
+            layer.weight.requires_grad = True if target_mode == 'spatial' else False
+            if layer.bias is not None:
+                layer.bias.requires_grad = True if target_mode == 'spatial' else False
+
+
     def build_backbone(self, config):
         pass
     
@@ -161,13 +195,14 @@ class AltFreezingDetector(AbstractDetector):
         # prepare the loss function
         loss_class = LOSSFUNC[config['loss_func']]
         loss_func = loss_class()
+
         return loss_func
     
     def features(self, data_dict: dict) -> torch.tensor:
         inputs = [data_dict['image'].permute(0,2,1,3,4)]
         pred = self.resnet(inputs)
-        output = {}
-        output["final_output"] = pred
+        output = {"final_output": pred}
+
         return output["final_output"]
 
     def classifier(self, features: torch.tensor):
@@ -178,6 +213,7 @@ class AltFreezingDetector(AbstractDetector):
         pred = pred_dict['cls'].view(-1)
         loss = self.loss_func(pred, label)
         loss_dict = {'overall': loss}
+
         return loss_dict
     
     def get_train_metrics(self, data_dict: dict, pred_dict: dict) -> dict:
@@ -186,33 +222,20 @@ class AltFreezingDetector(AbstractDetector):
         # compute metrics for batch data
         auc, eer, acc, ap = calculate_metrics_for_train(label.detach(), pred.detach())
         metric_batch_dict = {'acc': acc, 'auc': auc, 'eer': eer, 'ap': ap}
+
         return metric_batch_dict
 
     def forward(self, data_dict: dict, inference=False) -> dict:
         # get the probability
         prob = self.features(data_dict)
         # build the prediction dict for each output
-        pred_dict = {'cls': prob, 'prob': prob, 'feat': None}
-        if inference:
-            self.prob.extend(
-                pred_dict['prob']
-                .detach()
-                .squeeze()
-                .cpu()
-                .numpy()
-            )
-            self.label.extend(
-                data_dict['label']
-                .detach()
-                .squeeze()
-                .cpu()
-                .numpy()
-            )
-            # deal with acc
-            prediction_class = (prob >= 0.5).type(torch.int).view(-1)
-            assert prediction_class.shape == data_dict['label'].shape
-            correct = (prediction_class == data_dict['label']).sum().item()
-            self.correct += correct
-            self.total += data_dict['label'].size(0)
+        pred_dict = {'cls': prob, 'prob': prob, 'feat': prob}
+        if not inference:
+            if self.train_batch_cnt % (20 + 1) == 0:
+                self.alternate_mode('spatial')
+            elif self.train_batch_cnt % (20 + 1) == 1:
+                self.alternate_mode('temporal')
+
+            self.train_batch_cnt += 1
         
         return pred_dict

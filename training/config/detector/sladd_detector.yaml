@@ -75,7 +75,7 @@ optimizer:
     momentum: 0.9  # momentum for SGD optimizer
 
 # training config
-lr_scheduler: None   # learning rate scheduler step
+lr_scheduler: null   # learning rate scheduler step
 lr_step: 3
 lr_gamma: 0.4   # learning rate scheduler
 nEpochs: 40   # number of epochs to train for

@@ -110,24 +110,22 @@ def get_alpha_blend_mask(mask):
 
 class I2GDataset(DeepfakeAbstractBaseDataset):
     def __init__(self, config=None, mode='train'):
-        global c
-        c = config
-        config['GridShuffle']['p'] = 0
+        #config['GridShuffle']['p'] = 0
         super().__init__(config, mode)
-        real_images_list = [(img, label) for img, label in zip(self.image_list, self.label_list) if label == 0]
+        real_images_list = [img for img, label in zip(self.image_list, self.label_list) if label == 0]
         self.real_images_list = list(set(real_images_list))  #  de-duplicate since DF,F2F,FS,NT have same real images
         self.source_transforms = self.get_source_transforms()
         self.transforms = self.get_transforms()
         self.init_nearest()
 
     def init_nearest(self):
-        if os.path.exists('nearest_face_info_new.pkl'):
-            with open('nearest_face_info_new.pkl', 'rb') as f:
+        if os.path.exists('training/lib/nearest_face_info.pkl'):
+            with open('training/lib/nearest_face_info.pkl', 'rb') as f:
                 face_info = pickle.load(f)
         self.face_info = face_info
         # Check if the dictionary has already been created
-        if os.path.exists('landmark_dict_new.pkl'):
-            with open('landmark_dict_new.pkl', 'rb') as f:
+        if os.path.exists('training/lib/landmark_dict_ffall.pkl'):
+            with open('training/lib/landmark_dict_ffall.pkl', 'rb') as f:
                 landmark_dict = pickle.load(f)
         self.landmark_dict = landmark_dict
 

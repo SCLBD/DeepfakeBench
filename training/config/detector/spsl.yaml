@@ -2,7 +2,7 @@
 log_dir: /mntcephfs/lab_data/zhiyuanyan/benchmark_results/logs_final/spsl_4frames
 
 # model setting
-pretrained: /data/home/zhiyuanyan/DeepfakeBench/training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
+pretrained: ./training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
 # pretrained: /home/tianshuoge/resnet34-b627a593.pth   # path to a pre-trained model, if using one
 model_name: spsl   # model name
 backbone_name: xception  # backbone name

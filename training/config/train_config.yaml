@@ -1,11 +1,12 @@
 mode: train
-lmdb: False
+lmdb: True
 dry_run: false
 dataset_root_rgb: './datasets'
 lmdb_dir:  'I:\transform_2_lmdb'
 dataset_json_folder: './preprocessing/dataset_json'
 SWA: False
-
+save_avg: True
+log_dir: ./logs/training/
 # label settings
 label_dict:
   # DFD

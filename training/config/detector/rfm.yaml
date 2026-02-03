@@ -2,7 +2,7 @@
 log_dir: /data/home/zhiyuanyan/logs/benchv2/rfm
 
 # model setting
-pretrained: /data/home/zhiyuanyan/DeepfakeBench/training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
+pretrained: ./training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
 model_name: rfm   # model name
 backbone_name: xception  # backbone name
 

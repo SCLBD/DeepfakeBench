@@ -56,8 +56,6 @@ class MultiAttentionDetector(AbstractDetector):
         self.mid_dim = config["mid_dim"]
         self.backbone = self.build_backbone(config)
         self.loss_func = self.build_loss(config)
-        self.prob, self.label = [], []
-        self.correct, self.total = 0, 0
         self.batch_cnt = 0
 
         with torch.no_grad():
@@ -99,16 +97,10 @@ class MultiAttentionDetector(AbstractDetector):
     def build_backbone(self, config):
         backbone_class = BACKBONE[config['backbone_name']]
         model_config = config['backbone_config']
+        model_config['pretrained'] = self.config.get('pretrained', None)
         backbone = backbone_class(model_config)
+
         return backbone
-        # # FIXME: current load pretrained weights only from the backbone, not here
-        # model = EfficientNet.from_pretrained('efficientnet-b4')
-        # # Modify the first convolutional layer to accept input tensors with 'inc' channels
-        # model._conv_stem = nn.Conv2d(config["backbone_config"]["inc"], 48, kernel_size=3, stride=2, bias=False)
-        # # Remove the last layer (the classifier) from the EfficientNet-B4 model
-        # model._fc = nn.Identity()
-        #
-        # return model
 
     def build_loss(self, config):
         cls_loss_class = LOSSFUNC[config["loss_func"]["cls_loss"]]
@@ -183,28 +175,18 @@ class MultiAttentionDetector(AbstractDetector):
     def get_train_metrics(self, data_dict: dict, pred_dict: dict) -> dict:
         label = data_dict['label']
         pred = pred_dict['cls']
-        # compute metrics for batch data
         auc, eer, acc, ap = calculate_metrics_for_train(label.detach(), pred.detach())
         metric_batch_dict = {'acc': acc, 'auc': auc, 'eer': eer, 'ap': ap}
+
         return metric_batch_dict
 
-    def get_test_metrics(self):
-        y_pred = np.concatenate(self.prob)
-        y_true = np.concatenate(self.label)
-        # auc
-        fpr, tpr, thresholds = metrics.roc_curve(y_true, y_pred, pos_label=1)
-        auc = metrics.auc(fpr, tpr)
-        # eer
-        fnr = 1 - tpr
-        eer = fpr[np.nanargmin(np.absolute((fnr - fpr)))]
-        # ap
-        ap = metrics.average_precision_score(y_true, y_pred)
-        # acc
-        acc = self.correct / self.total
-        # reset the prob and label
-        self.prob, self.label = [], []
-        self.correct, self.total = 0, 0
-        return {'acc': acc, 'auc': auc, 'eer': eer, 'ap': ap, 'pred': y_pred, 'label': y_true}
+    def get_train_metrics(self, data_dict: dict, pred_dict: dict) -> dict:
+        label = data_dict['label']
+        pred = pred_dict['cls']
+        auc, eer, acc, ap = calculate_metrics_for_train(label.detach(), pred.detach())
+        metric_batch_dict = {'acc': acc, 'auc': auc, 'eer': eer, 'ap': ap}
+
+        return metric_batch_dict
 
     def forward(self, data_dict: dict, inference=False) -> dict:
         self.batch_cnt += 1
@@ -256,26 +238,6 @@ class MultiAttentionDetector(AbstractDetector):
                          "feat": layer_output["final"],
                          "attentions": attention_maps,
                          "feature_maps_d": feature_maps_d}
-        if inference:
-            self.prob.append(
-                pred_dict['prob']
-                .detach()
-                .squeeze()
-                .cpu()
-                .numpy()
-            )
-            self.label.append(
-                data_dict['label']
-                .detach()
-                .squeeze()
-                .cpu()
-                .numpy()
-            )
-            # deal with acc
-            _, prediction_class = torch.max(pred, 1)
-            correct = (prediction_class == data_dict['label']).sum().item()
-            self.correct += correct
-            self.total += data_dict['label'].size(0)
 
         return pred_dict
 

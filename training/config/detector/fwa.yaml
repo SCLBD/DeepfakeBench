@@ -2,7 +2,7 @@
 log_dir: /mntcephfs/lab_data/yuanxinhang/benchmark_results/logs_analysis/fwa
 
 # model setting
-pretrained: /home/zhiyuanyan/disfin/deepfake_benchmark/training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
+pretrained: ./training/pretrained/xception-b5690688.pth # path to a pre-trained model, if using one
 model_name: fwa   # model name
 backbone_name: xception  # backbone name
 

@@ -27,13 +27,11 @@ Codes are modified based on GitHub repo https://github.com/wany0824/UIA-ViT
 """
 from functools import partial
 
-import numpy as np
 import torch
 import torch.nn as nn
 from detectors import DETECTOR
 from loss import LOSSFUNC
 from metrics.base_metrics_class import calculate_metrics_for_train
-from sklearn import metrics
 from sklearn.covariance import LedoitWolf
 from timm.models.layers import DropPath, to_2tuple, trunc_normal_
 
@@ -44,9 +42,6 @@ from .base_detector import AbstractDetector
 class UIAViTDetector(AbstractDetector):
     def __init__(self, config):
         super().__init__()
-
-        self.prob, self.label = [], []
-        self.correct, self.total = 0, 0
 
         self.config = config
         self.batch_per_epoch = config["batch_per_epoch"]
@@ -60,7 +55,6 @@ class UIAViTDetector(AbstractDetector):
         self.model = self.build_backbone(config)
         self.loss_func = self.build_loss(config)
         self.loss_weight = config["loss_func"]["weights"]
-
 
     def build_backbone(self, config):
         model = VisionTransformer(patch_size=16, embed_dim=768, depth=12, num_heads=12, mlp_ratio=4, qkv_bias=True,
@@ -108,16 +102,13 @@ class UIAViTDetector(AbstractDetector):
         else:
             return {"overall": ce_loss}
 
-
-
     def get_train_metrics(self, data_dict: dict, pred_dict: dict) -> dict:
         label = data_dict['label']
         pred = pred_dict['cls']
-        # compute metrics for batch data
         auc, eer, acc, ap = calculate_metrics_for_train(label.detach(), pred.detach())
         metric_batch_dict = {'acc': acc, 'auc': auc, 'eer': eer, 'ap': ap}
+
         return metric_batch_dict
-    
 
     def forward(self, data_dict: dict, inference=False) -> dict:
         # compute MVG
@@ -142,7 +133,7 @@ class UIAViTDetector(AbstractDetector):
         self.real_feature_list.append(feature_patch_real.reshape(B * H * W, C).cpu().detach())
 
         fake_indices = torch.where(data_dict["label"] == 1.0)[0]
-        feature_patch_fake = feature_patch[fake_indices[:4], 3:11, 3:11, :] # hard coding, extend config to modify if needed
+        feature_patch_fake = feature_patch[fake_indices[:4], 3:11, 3:11, :]  # hard coding, extend config to modify if needed
         B, H, W, C = feature_patch_fake.size()
         self.fake_feature_list.append(feature_patch_fake.reshape(B * H * W, C).cpu().detach())
 
@@ -156,32 +147,12 @@ class UIAViTDetector(AbstractDetector):
 
         del attention_map, feature_patch
 
-        if inference:
-            self.prob.append(
-                pred_dict['prob']
-                .detach()
-                .squeeze()
-                .cpu()
-                .numpy()
-            )
-            self.label.append(
-                data_dict['label']
-                .detach()
-                .squeeze()
-                .cpu()
-                .numpy()
-            )
-            # deal with acc
-            _, prediction_class = torch.max(pred, 1)
-            correct = (prediction_class == data_dict['label']).sum().item()
-            self.correct += correct
-            self.total += data_dict['label'].size(0)
-        else:
-            pred_dict["attention_map_real"] = attention_map_real
-            pred_dict["attention_map_fake"] = attention_map_fake
-            self.batch_cnt += 1
+        pred_dict["attention_map_real"] = attention_map_real
+        pred_dict["attention_map_fake"] = attention_map_fake
+        self.batch_cnt += 1
 
         return pred_dict
+
 
 class Mlp(nn.Module):
     def __init__(self, in_features, hidden_features=None, out_features=None, act_layer=nn.GELU, drop=0.):
@@ -271,7 +242,7 @@ class PatchEmbed(nn.Module):
         # FIXME look at relaxing size constraints
         # assert H == self.img_size[0] and W == self.img_size[1], \
         # f"Input image size ({H}*{W}) doesn't match model ({self.img_size[0]}*{self.img_size[1]})."
-        x = self.proj(x).flatten(2).transpose(1, 2) # [B, H*W, C]
+        x = self.proj(x).flatten(2).transpose(1, 2)  # [B, H*W, C]
         return x
 
 
@@ -440,8 +411,8 @@ class VisionTransformer(nn.Module):
         x = self.head(x)
         return x, feat_block, attn_block
 
+
 def fit_inv_covariance(samples):
     return torch.Tensor(LedoitWolf().fit(samples.cpu()).precision_).to(
         samples.device
     )
-

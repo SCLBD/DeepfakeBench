@@ -159,7 +159,8 @@ class IResNet(nn.Module):
             x = torch.flatten(x, 1)
             x = self.dropout(x)
         x = self.fc(x.float() if self.fp16 else x)
-        x = self.features(x)
+        if x.size(0)>1:
+            x = self.features(x)
         return x
 
 

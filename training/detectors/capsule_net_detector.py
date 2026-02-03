@@ -59,9 +59,6 @@ class CapsuleNetDetector(AbstractDetector):
         self.config = config
         self.backbone = self.build_backbone(config)
         self.loss_func = self.build_loss(config)
-        self.prob, self.label = [], []
-        self.correct, self.total = 0, 0
-
         #capsule net
         self.num_classes = config['num_classes']
         self.vgg_ext = VggExtractor()
@@ -118,26 +115,6 @@ class CapsuleNetDetector(AbstractDetector):
         prob = torch.softmax(pred, dim=1)[:, 1]
         # build the prediction dict for each output
         pred_dict = {'cls': pred, 'prob': prob, 'feat': features, 'classes': preds}
-        if inference:
-            self.prob.append(
-                pred_dict['prob']
-                .detach()
-                .squeeze()
-                .cpu()
-                .numpy()
-            )
-            self.label.append(
-                data_dict['label']
-                .detach()
-                .squeeze()
-                .cpu()
-                .numpy()
-            )
-            # deal with acc
-            _, prediction_class = torch.max(pred, 1)
-            correct = (prediction_class == data_dict['label']).sum().item()
-            self.correct += correct
-            self.total += data_dict['label'].size(0)
         return pred_dict
 
     def weights_init(self, m):

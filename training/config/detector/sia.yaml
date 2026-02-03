@@ -1,7 +1,7 @@
 # log dir 
 log_dir: ../loggg/
 # model setting
-# pretrained: /home/zhiyuanyan/disfin/deepfake_benchmark/training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
+pretrained: ./training/pretrained/efficientnet-b4-6ed6700e.pth   # path to a pre-trained model, if using one
 model_name: sia   # model name
 backbone_name: efficientnetb4  # backbone name
 

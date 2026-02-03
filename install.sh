@@ -21,12 +21,13 @@ pip install timm==0.6.12
 pip install segmentation-models-pytorch==0.3.2
 pip install torchtoolbox==0.1.8.2
 pip install tensorboard==2.10.1
-pip install setuptools==59.5.0 \
-pip install loralib \
-pip install pytorchvideo \
-pip install einops \
-pip install transformers \
-pip install filterpy \
-pip install simplejson \
-pip install kornia \
+pip install setuptools==59.5.0
+pip install loralib
+pip install einops
+pip install transformers
+pip install filterpy
+pip install simplejson
+pip install kornia
+pip install fvcore
+pip install imgaug==0.4.0
 pip install git+https://github.com/openai/CLIP.git

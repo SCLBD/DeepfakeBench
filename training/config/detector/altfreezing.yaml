@@ -2,7 +2,7 @@
 log_dir: /data/home/zhiyuanyan/DeepfakeBench/logs_debug
 
 # model setting
-pretrained: /data/home/zhiyuanyan/torch_ckpts/I3D_8x8_R50.pth   # path to a pre-trained model, if using one
+pretrained: training/pretrained/I3D_8x8_R50.pth   # path to a pre-trained model, if using one
 model_name: altfreezing   # model name
 backbone_name: null  # backbone name
 

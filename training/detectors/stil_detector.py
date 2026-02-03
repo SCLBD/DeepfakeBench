@@ -57,8 +57,6 @@ class STILDetector(AbstractDetector):
         super().__init__()
         self.model = self.build_backbone(config)
         self.loss_func = self.build_loss(config)
-        self.prob, self.label = [], []
-        self.correct, self.total = 0, 0
     
     def build_backbone(self, config):
         backbone = STIL_Model(num_class=2, num_segment=config['clip_size'], add_softmax=False)
@@ -105,7 +103,6 @@ class STILDetector(AbstractDetector):
         auc, eer, acc, ap = calculate_metrics_for_train(label.detach(), pred.detach())
         metric_batch_dict = {'acc': acc, 'auc': auc, 'eer': eer, 'ap': ap}
         # we dont compute the video-level metrics for training
-        self.video_names = []
         return metric_batch_dict
     
     def forward(self, data_dict: dict, inference=False) -> dict:
@@ -115,29 +112,7 @@ class STILDetector(AbstractDetector):
         prob = torch.softmax(pred, dim=1)[:, 1]
         # build the prediction dict for each output
         pred_dict = {'cls': pred, 'prob': prob, 'feat': prob}
-        if inference:
-            self.prob.extend(
-                pred_dict['prob']
-                .detach()
-                .squeeze()
-                .cpu()
-                .numpy()
-            )
-            self.label.extend(
-                data_dict['label']
-                .detach()
-                .squeeze()
-                .cpu()
-                .numpy()
-            )
-            # deal with acc
-            _, prediction_class = torch.max(pred, 1)
-            correct = (prediction_class == data_dict['label']).sum().item()
-            self.correct += correct
-            self.total += data_dict['label'].size(0)
 
-            # Save video names for computing video-level AUC
-            self.video_names.extend(data_dict['name'])
         return pred_dict
 
 

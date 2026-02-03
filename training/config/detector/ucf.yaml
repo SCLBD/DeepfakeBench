@@ -2,7 +2,7 @@
 log_dir: /data/home/zhiyuanyan/DeepfakeBench/debug_logs/ucf
 
 # model setting
-pretrained: /data/home/zhiyuanyan/DeepfakeBench/training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
+pretrained: ./training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
 # pretrained: '/home/zhiyuanyan/.cache/torch/hub/checkpoints/resnet34-b627a593.pth'   # path to a pre-trained model, if using one
 model_name: ucf   # model name
 backbone_name: xception  # backbone name
@@ -29,7 +29,6 @@ frame_num: {'train': 32, 'test': 32}   # number of frames to use per video in tr
 resolution: 256   # resolution of output image to network
 with_mask: false   # whether to include mask information in the input
 with_landmark: false   # whether to include facial landmark information in the input
-save_ckpt: true   # whether to save checkpoint
 save_feat: true   # whether to save features
 
 # label settings

@@ -3,7 +3,7 @@ log_dir: /data/home/zhiyuanyan/DeepfakeBench/logs_debug/video_baseline
 
 # model setting
 pretrained: /data/home/zhiyuanyan/DeepfakeBench/training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
-model_name: video_baseline   # model name
+model_name: videomae   # model name
 backbone_name: null  # backbone name
 
 #backbone setting
@@ -23,11 +23,11 @@ train_batchSize: 8   # training batch size
 test_batchSize: 8   # test batch size
 workers: 8   # number of data loading workers
 frame_num: {'train': 32, 'test': 32}   # number of frames to use per video in training and testing
-resolution: 256   # resolution of output image to network
+resolution: 224   # resolution of output image to network
 with_mask: false   # whether to include mask information in the input
 with_landmark: true   # whether to include facial landmark information in the input
 video_mode: True  # whether to use video-level data
-clip_size: 8  # number of frames in each clip
+clip_size: 16  # number of frames in each clip
 
 
 # data augmentation

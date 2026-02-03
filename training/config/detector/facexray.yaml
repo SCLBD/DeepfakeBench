@@ -2,7 +2,7 @@
 log_dir: /mntcephfs/lab_data/tianshuoge/benchmark_results/logs_final/facexray_nt
 
 # model setting
-pretrained: /home/zhiyuanyan/disfin/deepfake_benchmark/training/pretrained/xception-b5690688.pth   # path to a pre-trained model, if using one
+pretrained: ./training/pretrained/efficientnet-b4-6ed6700e.pth   # path to a pre-trained model, if using one
 model_name: facexray   # model name
 backbone_name: efficientnetb4  # backbone name
 
