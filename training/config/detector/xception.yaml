@@ -20,8 +20,8 @@ test_dataset: [FaceForensics++, DeepFakeDetection]
 
 compression: c23  # compression-level for videos
 train_batchSize: 32   # training batch size
-test_batchSize: 32   # test batch size
-workers: 0   # number of data loading workers
+test_batchSize: 8   # test batch size
+workers: 8   # number of data loading workers
 frame_num: {'train': 32, 'test': 32}   # number of frames to use per video in training and testing
 resolution: 256   # resolution of output image to network
 with_mask: false   # whether to include mask information in the input

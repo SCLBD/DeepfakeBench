@@ -16,6 +16,7 @@ import numpy as np
 from datetime import timedelta
 from copy import deepcopy
 from PIL import Image as pil_image
+import json
 
 import torch
 import torch.nn as nn
@@ -46,6 +47,17 @@ parser.add_argument('--no-save_ckpt', dest='save_ckpt', action='store_false', de
 parser.add_argument('--no-save_feat', dest='save_feat', action='store_false', default=True)
 parser.add_argument("--ddp", action='store_true', default=False)
 parser.add_argument('--local_rank', type=int, default=0)
+
+parser.add_argument("--wandb", action="store_true", default=False)
+parser.add_argument("--wandb_project", type=str, default="DeepfakeBench")
+parser.add_argument("--wandb_entity", type=str, default=None)
+parser.add_argument("--wandb_run_name", type=str, default=None)
+parser.add_argument("--wandb_tags", type=str, default=None, help="comma-separated tags")
+parser.add_argument("--wandb_group", type=str, default=None)
+parser.add_argument("--wandb_mode", type=str, default="online", choices=["online", "offline", "disabled"])
+parser.add_argument("--wandb_dir", type=str, default=None)
+
+
 args = parser.parse_args()
 torch.cuda.set_device(args.local_rank)
 
@@ -224,6 +236,31 @@ def choose_metric(config):
     return metric_scoring
 
 
+
+def is_main_process(config):
+    return (not config.get("ddp", False)) or (int(config.get("local_rank", 0)) == 0)
+
+def init_wandb(config):
+    # Lazy import so training works even if wandb isn't installed
+    import wandb
+
+    tags = None
+    if args.wandb_tags:
+        tags = [t.strip() for t in args.wandb_tags.split(",") if t.strip()]
+
+    run = wandb.init(
+        project=args.wandb_project,
+        entity=args.wandb_entity,
+        name=args.wandb_run_name,
+        group=args.wandb_group,
+        tags=tags,
+        config=config,                 # logs your merged yaml config
+        mode=args.wandb_mode,          # online/offline/disabled
+        dir=args.wandb_dir,
+    )
+    return run
+
+
 def main():
     # parse options and load config
     with open(args.detector_path, 'r') as f:
@@ -250,6 +287,13 @@ def main():
     logger = create_logger(os.path.join(logger_path, 'training.log'))
     logger.info('Save log to {}'.format(logger_path))
     config['ddp']= args.ddp
+
+    wandb_run = None
+    if args.wandb and is_main_process(config) and args.wandb_mode != "disabled":
+        wandb_run = init_wandb(config)
+
+
+
     # print configuration
     logger.info("--------------- Configuration ---------------")
     params_string = "Parameters: \n"
@@ -290,7 +334,7 @@ def main():
     metric_scoring = choose_metric(config)
 
     # prepare the trainer
-    trainer = Trainer(config, model, optimizer, scheduler, logger, metric_scoring)
+    trainer = Trainer(config, model, optimizer, scheduler, logger, metric_scoring, wandb_run=wandb_run)
 
     # start training
     for epoch in range(config['start_epoch'], config['nEpochs'] + 1):
@@ -312,6 +356,11 @@ def main():
     # close the tensorboard writers
     for writer in trainer.writers.values():
         writer.close()
+
+    # close wandb
+    if wandb_run is not None:
+        wandb_run.finish()
+
 
 
 

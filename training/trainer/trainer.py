@@ -30,6 +30,7 @@ from torch import distributed as dist
 from torch.nn.parallel import DistributedDataParallel as DDP
 from sklearn import metrics
 from metrics.utils import get_test_metrics
+import gc
 
 FFpp_pool=['FaceForensics++','FF-DF','FF-F2F','FF-FS','FF-NT']#
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -45,7 +46,8 @@ class Trainer(object):
         logger,
         metric_scoring='auc',
         time_now = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S'),
-        swa_model=None
+        swa_model=None,
+        wandb_run=None,
         ):
         # check if all the necessary components are implemented
         if config is None or model is None or optimizer is None or logger is None:
@@ -59,6 +61,8 @@ class Trainer(object):
         self.writers = {}  # dict to maintain different tensorboard writers for each dataset and metric
         self.logger = logger
         self.metric_scoring = metric_scoring
+        self.wandb_run = wandb_run
+
         # maintain the best metric of all epochs
         self.best_metrics_all_time = defaultdict(
             lambda: defaultdict(lambda: float('-inf')
@@ -81,6 +85,26 @@ class Trainer(object):
                 self.config['model_name'] + task_str + '_' + self.timenow
             )
         os.makedirs(self.log_dir, exist_ok=True)
+
+    def _wandb_log(self, d: dict, step: int):
+        # Only log on main process
+        if self.wandb_run is None:
+            return
+        if int(self.config.get("local_rank", 0)) != 0:
+            return
+        # Ensure plain python numbers
+        clean = {}
+        for k, v in d.items():
+            if v is None:
+                continue
+            if isinstance(v, (torch.Tensor, np.ndarray)):
+                try:
+                    v = float(v)
+                except Exception:
+                    continue
+            clean[k] = v
+        if clean:
+            self.wandb_run.log(clean, step=step)
 
     def get_writer(self, phase, dataset_key, metric_key):
         writer_key = f"{phase}-{dataset_key}-{metric_key}"
@@ -270,6 +294,12 @@ class Trainer(object):
                     self.scheduler.step()
                 # info for loss
                 loss_str = f"Iter: {step_cnt}    "
+                wandb_payload = {"epoch": epoch, "iter": step_cnt}
+                # (optional) log LR
+                try:
+                    wandb_payload["lr"] = float(self.optimizer.param_groups[0]["lr"])
+                except Exception:
+                    pass
                 for k, v in train_recorder_loss.items():
                     v_avg = v.average()
                     if v_avg == None:
@@ -279,6 +309,7 @@ class Trainer(object):
                     # tensorboard-1. loss
                     writer = self.get_writer('train', ','.join(self.config['train_dataset']), k)
                     writer.add_scalar(f'train_loss/{k}', v_avg, global_step=step_cnt)
+                    wandb_payload[f"train/loss/{k}"] = float(v_avg)
                 self.logger.info(loss_str)
                 # info for metric
                 metric_str = f"Iter: {step_cnt}    "
@@ -291,7 +322,10 @@ class Trainer(object):
                     # tensorboard-2. metric
                     writer = self.get_writer('train', ','.join(self.config['train_dataset']), k)
                     writer.add_scalar(f'train_metric/{k}', v_avg, global_step=step_cnt)
+                    wandb_payload[f"train/metric/{k}"] = float(v_avg)
                 self.logger.info(metric_str)
+                # W&B log (rank 0 only)
+                self._wandb_log(wandb_payload, step=step_cnt)
 
 
 
@@ -304,24 +338,26 @@ class Trainer(object):
 
             # run test
             if (step_cnt+1) % test_step == 0:
+                # ---- free caches before evaluation ----
+                try:
+                    del losses, predictions, batch_metrics
+                except Exception:
+                    pass
+                gc.collect()
+                torch.cuda.empty_cache()
+
                 if test_data_loaders is not None and (not self.config['ddp'] ):
                     self.logger.info("===> Test start!")
-                    test_best_metric = self.test_epoch(
-                        epoch,
-                        iteration,
-                        test_data_loaders,
-                        step_cnt,
-                    )
+                    test_best_metric = self.test_epoch(epoch, iteration, test_data_loaders, step_cnt)
                 elif test_data_loaders is not None and (self.config['ddp'] and dist.get_rank() == 0):
                     self.logger.info("===> Test start!")
-                    test_best_metric = self.test_epoch(
-                        epoch,
-                        iteration,
-                        test_data_loaders,
-                        step_cnt,
-                    )
+                    test_best_metric = self.test_epoch(epoch, iteration, test_data_loaders, step_cnt)
                 else:
                     test_best_metric = None
+
+                # ---- free caches after evaluation ----
+                gc.collect()
+                torch.cuda.empty_cache()
 
                     # total_end_time = time.time()
             # total_elapsed_time = total_end_time - total_start_time
@@ -341,7 +377,6 @@ class Trainer(object):
         # define test recorder
         test_recorder_loss = defaultdict(Recorder)
         prediction_lists = []
-        feature_lists=[]
         label_lists = []
         for i, data_dict in tqdm(enumerate(data_loader),total=len(data_loader)):
             # get data
@@ -356,7 +391,7 @@ class Trainer(object):
             predictions = self.inference(data_dict)
             label_lists += list(data_dict['label'].cpu().detach().numpy())
             prediction_lists += list(predictions['prob'].cpu().detach().numpy())
-            feature_lists += list(predictions['feat'].cpu().detach().numpy())
+
             if type(self.model) is not AveragedModel:
                 # compute all losses for each batch data
                 if type(self.model) is DDP:
@@ -368,7 +403,7 @@ class Trainer(object):
                 for name, value in losses.items():
                     test_recorder_loss[name].update(value)
 
-        return test_recorder_loss, np.array(prediction_lists), np.array(label_lists),np.array(feature_lists)
+        return test_recorder_loss, np.array(prediction_lists), np.array(label_lists)
 
     def save_best(self,epoch,iteration,step,losses_one_dataset_recorder,key,metric_one_dataset):
         best_metric = self.best_metrics_all_time[key].get(self.metric_scoring,
@@ -413,6 +448,26 @@ class Trainer(object):
             metric_str += f'testing-metric, acc_real:{acc_real}; acc_fake:{acc_fake}'
             writer.add_scalar(f'test_metrics/acc_real', acc_real, global_step=step)
             writer.add_scalar(f'test_metrics/acc_fake', acc_fake, global_step=step)
+
+        # W&B: per-dataset test metrics
+        wandb_payload = {"epoch": epoch, "iter": step}
+        for k, v in metric_one_dataset.items():
+            if k in ("pred", "label", "dataset_dict"):
+                continue
+            # Namespace by dataset
+            wandb_payload[f"test/{key}/{k}"] = float(v)
+        if 'pred' in metric_one_dataset:
+            wandb_payload[f"test/{key}/acc_real"] = float(acc_real)
+            wandb_payload[f"test/{key}/acc_fake"] = float(acc_fake)
+
+        # also log "best so far" for the scoring metric
+        try:
+            wandb_payload[f"best/{key}/{self.metric_scoring}"] = float(self.best_metrics_all_time[key][self.metric_scoring])
+        except Exception:
+            pass
+
+        self._wandb_log(wandb_payload, step=step)
+
         self.logger.info(metric_str)
     def test_epoch(self, epoch, iteration, test_data_loaders, step):
         # set model to eval mode
@@ -431,7 +486,7 @@ class Trainer(object):
             self.save_data_dict('test', data_dict, key)
 
             # compute loss for each dataset
-            losses_one_dataset_recorder, predictions_nps, label_nps, feature_nps = self.test_one_dataset(test_data_loaders[key])
+            losses_one_dataset_recorder, predictions_nps, label_nps = self.test_one_dataset(test_data_loaders[key])
             # print(f'stack len:{predictions_nps.shape};{label_nps.shape};{len(data_dict["image"])}')
             losses_all_datasets[key] = losses_one_dataset_recorder
             metric_one_dataset=get_test_metrics(y_pred=predictions_nps,y_true=label_nps,img_names=data_dict['image'])

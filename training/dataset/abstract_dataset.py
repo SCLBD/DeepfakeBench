@@ -199,6 +199,28 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
                     raise ValueError(f'Label {video_info["label"]} is not found in the configuration file.')
                 label = self.config['label_dict'][video_info['label']]
                 frame_paths = video_info['frames']
+
+                # ---- normalize frame paths to local dataset_root_rgb ----
+                root = os.path.normpath(self.config.get("dataset_root_rgb", "./datasets"))
+
+                fixed = []
+                for p in frame_paths:
+                    # unify slashes
+                    p2 = p.replace("\\", "/")
+
+                    # common legacy prefixes in JSONs
+                    if p2.startswith("../datasets/"):
+                        p2 = p2.replace("../datasets", root, 1)
+                    elif p2.startswith("./datasets/"):
+                        p2 = p2.replace("./datasets", root, 1)
+                    elif p2.startswith("datasets/"):
+                        p2 = os.path.join(root, p2[len("datasets/"):])
+
+                    fixed.append(os.path.normpath(p2))
+
+                frame_paths = fixed
+
+
                 # sorted video path to the lists
                 if '\\' in frame_paths[0]:
                     frame_paths = sorted(frame_paths, key=lambda x: int(x.split('\\')[-1].split('.')[0]))
