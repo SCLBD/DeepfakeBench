@@ -7,7 +7,7 @@ pip install dlib==19.24.0
 pip install imageio==2.9.0
 pip install imgaug==0.4.0
 pip install tqdm==4.61.0
-pip install scipy==1.7.3
+pip install scipy==1.8.0
 pip install seaborn==0.11.2
 pip install pyyaml==6.0
 pip install imutils==0.5.4
@@ -29,5 +29,4 @@ pip install filterpy
 pip install simplejson
 pip install kornia
 pip install fvcore
-pip install imgaug==0.4.0
 pip install git+https://github.com/openai/CLIP.git
