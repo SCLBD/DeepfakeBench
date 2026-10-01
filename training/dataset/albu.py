@@ -44,7 +44,11 @@ class IsotropicResize(DualTransform):
 
 class Resize4xAndBack(ImageOnlyTransform):
     def __init__(self, always_apply=False, p=0.5):
-        super(Resize4xAndBack, self).__init__(always_apply, p)
+        # NOTE (albumentations>=2.0 compat): `always_apply` was removed
+        # from BasicTransform.__init__ (now `__init__(self, p=0.5)`), so
+        # passing it positionally bound it to `p`, silently setting p=0.0
+        # and crashing A.OneOf with ZeroDivisionError. Map it explicitly.
+        super(Resize4xAndBack, self).__init__(p=1 if always_apply else p)
 
     def apply(self, img, **params):
         h, w = img.shape[:2]
@@ -58,7 +62,11 @@ class Resize4xAndBack(ImageOnlyTransform):
 class RandomSizedCropNonEmptyMaskIfExists(DualTransform):
 
     def __init__(self, min_max_height, w2h_ratio=[0.7, 1.3], always_apply=False, p=0.5):
-        super(RandomSizedCropNonEmptyMaskIfExists, self).__init__(always_apply, p)
+        # NOTE (albumentations>=2.0 compat): `always_apply` was removed
+        # from BasicTransform.__init__ (now `__init__(self, p=0.5)`), so
+        # passing it positionally bound it to `p`, silently setting p=0.0
+        # and crashing A.OneOf with ZeroDivisionError. Map it explicitly.
+        super(RandomSizedCropNonEmptyMaskIfExists, self).__init__(p=1 if always_apply else p)
 
         self.min_max_height = min_max_height
         self.w2h_ratio = w2h_ratio
