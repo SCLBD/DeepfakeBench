@@ -267,15 +267,19 @@ def generate_dataset_file(dataset_name, dataset_root_path, output_file_path, com
             else:
                 label = 'CelebDFv1_fake'
             assert label in ['CelebDFv1_real', 'CelebDFv1_fake'], 'Invalid label: {}'.format(label)
-            dataset_dict[dataset_name][label] = {}
-            dataset_dict[dataset_name][label]['train'] = {}
-            dataset_dict[dataset_name][label]['val'] = {}
-            dataset_dict[dataset_name][label]['test'] = {}
+            # Both real folders share one label; merge into it instead of
+            # resetting, so the second folder does not wipe the first (#172).
+            label_dict = dataset_dict[dataset_name].setdefault(
+                label, {'train': {}, 'val': {}, 'test': {}})
             for video_path in os.scandir(os.path.join(dataset_path, folder.name, 'frames')):
                 if video_path.is_dir():
                     video_name = video_path.name
                     frame_paths = [os.path.join(video_path, frame.name) for frame in os.scandir(video_path)]
-                    dataset_dict[dataset_name][label]['train'][video_name] = {'label': label, 'frames': frame_paths}
+                    if video_name in label_dict['train']:
+                        print(f"Warning: duplicate video '{video_name}' in folder "
+                              f"'{folder.name}' skipped for label '{label}'.")
+                        continue
+                    label_dict['train'][video_name] = {'label': label, 'frames': frame_paths}
         
         # Special case for test&val data of Celeb-DF-v1/2
         with open(os.path.join(dataset_root_path, dataset_name, 'List_of_testing_videos.txt'), 'r') as f:
@@ -307,15 +311,19 @@ def generate_dataset_file(dataset_name, dataset_root_path, output_file_path, com
             else:
                 label = 'CelebDFv2_fake'
             assert label in ['CelebDFv2_real', 'CelebDFv2_fake'], 'Invalid label: {}'.format(label)
-            dataset_dict[dataset_name][label] = {}
-            dataset_dict[dataset_name][label]['train'] = {}
-            dataset_dict[dataset_name][label]['val'] = {}
-            dataset_dict[dataset_name][label]['test'] = {}
+            # Both real folders share one label; merge into it instead of
+            # resetting, so the second folder does not wipe the first (#172).
+            label_dict = dataset_dict[dataset_name].setdefault(
+                label, {'train': {}, 'val': {}, 'test': {}})
             for video_path in os.scandir(os.path.join(dataset_path, folder.name, 'frames')):
                 if video_path.is_dir():
                     video_name = video_path.name
                     frame_paths = [os.path.join(video_path, frame.name) for frame in os.scandir(video_path)]
-                    dataset_dict[dataset_name][label]['train'][video_name] = {'label': label, 'frames': frame_paths}
+                    if video_name in label_dict['train']:
+                        print(f"Warning: duplicate video '{video_name}' in folder "
+                              f"'{folder.name}' skipped for label '{label}'.")
+                        continue
+                    label_dict['train'][video_name] = {'label': label, 'frames': frame_paths}
         
         # Special case for test&val data of Celeb-DF-v1/2
         with open(os.path.join(dataset_root_path, dataset_name, 'List_of_testing_videos.txt'), 'r') as f:
@@ -497,6 +505,15 @@ def generate_dataset_file(dataset_name, dataset_root_path, output_file_path, com
         json.dump(dataset_dict, f)
     # print the successfully generated dataset dictionary
     print(f"{dataset_name}.json generated successfully.")
+    # Print per-label, per-split video counts so silent data loss (e.g. a
+    # folder overwriting another folder's videos) is visible on every run.
+    for label, splits in dataset_dict.get(dataset_name, {}).items():
+        if not isinstance(splits, dict):
+            continue
+        counts = ', '.join(
+            f"{split}: {len(videos)}" for split, videos in splits.items()
+            if isinstance(videos, dict))
+        print(f"  {label}: {counts}")
 
 if __name__ == '__main__':
     # from config.yaml load parameters
